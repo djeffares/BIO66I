@@ -8,11 +8,9 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
-      - href: workshop2.qmd
-        text: workshop2
-      
-
+      - href: BIO00066I-workshop2.qmd
+        text: "Workshop 2"
+        
 format:
   html:
     theme: cosmo
