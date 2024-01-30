@@ -3,12 +3,12 @@ project:
   output-dir: docs
 
 website:
-  title: "BIO66I"
+  title: "BIO00066I"
   navbar:
     left:
       - href: index.qmd
         text: Home
-      - href: BIO00066I-workshop2.qmd
+      - href: workshop2.qmd
         text: "Workshop 2"
         
 format:
