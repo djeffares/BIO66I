@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Daniel Jeffares">
 <meta name="dcterms.date" content="2024-01-25">
-<title>BIO00066I</title>
+<title>BIO00066I - BIO00066I Workshop 2</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -118,7 +118,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./workshop2.html"> 
+    <a class="nav-link active" href="./workshop2.html" aria-current="page"> 
 <span class="menu-text">Workshop 2</span></a>
   </li>  
 </ul>
@@ -167,7 +167,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title">BIO00066I</h1>
+<h1 class="title">BIO00066I Workshop 2</h1>
 <p class="subtitle lead">Cell Biology Data Analysis Workshop 2</p>
 </div>
 
@@ -389,12 +389,12 @@ Comment your code!
 <span class="header-section-number">3.2</span> Loading the data</h2>
 <p>In workshop 1, we showed you how to <a href="https://3mmarand.github.io/R4BABS/r4babs1/week-8/workshop.html#importing-data-from-files">import data from files</a>. Today, we load a tab-separated value (TSV) file from a website:</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cells</span> <span class="op">&lt;-</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_tsv</a></span><span class="op">(</span><span class="st">"data/all-cell-data-FFT.filtered.2024-01-19.tsv"</span>,</span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cells</span> <span class="op">&lt;-</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_tsv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/connections.html">url</a></span><span class="op">(</span><span class="st">"https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-01-19.tsv"</span><span class="op">)</span>,</span>
 <span>    col_types <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/cols.html">cols</a></span><span class="op">(</span></span>
 <span>        clone <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_factor.html">col_factor</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>        replicate <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_factor.html">col_factor</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>        tracking.id<span class="op">=</span><span class="fu"><a href="https://readr.tidyverse.org/reference/parse_factor.html">col_factor</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>        ineage.id<span class="op">=</span><span class="fu"><a href="https://readr.tidyverse.org/reference/parse_factor.html">col_factor</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>        lineage.id<span class="op">=</span><span class="fu"><a href="https://readr.tidyverse.org/reference/parse_factor.html">col_factor</a></span><span class="op">(</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span>
 <span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -528,7 +528,7 @@ Do you see any patterns in this data?
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="BIO00066I-workshop2_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="workshop2_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -601,7 +601,7 @@ Non-parametric tests are safe
 <span>    <span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/stat_compare_means.html">stat_compare_means</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="BIO00066I-workshop2_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="workshop2_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -614,14 +614,14 @@ Non-parametric tests are safe
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Practise makes perfect
+If there is something you don’t uderstand, it’s OK to ask us!
 </div>
 </div>
 <div class="callout-body-container callout-body">
 
 </div>
 </div>
-<p>To increase your ubderstanding, run through all the plots in section 3.5 with some other cell shape or size metric.</p>
+<p>To increase your understanding, run through all the plots in section 3.5 with some other cell shape or size metric.</p>
 <p>To start, find what metrics are present with:</p>
 <div class="cell">
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">cells</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -637,13 +637,59 @@ Practise makes perfect
 <li>dry.mass</li>
 </ul></section><section id="analysis-with-small-data" class="level1" data-number="5"><h1 data-number="5">
 <span class="header-section-number">5</span> Analysis with small data</h1>
-<p>So far, we have used <strong>all</strong> the rows in our data frame. But perhaps, this isn’t wise.</p>
-<div class="quarto-figure quarto-figure-centre">
-<figure class="figure"><p><img src="../images/tracking-id-cell-id.png" class="img-fluid quarto-figure quarto-figure-centre figure-img" style="width:50.0%"></p>
-<figcaption><strong>Figure 1. Tracking ID and Lineage ID. </strong> The <strong>tracking ID (TID)</strong> is a unique ID that the microscope assigned to each object (cell), as it tracks it through time. The <strong>lineage ID (LID)</strong> is a number assigned to the ‘family’ of cells that derived by cell division during the the experiment. When a cell divides, each daughter cell is given a new tracking ID, but they keep their lineage ID, because they are still part of the same cell lineage ‘genealogy’.</figcaption></figure>
-</div>
+<p>So far, we have used <strong>all</strong> the rows in our data frame. But perhaps, this isn’t wise, because the Livecyte tracking followed each cell over time. So each measurement of cell shape is not a <em>completely</em> an independent measurement.It is more of a technical replicate than a biological replicate. It is valuable to learn how to make plots and analyse small data sets, as well as large ones. So not we will create a very small subset of the data, and investigate this.</p>
+</section><section id="reflection" class="level1" data-number="6"><h1 data-number="6">
+<span class="header-section-number">6</span> Reflection</h1>
+<ul>
+<li>After loading the data, what did we do first?</li>
+<li>What did making the plots do that summary statistics (liek average, or median) cannot do?</li>
+<li>What did we learn about the two clones?</li>
+</ul></section><section id="after-the-workshop" class="level1" data-number="7"><h1 data-number="7">
+<span class="header-section-number">7</span> After the workshop</h1>
+<p>Look at your script again. Add some comments, so that the next time you look at it, it will make more sense to you.</p>
+<p>Also, have a go at the consolidation exercises below.</p>
+<section id="consolidation-exercises" class="level2" data-number="7.1"><h2 data-number="7.1" class="anchored" data-anchor-id="consolidation-exercises">
+<span class="header-section-number">7.1</span> Consolidation exercises</h2>
+<section id="violin-plots-geom_violin" class="level3" data-number="7.1.1"><h3 data-number="7.1.1" class="anchored" data-anchor-id="violin-plots-geom_violin">
+<span class="header-section-number">7.1.1</span> Violin plots <code>geom_violin</code>
+</h3>
+<ol type="1">
+<li>We used <code><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot()</a></code>to show the differences between categories (clone A and clone B). Try <code>geom_violin</code> instead. Which one do you prefer?</li>
+</ol>
 <div class="cell">
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#take the mean of each unique tracking id</span></span>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">cells</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">clone</span>,y<span class="op">=</span><span class="va">width</span>,fill<span class="op">=</span><span class="va">replicate</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ol start="2" type="1">
+<li>Now adjust the title with <code>ggtitle(label)</code>, and the axis labels with <code>xlab(label)</code> and <code>ylab(label)</code>, and the <strong>theme</strong> (the general style of the plot), with <code><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic()</a></code>. Use whatever theme you feel makes the data clear.</li>
+</ol>
+<div class="cell">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">cells</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">clone</span>,y<span class="op">=</span><span class="va">length</span>,fill<span class="op">=</span><span class="va">replicate</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"something"</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"clone"</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"length"</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Learning a small amount regularly is better than cramming.
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Because our brains can only concentrate for a short time.</p>
+</div>
+</div>
+</section><section id="making-the-small-data-set" class="level3" data-number="7.1.2"><h3 data-number="7.1.2" class="anchored" data-anchor-id="making-the-small-data-set">
+<span class="header-section-number">7.1.2</span> Making the small data set</h3>
+<p>This is how we made the small data set <code>trackingid.small.data</code>. Reading through and/or trying out this code will enhance your skills.</p>
+<p>Use the <code>dplyr</code> tools <code>group_by</code> and <code>summarise</code> to calculate the average of all the cell shape measurements for each cell. Each cell is marked by the Livecyte software with a tracking id (<code>tracking.id</code>), so we group cells by this. The code <code>group_by(clone, replicate, tracking.id)</code> will group each measurement by the clone, replicate <strong>and</strong> tracking id, then the <code>summarise</code> part calculates the mean values for all our metrics:</p>
+<div class="cell">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#take the mean of each unique tracking id</span></span>
 <span><span class="va">trackingid.summary.table</span><span class="op">&lt;-</span><span class="va">cells</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">clone</span>, <span class="va">replicate</span>, <span class="va">tracking.id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span></span>
@@ -661,94 +707,33 @@ Practise makes perfect
 <pre><code>`summarise()` has grouped output by 'clone', 'replicate'. You can override
 using the `.groups` argument.</code></pre>
 </div>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#how many rows</span></span>
-<span><span class="va">row.count</span><span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">trackingid.summary.table</span><span class="op">)</span></span>
-<span><span class="fl">13688</span><span class="op">/</span><span class="fl">100</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 136.88</code></pre>
 </div>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#subset</span></span>
-<span><span class="co">#sample_n samples a number of rows at random</span></span>
-<span><span class="co">#If the data frame is grouped, the number applies to each group</span></span>
-<span><span class="co">#Our sample is group by </span></span>
+<p>Then we use the <code>dplyr</code> function <code>sample_n</code>, which samples a number of rows from a data frame at random. If the data frame is grouped (which our data is), the number we set applies to each group:</p>
+<div class="cell">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#collect a random subset, of 5 rows for each tracking id</span></span>
 <span><span class="va">trackingid.small.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample_n.html">sample_n</a></span><span class="op">(</span><span class="va">trackingid.summary.table</span>, <span class="fl">5</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">trackingid.summary.table</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Rows: 13,688
-Columns: 12
-Groups: clone, replicate [6]
-$ clone           &lt;fct&gt; cloneA, cloneA, cloneA, cloneA, cloneA, cloneA, cloneA…
-$ replicate       &lt;fct&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
-$ tracking.id     &lt;fct&gt; 1, 2, 534, 537, 3, 814, 4, 7, 9, 11, 12, 661, 13, 14, …
-$ volume          &lt;dbl&gt; 1154.725, 1725.695, 1269.765, 1248.555, 1654.985, 1176…
-$ mean.thickness  &lt;dbl&gt; 1.2803999, 1.2148985, 2.1121036, 1.0129144, 1.3742726,…
-$ radius          &lt;dbl&gt; 16.94749, 21.55961, 14.41782, 19.69785, 20.18902, 11.1…
-$ area            &lt;dbl&gt; 903.430, 1460.270, 674.805, 1219.025, 1280.555, 393.50…
-$ sphericity      &lt;dbl&gt; 0.2850, 0.2350, 0.4360, 0.2210, 0.2635, 0.6080, 0.2500…
-$ length          &lt;dbl&gt; 61.410, 94.550, 55.825, 105.475, 79.120, 26.560, 50.01…
-$ dry.mass        &lt;dbl&gt; 288.680, 431.420, 317.435, 312.135, 413.740, 294.060, …
-$ perimeter       &lt;dbl&gt; 151.020, 223.540, 134.055, 215.225, 199.255, 71.850, 1…
-$ length.to.width &lt;dbl&gt; 2.560749, 2.754384, 2.443677, 3.612040, 3.034136, 1.34…</code></pre>
+<span><span class="co">#check that we have</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">trackingid.small.data</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">trackingid.small.data</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">trackingid.small.data</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 30</code></pre>
-</div>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">trackingid.summary.table</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Rows: 13,688
-Columns: 12
-Groups: clone, replicate [6]
-$ clone           &lt;fct&gt; cloneA, cloneA, cloneA, cloneA, cloneA, cloneA, cloneA…
-$ replicate       &lt;fct&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
-$ tracking.id     &lt;fct&gt; 1, 2, 534, 537, 3, 814, 4, 7, 9, 11, 12, 661, 13, 14, …
-$ volume          &lt;dbl&gt; 1154.725, 1725.695, 1269.765, 1248.555, 1654.985, 1176…
-$ mean.thickness  &lt;dbl&gt; 1.2803999, 1.2148985, 2.1121036, 1.0129144, 1.3742726,…
-$ radius          &lt;dbl&gt; 16.94749, 21.55961, 14.41782, 19.69785, 20.18902, 11.1…
-$ area            &lt;dbl&gt; 903.430, 1460.270, 674.805, 1219.025, 1280.555, 393.50…
-$ sphericity      &lt;dbl&gt; 0.2850, 0.2350, 0.4360, 0.2210, 0.2635, 0.6080, 0.2500…
-$ length          &lt;dbl&gt; 61.410, 94.550, 55.825, 105.475, 79.120, 26.560, 50.01…
-$ dry.mass        &lt;dbl&gt; 288.680, 431.420, 317.435, 312.135, 413.740, 294.060, …
-$ perimeter       &lt;dbl&gt; 151.020, 223.540, 134.055, 215.225, 199.255, 71.850, 1…
-$ length.to.width &lt;dbl&gt; 2.560749, 2.754384, 2.443677, 3.612040, 3.034136, 1.34…</code></pre>
-</div>
-</div>
-</section><section id="reflection" class="level1" data-number="6"><h1 data-number="6">
-<span class="header-section-number">6</span> Reflection</h1>
-<ul>
-<li>After loading the data, what did we do first?</li>
-<li>What did making the plots do that summary statistics (liek average, or median) cannot do?</li>
-<li>What did we learn about the two clones?</li>
-</ul></section><section id="after-the-workshop" class="level1" data-number="7"><h1 data-number="7">
-<span class="header-section-number">7</span> After the workshop</h1>
-<p>Look at your script again. Add some comments, so that the next time you look at it, it will make more sense to you.</p>
-<p>Also, have a go at the consolidation exercises below.</p>
-<section id="consolidation-exercises" class="level2" data-number="7.1"><h2 data-number="7.1" class="anchored" data-anchor-id="consolidation-exercises">
-<span class="header-section-number">7.1</span> Consolidation exercises</h2>
-<ol type="1">
-<li>We used <code><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot()</a></code>to show the differences between categories (clone A and clone B). Try <code>geom_violin</code> instead. Which one do you prefer?</li>
-</ol>
+<p>We write the output to a file:</p>
 <div class="cell">
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">cells</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">clone</span>,y<span class="op">=</span><span class="va">width</span>,fill<span class="op">=</span><span class="va">replicate</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#output trackingid.small.data as a tab-separated value (tsv) file</span></span>
+<span><span class="fu"><a href="https://readr.tidyverse.org/reference/write_delim.html">write_tsv</a></span><span class="op">(</span><span class="va">trackingid.small.data</span>, file <span class="op">=</span><span class="st">"/Users/dj757/gd/modules/BIO66I/data/trackingid.small.data.tsv"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<ol start="2" type="1">
-<li>Now adjust the title with <code>ggtitle(label)</code>, and the axis labels with <code>xlab(label)</code> and <code>ylab(label)</code>, and the <strong>theme</strong> (the general style of the plot), with <code><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic()</a></code>. Use whatever theme you feel makes the data clear.</li>
-</ol>
+<p>Look at the <code>trackingid.small.data</code> data frame, so we know what we have:</p>
 <div class="cell">
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">cells</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">clone</span>,y<span class="op">=</span><span class="va">length</span>,fill<span class="op">=</span><span class="va">replicate</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"something"</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">xlab</a></span><span class="op">(</span><span class="st">"clone"</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ylab</a></span><span class="op">(</span><span class="st">"length"</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#how many rows do we have?</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">trackingid.small.data</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#what does the data look like?</span></span>
+<span><span class="fu"><a href="https://tibble.tidyverse.org/reference/view.html">view</a></span><span class="op">(</span><span class="va">trackingid.small.data</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="planning-for-your-report" class="level2" data-number="7.2"><h2 data-number="7.2" class="anchored" data-anchor-id="planning-for-your-report">
+</section></section><section id="planning-for-your-report" class="level2" data-number="7.2"><h2 data-number="7.2" class="anchored" data-anchor-id="planning-for-your-report">
 <span class="header-section-number">7.2</span> Planning for your report</h2>
 </section></section><section id="the-end." class="level1" data-number="8"><h1 data-number="8">
 <span class="header-section-number">8</span> The end.</h1>
-<p>We hope this was useful.</p>
 
 
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
