@@ -174,7 +174,7 @@ In workshop 1, we showed you how to [import data from files](https://3mmarand.gi
 ```{r}
 #| echo: true
 #| warning: false
-cells <-read_tsv("data/all-cell-data-FFT.filtered.2024-01-19.tsv",
+cells <-read_tsv(url("https://djeffares.github.io/BIO66I/all-cell-data-FFT.filtered.2024-01-19.tsv"),
     col_types = cols(
         clone = col_factor(),
         replicate = col_factor(),
@@ -183,6 +183,7 @@ cells <-read_tsv("data/all-cell-data-FFT.filtered.2024-01-19.tsv",
     )
 )
 ```
+
 
 ::: callout-note
 ## About read_tsv
@@ -416,6 +417,33 @@ We suggest using one of these, in place of `width`:
 
 So far, we have used **all** the rows in our data frame. But perhaps, this isn't wise, because the Livecyte tracking followed each cell over time. So each measurement of cell shape is not a *completely* an independent measurement.It is more of a technical replicate than a biological replicate. It is valuable to learn how to make plots and analyse small data sets, as well as large ones. So not we will create a very small subset of the data, and investigate this.
 
+First, read in the small data set we prepared, and have a quick peel, to check what we have.
+
+
+```{r}
+#| echo: true
+#| warning: false
+#| output: false
+#| eval: true
+
+#read in some data from a website
+small.tracking.data <-read_tsv(url("https://djeffares.github.io/BIO66I/trackingid.small.data.tsv"),
+    col_types = cols(
+        clone = col_factor(),
+        replicate = col_factor(),
+        tracking.id=col_factor(),
+        lineage.id=col_factor()
+    )
+)
+
+#check that we have
+glimpse(small.tracking.data)
+summary(small.tracking.data)
+```
+
+
+
+
 # Reflection
 
 -   After loading the data, what did we do first?
@@ -451,11 +479,12 @@ ggplot(cells,aes(x=clone,y=width,fill=replicate))+
 #| warning: false
 #| output: false
 #| eval: false
+
 ggplot(cells,aes(x=clone,y=length,fill=replicate))+
     geom_violin()+
-    ggtitle("something")+
-    xlab("clone")+
-    ylab("length")+
+    ggtitle("put your title here!")+
+    xlab("my X axis label")+
+    ylab("my Y axis label")+
     theme_classic()
 
 ```
@@ -527,7 +556,6 @@ nrow(trackingid.small.data)
 #what does the data look like?
 view(trackingid.small.data)
 ```
-
 
 ## Planning for your report
 
