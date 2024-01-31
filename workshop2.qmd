@@ -179,7 +179,7 @@ cells <-read_tsv(url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.
         clone = col_factor(),
         replicate = col_factor(),
         tracking.id=col_factor(),
-        ineage.id=col_factor()
+        lineage.id=col_factor()
     )
 )
 ```
@@ -412,10 +412,6 @@ We suggest using one of these, in place of `width`:
 -   length
 -   dry.mass
 
-```{r}
-write_tsv(trackingid.small.data, file ="/Users/dj757/gd/modules/BIO66I/docs/data/trackingid.small.data.tsv")
-```
-
 # Analysis with small data
 
 So far, we have used **all** the rows in our data frame. But perhaps, this isn't wise, because the Livecyte tracking followed each cell over time. So each measurement of cell shape is not a *completely* an independent measurement.It is more of a technical replicate than a biological replicate. It is valuable to learn how to make plots and analyse small data sets, as well as large ones. So not we will create a very small subset of the data, and investigate this.
@@ -507,6 +503,14 @@ trackingid.small.data <- sample_n(trackingid.summary.table, 5)
 #check that we have
 nrow(trackingid.small.data)
 glimpse(trackingid.small.data)
+```
+
+
+We write the output to a file:
+
+```{r}
+#output trackingid.small.data as a tab-separated value (tsv) file
+write_tsv(trackingid.small.data, file ="/Users/dj757/gd/modules/BIO66I/data/trackingid.small.data.tsv")
 ```
 
 Look at the `trackingid.small.data` data frame, so we know what we have:
