@@ -135,12 +135,14 @@ Data science can be challenging when you first start. But data science does have
 ```{r}
 #| echo: true
 #| warning: false
+#| eval: true
 
 #clear previous data
 rm(list=ls())
 
 #load the tidyverse
 library(tidyverse)
+
 ```
 
 6.  Finally load another library that allows us to make multi-part plots (this can be useful sometimes). #we need this to make pretty plots with the 'ggarrange' package
@@ -148,6 +150,7 @@ library(tidyverse)
 ```{r}
 #| echo: true
 #| warning: false
+#| eval: true
 
 #load the ggpubr package for multi-part plots
 library(ggpubr)
@@ -171,7 +174,7 @@ In workshop 1, we showed you how to [import data from files](https://3mmarand.gi
 ```{r}
 #| echo: true
 #| warning: false
-cells <-read_tsv("data/all-cell-data-FFT.filtered.2024-01-19.tsv",
+cells <-read_tsv(url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-01-19.tsv"),
     col_types = cols(
         clone = col_factor(),
         replicate = col_factor(),
@@ -179,7 +182,6 @@ cells <-read_tsv("data/all-cell-data-FFT.filtered.2024-01-19.tsv",
         ineage.id=col_factor()
     )
 )
-#cells <-read_tsv(url("https://djeffares.github.io/BIO66I/A2-FFT.csv"))
 
 ```
 
@@ -415,9 +417,6 @@ We suggest using one of these, in place of `width`:
 
 So far, we have used **all** the rows in our data frame. But perhaps, this isn't wise.
 
-![**Figure 1. Tracking ID and Lineage ID. ** The **tracking ID (TID)** is a unique ID that the microscope assigned to each object (cell), as it tracks it through time. The **lineage ID (LID)** is a number assigned to the ‘family’ of cells that derived by cell division during the the experiment. When a cell divides, each daughter cell is given a new tracking ID, but they keep their lineage ID, because they are still part of the same cell lineage 'genealogy'.
-](../images/tracking-id-cell-id.png){fig-align="centre" width=50% width=50%}
-
 ```{r}
 
 #take the mean of each unique tracking id
@@ -437,7 +436,6 @@ trackingid.summary.table<-cells |>
 
 #how many rows
 row.count<-nrow(trackingid.summary.table)
-13688/100
 
 #subset
 #sample_n samples a number of rows at random

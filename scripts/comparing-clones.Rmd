@@ -1,0 +1,230 @@
+---
+title: 'Comparing Clones'
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: cerulean
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: no
+    highlight: tango
+  pdf_document:
+    toc: yes
+  word_document:
+    toc: yes
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+```{r setup, include=FALSE, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Step 1. Set up the R Studio environment and load data
+
+First, we set up our R Studio environment, with these commands:
+
+```{r,message=FALSE}
+
+#clear previous data
+rm(list=ls())
+
+#load the tidyverse
+library(tidyverse)
+
+#we need this to make pretty plots with the 'ggarrange' package
+library(ggpubr)
+```
+
+Next, let's load the data:
+
+```{r,message=FALSE}
+cells <-read_tsv(url("https://djeffares.github.io/data/BIO00066I/all-cell-data-FFT.tsv"))
+```
+
+To remind ourselves what data we have, let's look at the names of the columns in the data frame called **cells**.
+
+```{r}
+names(cells)
+```
+
+**We have a lot of data about these cells!**
+
+You could also use *view()** to look at the data if you like:
+
+```{r,include = FALSE}
+view(cells)
+```
+
+
+---
+
+## Step 2. The two clones
+
+Last time, we took out first peek at the data. This data contains two different cell lines from **one donor** (ie: one person). This time, we will look at the two different clones, and see how they differ.
+
+First, lets see what is in the **clones** column:
+```{r}
+unique(cells$clone)
+```
+
+OK, so we have **cloneA** and **cloneB**.
+
+To compare various aspects of these clones, we will select only **some** of the columns:
+
+- **some shape data**, such as volume, mean.thickness, length, width and area 
+- **some data about cell movement**, such as displacement, instantaneous.velocity 
+
+**To select some columns** that contain shape data, we will use the **select** function, like so:
+
+```{r}
+cell.shape.data<-select(cells,
+    clone,
+    volume,
+    mean.thickness,
+    length,
+    width,
+    area
+)
+```
+
+We now have a new data frame, with only *some* of the columns of the original one.
+
+---
+
+To select the columns that contain movement data, we use the **select** function again:
+
+
+```{r}
+cell.move.data<-select(cells,
+    clone, 
+    displacement,
+    instantaneous.velocity
+)
+```
+
+---
+
+### Data hygiene
+
+Check what we have:
+
+```{r, echo=FALSE}
+#what data columns do we have in cells?
+names(cells)
+
+#what data columns do we have in cell.shape.data?
+names(cell.shape.data)
+
+#what data columns do we have in cell.move.data?
+names(cell.move.data)
+```
+
+--- 
+
+We should also have the same number of rows each time, because we only selected different columns. We left *all* the rows intact. Let's check this:
+
+```{r}
+#check how many rows in the original cells data frame
+nrow(cells)
+```
+
+Now use **nrow()** to check how many rows are in the **cell.shape.data** data frame and the **cell.shape.data** data frames.
+
+---
+
+**If everything looks ok**, we can save our data now
+
+```{r}
+#save today's date in a variable
+date.today<-Sys.Date()
+
+#create an R data object file name
+rda.file.name<-paste("BIO00066I.workshop3.",date.today,".Rda",sep="")
+
+#save the image containing all variables
+save.image(rda.file.name)
+```
+
+
+
+
+
+<!-- #compare various metrics -->
+<!-- par(mfrow=c(3,4)) -->
+<!-- for (i in 2:ncol(cloneA)){ -->
+<!--     A<-as.numeric(unlist(cloneA[,i])) -->
+<!--     B<-as.numeric(unlist(cloneB[,i])) -->
+<!--     test<-signif(wilcox.test(A,B)$p.value,2) -->
+<!--     boxplot(A,B,main=names(cloneA)[i],outline=F) -->
+<!--     mtext(paste("P=",test)) -->
+<!--     print(paste(names(cloneA)[i],test)) -->
+<!-- } -->
+
+<!-- #all params of these cells are statistically different: -->
+<!-- #SUBTLE -->
+<!-- # [1] "dry.mass 7.7e-166" -->
+<!-- #[1] "volume 7.7e-166" -->
+<!-- # [1] "length 0" -->
+<!-- # [1] "orientation 1.9e-21" -->
+
+<!-- #VERY DIFFERENT -->
+<!-- # [1] "sphericity 0" -->
+<!-- # [1] "mean.thickness 0" -->
+<!-- # [1] "radius 0" -->
+<!-- # [1] "area 0" -->
+<!-- # [1] "width 0" -->
+<!-- # [1] "displacement 0"  -->
+<!-- # [1] "instantaneous.velocity 0" -->
+
+<!-- #Make some plots to look at the shape -->
+<!-- width.plot<-ggplot(cells, aes(x=clone,y=width,color=clone))+ -->
+<!--     geom_boxplot()+ -->
+<!--     geom_hline(yintercept = median(cells$width),linetype="dashed")+ -->
+<!--     stat_compare_means()+ -->
+<!--     theme_classic2() -->
+<!-- length.plot<-ggplot(cells, aes(x=clone,y=length,color=clone))+ -->
+<!--     geom_boxplot()+ -->
+<!--     geom_hline(yintercept = median(cells$length),linetype="dashed")+ -->
+<!--     stat_compare_means()+ -->
+<!--     theme_classic2() -->
+<!-- #arrange  -->
+<!-- ggarrange(width.plot,length.plot) -->
+
+<!-- #shows that -->
+<!--     #cloneA is thinner and longer -->
+<!--     #cloneB is wider and shorter -->
+
+<!-- #Look at how they move -->
+<!-- # [1] "displacement 0"  -->
+<!-- # [1] "instantaneous.velocity 0" -->
+
+<!-- ggplot(cells, aes(x=clone,y=instantaneous.velocity,colour=clone))+ -->
+<!--     geom_violin()+ -->
+<!--     stat_compare_means()+ -->
+<!--     theme_bw()+ -->
+
+<!-- velocity.plot<-ggplot(cells, aes(x=clone,y=instantaneous.velocity,colour=clone))+ -->
+<!--     geom_violin()+ -->
+<!--     stat_compare_means()+ -->
+<!--     theme_bw()+ -->
+<!--     scale_y_log10()+ -->
+<!--     ylab("log10(instantaneous.velocity)") -->
+
+<!-- displacement.plot<-ggplot(cells, aes(x=clone,y=displacement,colour=clone))+ -->
+<!--     geom_violin()+ -->
+<!--     stat_compare_means()+ -->
+<!--     theme_bw()+ -->
+<!--     scale_y_log10()+ -->
+<!--     ylab("log10(displacement)") -->
+
+<!-- #arrange -->
+<!-- ggarrange(velocity.plot,displacement.plot)     -->
+
+<!-- #save -->
+<!-- movement.plots<-ggarrange(velocity.plot,displacement.plot)   -->
+<!-- ggsave(movement.plots,file="clone.movement.plots.jpeg") -->
+

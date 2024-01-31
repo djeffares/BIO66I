@@ -1,0 +1,190 @@
+---
+title: 'BIO00066I Cell Biology '
+date: "`r Sys.Date()`"
+output:
+  html_document: 
+    theme: spacelab
+    toc: yes
+    toc_float:
+      collapsed: no
+      smooth_scroll: no
+    highlight: tango
+  pdf_document:
+    toc: yes
+  word_document:
+    toc: yes
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Step 1: Initial data exploration
+
+--- 
+
+## Setting up
+```{r}         
+
+#clear previous data
+rm(list=ls())
+
+#The tidyverse!
+library(tidyverse)
+
+#we need this to make prerry plots with 'ggarrange'
+library(ggpubr)
+
+```
+
+---
+
+## Getting to know the data
+Load the data and see what it looks like:
+```{r}
+load("data/cells.Rda")
+ls()
+dim(cells)
+```
+
+
+Have a look at the data using **view()**
+```{r}
+view(cells)
+```
+
+
+Get a summary of all the columns
+```{r}
+summary(cells)
+```
+
+
+Check how many **tracking ids** and **lineage ids** there are:
+
+```{r}
+length(unique(cells$tracking.id))
+length(unique(cells$lineage.id))
+```
+
+---
+
+## Making plots
+
+It looks like we have these values that could be important to understand.
+
+- volume.um
+- radius.um
+- width.um
+- dry.mass.pgs
+- area.um
+- length.um
+
+A good way of understanding data is to plot it.
+
+PS: In all these values **um** means microns. These are usually represented as **µm**. 
+
+
+### Plot a histogram
+
+Histograms can sometimes be useful.Let's see:
+
+```{r}
+ggplot(cells, aes(x=volume.um))+
+  geom_histogram()
+```
+
+### Density plots
+
+A density plot might be be better. So let's try that.
+
+```{r}
+ggplot(cells, aes(x=volume.um))+
+  geom_density()+
+  theme_light()
+```
+
+Now examine the **radius** using a **density plot**.
+
+
+```{r}
+ggplot(cells, aes(x=radius.um))+
+  geom_density()+
+  theme_light()
+```
+Looks like there might be **two populations** here, perhaps?
+
+
+### Arranging many plots together
+Plot all the values now, **arrange** them and then **save** a plot as a jpeg.
+
+
+```{r}
+
+#volumne
+volume.plot<-ggplot(cells, aes(x=width.um))+
+  geom_density()+
+  theme_light()
+
+#radius
+radius.plot<-ggplot(cells, aes(x=radius.um))+
+  geom_density()+
+  theme_light()
+
+#width
+width.plot<-ggplot(cells, aes(x=width.um))+
+  geom_density()+
+  theme_light()
+
+#dry.mass.pgs
+mass.plot<-ggplot(cells, aes(x=dry.mass.pg))+
+  geom_density()+
+  theme_light()
+
+#area.um
+area.plot<-ggplot(cells, aes(x=area.um))+
+  geom_density()+
+  theme_light()
+
+#length.um
+length.plot<-ggplot(cells, aes(x=length.um))+
+  geom_density()+
+  theme_light()
+
+#arrange the plot
+density.plots<-ggarrange(
+  volume.plot,
+  radius.plot,
+  width.plot, 
+  mass.plot, 
+  area.plot,
+  length.plot,
+  ncol = 3, 
+  nrow = 2
+)
+
+#now save a jpeg
+#the default width and height = 7
+#so lets make it a bit wider
+ggsave(density.plots,
+  file="plots/first.density.plots.jpeg",
+  width = 7*1.5,
+  height = 7
+)
+
+```
+
+
+### Final comments
+ 
+ - What do you see here?
+ - What we we wonder if we did **not** do this initial exploration?
+
+### End
+
+
+
+
+
