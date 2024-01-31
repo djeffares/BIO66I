@@ -1,0 +1,86 @@
+[
+  {
+    "objectID": "workshop2.html",
+    "href": "workshop2.html",
+    "title": "BIO00066I Workshop 2",
+    "section": "",
+    "text": "Colour scheme\nIn these workshops, we highlight some elements in boxes like this:"
+  },
+  {
+    "objectID": "workshop2.html#the-biology",
+    "href": "workshop2.html#the-biology",
+    "title": "BIO00066I Workshop 2",
+    "section": "\n2.1 The biology",
+    "text": "2.1 The biology\nToday we will look at some data from mesenchymal stem cells (MSCs, sometimes called stromal cells). MCSs are are multipotent stem cells, than can differentiate into many kinds of mesenchymal cells: bone, cartilage and fat cells. They are not pluripotent, in that they do have limits about how they differentiate.\nMSCs are also:\n\nimmuno-modulatory (they make cytokines)\nheterogeneous (they have subpopulations that are different from each other)\n\nThe MSCs we are looking at are from bone marrow femoral head tissues (from the hip bone). These MSCs were immortalised (by XXX), and then cloned by limiting dilution. We will compare the data on cell shape and size from just two clones, both obtained from one person’s femoral head tissues. Each clone was derived from a single cell from the person.\nWe call these two clones clone A and clone B. Today, we will use our data analysis skills to explore how these cells differ."
+  },
+  {
+    "objectID": "workshop2.html#research-questions",
+    "href": "workshop2.html#research-questions",
+    "title": "BIO00066I Workshop 2",
+    "section": "\n2.2 Research questions",
+    "text": "2.2 Research questions\n\nWhat parameters do we have in the data obtained from the XXX machine/method?\nWhich parameters differ between the clones?\nWhich parameters are correlated?"
+  },
+  {
+    "objectID": "workshop2.html#the-data",
+    "href": "workshop2.html#the-data",
+    "title": "BIO00066I Workshop 2",
+    "section": "\n2.3 The data",
+    "text": "2.3 The data\nThe data we have today are derived from an XXX machine. We grew each clones in XXX media, and captured cell shape an size information for many cells from each clones with XXX machine. For each clone, we measured three biological replicates.\n\n\n\n\n\n\nBiological replicates and technical replicates\n\n\n\nA biological replicate repeats an experiment from different cell types, tissue types, or organisms to see if similar results can be observed.\nTechnical replicates are repeat measurements of the same biological material, which help to show how much variation comes from the equipment or different methods (rather from the biology).\nOur replicates are almost biological replicates, because we grew the cells three times.\n\n\n\n\n\n\n\n\nThinking like a data scientist\n\n\n\nData science can be challenging when you first start. But data science does have core concepts, like any other science.\n\nConsider the motivation or scientific question before drawing a plot\nReflect on how the plot or analysis addresses the scientific question\nUse each plots to adapt, to inspire new research questions and new inquiries\nEnsure that your scripts are reproducible and clearly commented\nConsider what the results tell you about the biology"
+  },
+  {
+    "objectID": "workshop2.html#getting-started",
+    "href": "workshop2.html#getting-started",
+    "title": "BIO00066I Workshop 2",
+    "section": "\n3.1 Getting started",
+    "text": "3.1 Getting started\n\nStart RStudio from the Start menu\nOpen your RStudio project using the dropdown menu at the very top right of the RStudio window.\nMake a new script then save it with a sensible name that will help you to know later what is in this file. BIO00066I-workshop2.R would work.\nAdd a comment to the script so you know what it is about, for example\n\n\n#Data Analysis 2: Cell Biology\n#date 2024-30-01\n\n\nClear all the previous data, and load tidyverse package by adding these lines to your script:\n\n\n#clear previous data\nrm(list=ls())\n\n#load the tidyverse\nlibrary(tidyverse)\n\n\nFinally load another library that allows us to make multi-part plots (this can be useful sometimes). #we need this to make pretty plots with the ‘ggarrange’ package\n\n\n#load the ggpubr package for multi-part plots\nlibrary(ggpubr)\n\n\nMake sure all these lines of code are in your script, with comments.\nSave the script.\n\n\n\n\n\n\n\nComment your code!\n\n\n\nIn R scripts, lines that start with the hash symbol (#) are comments.\nCommenting code makes it readable, for you and anyone else. Good data science includes clearly commented code."
+  },
+  {
+    "objectID": "workshop2.html#loading-the-data",
+    "href": "workshop2.html#loading-the-data",
+    "title": "BIO00066I Workshop 2",
+    "section": "\n3.2 Loading the data",
+    "text": "3.2 Loading the data\nIn workshop 1, we showed you how to import data from files. Today, we load a tab-separated value (TSV) file from a website:\n\ncells &lt;-read_tsv(\"data/all-cell-data-FFT.filtered.2024-01-19.tsv\",\n    col_types = cols(\n        clone = col_factor(),\n        replicate = col_factor(),\n        tracking.id=col_factor(),\n        lineage.id=col_factor()\n    )\n)\n\n\n\n\n\n\n\nAbout read_tsv\n\n\n\nWe use the read_tsv function to read the tab-separated value file. Clicking on the link in the read_tsv takes you to a website about this function. All the code chunks in these workshops have links like this.\nThe clone = col_factor(),replicate = col_factor() part let’s R know that we want the clone column and the replicate column to be factors, rather than numeric values. Factors are used to represent categorical data."
+  },
+  {
+    "objectID": "workshop2.html#exploring-the-data",
+    "href": "workshop2.html#exploring-the-data",
+    "title": "BIO00066I Workshop 2",
+    "section": "\n3.3 Exploring the data",
+    "text": "3.3 Exploring the data\nIt is important to know what data you have. How many rows and columns etc.\nThere are many ways to do this in R. Here are some of our favourites. Copy and past these into your R script, and try them out.\n##Amanda: should we remove some of the less-useful columns? #This will keep it simple for the students #Are the different measurements of cell size & shape independent measures?\n\n#look at the data, like an excel table:\nview(cells)\n\n#what are the names of the columns?\nnames(cells)\n\n#how many rows and columns you we have?\nnrow(cells)\nncol(cells)\ndim(cells)\n\n#other ways to peek at data:\nsummary(cells)\nglimpse(cells)\n\n\n\n\n\n\n\nWhich method of do you like the best?\n\n\n\nWhy not take a note of this, and use it all the time?\n\n\n\n3.3.1 What is in the data?\nYou may have noticed that we have two clones (cloneA and cloneB). For each clone, we have three replicates. For each replicate, we have many readings of cell widths, cell volume, cell sphericity and so on.\nNow save your data and save your script. This command will save all the variables you have loaded, or created so far:\n\n#save all my stuff\nsave.image(\"BIO00066I-workshop2.Rda\")\n\nYou can load all the data again with:\n\n#load all my stuff from last time\nload(\"BIO00066I-workshop2.Rda\")"
+  },
+  {
+    "objectID": "workshop2.html#summarise-with-dplyr",
+    "href": "workshop2.html#summarise-with-dplyr",
+    "title": "BIO00066I Workshop 2",
+    "section": "\n3.4 Summarise with dplyr",
+    "text": "3.4 Summarise with dplyr\nThe view(cells) command shows that we have many cell shape metrics. We saw a summary of our cell shape metrics with the summary(cells) command above.\nNow we will do something even better, by using a tool from the dplyr package (part of the tidyverse) to make some sense of all this data very quickly.\n\n\n\n\n\n\ndplyr is wonderful\n\n\n\ndplyr is like a set of pliers, helping us to ‘bend’ or ‘reshape’ our data.\n\n\nHere is the command. I will explain it below.\n\nsummary.table &lt;- cells |&gt; \n    group_by(clone, replicate) |&gt; \n    summarise(\n        volume=median(volume),\n        mean.thickness=median(mean.thickness),\n        radius=median(radius),\n        area=median(area),\n        sphericity=median(sphericity),\n        length=median(length),\n        dry.mass=median(dry.mass),\n        perimeter=median(perimeter),\n        length.to.width=median(length.to.width)\n)\n\n\n3.4.1 What this code does\n\nThe cells |&gt; part takes the data from the cells data frame, and ‘pipes’ it into the group_by function. The |&gt; symbol as means put this data into the next bit.\ngroup_by(clone, replicate) means that make groups of data, according to which clone they are, and which replicate culture they were from.\nsummarise calculates some summaries of all the data rows (for each clone and replicate). The part volume=median(volume) creates a header called volume and fills this with the median cell volume for each clone and replicate\nRight at the top, summary.table &lt;- stores the results of all the piping in an object called summary.table.\n\nHave a look at the information we generated with:\n\nview(summary.table)\n\n\n\n\n\n\n\nDo you see any patterns in this data?\n\n\n\n\nWhat does this table tell you about clone A and clone B?\nWhat does this tell you about mesenchymal stem cells?"
+  },
+  {
+    "objectID": "workshop2.html#making-plots",
+    "href": "workshop2.html#making-plots",
+    "title": "BIO00066I Workshop 2",
+    "section": "\n3.5 Making plots",
+    "text": "3.5 Making plots\nIt looks like many of the cell shape metrics from above might differ between clones. So let’s look deeper, starting with cell width. We will make a box and whisker plot. We use a small ‘trick’ here: by including fill=replicate we force R to make different plots for each replicate.\n\nggplot(cells,aes(x=clone,y=width,fill=replicate))+\n    geom_boxplot()\n\n\n\n\n\n\n\n\n\n\n\n\n\nMaking plots with ggplot\n\n\n\nNo matter what shape plot you want, ggplot uses the same syntax.\n\nStart by telling R what data you want to use like this: ggplot(some_data_frame,aes(x=x_axis_data, y=y_axis_data) +\n\n\nIn this line, x_axis_data and y_axis_data are columns of some_data_frame.\n\nThen define what the shape plot you want (the ‘geometry’): geom_boxplot(), geom_histogram() etc.\nAdd extra things to customise your plot, eg: xlab(\"my x axis label\")\n\n\nIf you are unsure what to do, it’s OK to ask! Googling “ggpplot how to make a boxplot” (or any other plot) will help.\n\n\nIt does look like clone A and clone B differ consistently in width, with all repeats. To prove this, we would like to do a statistical test. A Student’s t-Test t.test would work. But t-Test’s assume that the data are normally distributed (like a bell curve).\nWe can test this approximately by plotting data, as below. It doesn’t look perfectly ‘bell shaped’, so let’s play is safe and use a nonparametric test.\n\nggplot(cells, aes(x = width)) +\n  geom_density()\n\nThe nonparametric equivalent of a t-Test is a Wilcoxon rank sum test. There are two ways to run this test in R. We can do wilcox.test(vectorA, vectorB), where vectorA and vectorB contain the numeric values we want to test.\nBut does does not suit tidyverse data frames very well. So we will use the wilcox.test(numberic_value ~ categorry_name, data = some_data_frame) method, like so:\n\n#Wilcoxon rank sum test\n#To test if cloneA and cloneB have statistically different widths\nwilcox.test(width ~ clone, data = cells)\n\n\n    Wilcoxon rank sum test with continuity correction\n\ndata:  width by clone\nW = 562074424, p-value &lt; 2.2e-16\nalternative hypothesis: true location shift is not equal to 0\n\n\nBecause the p-value is very low (&lt; 2.2e-16), this means the null hypothesis (that both sets of numbers come from the same population) is very unlikely to be true.\n\n\n\n\n\n\nNon-parametric tests are safe\n\n\n\nParametric tests are based on assumptions about the distribution of the real data. Nonparametric statistics are not based on these assumptions. So they are safer. Many biological metrics need nonparametric tests.\n\n\n\n3.5.1 An easier way\nFortunately, you can add the results of nonparametric tests to ggplot, by adding stat_compare_means() to our plot. Note that below we do not force R to split up the replicates as we did above.\n\nggplot(cells,aes(x=clone,y=width))+\n    geom_boxplot()+\n    stat_compare_means()"
+  },
+  {
+    "objectID": "workshop2.html#consolidation-exercises",
+    "href": "workshop2.html#consolidation-exercises",
+    "title": "BIO00066I Workshop 2",
+    "section": "\n7.1 Consolidation exercises",
+    "text": "7.1 Consolidation exercises\n\n7.1.1 Violin plots geom_violin\n\n\nWe used geom_boxplot()to show the differences between categories (clone A and clone B). Try geom_violin instead. Which one do you prefer?\n\n\nggplot(cells,aes(x=clone,y=width,fill=replicate))+\n    geom_violin()\n\n\nNow adjust the title with ggtitle(label), and the axis labels with xlab(label) and ylab(label), and the theme (the general style of the plot), with theme_classic(). Use whatever theme you feel makes the data clear.\n\n\nggplot(cells,aes(x=clone,y=length,fill=replicate))+\n    geom_violin()+\n    ggtitle(\"something\")+\n    xlab(\"clone\")+\n    ylab(\"length\")+\n    theme_classic()\n\n\n\n\n\n\n\nLearning a small amount regularly is better than cramming.\n\n\n\nBecause our brains can only concentrate for a short time.\n\n\n\n7.1.2 Making the small data set\nThis is how we made the small data set trackingid.small.data. Reading through and/or trying out this code will enhance your skills.\nUse the dplyr tools group_by and summarise to calculate the average of all the cell shape measurements for each cell. Each cell is marked by the Livecyte software with a tracking id (tracking.id), so we group cells by this. The code group_by(clone, replicate, tracking.id) will group each measurement by the clone, replicate and tracking id, then the summarise part calculates the mean values for all our metrics:\n\n#take the mean of each unique tracking id\ntrackingid.summary.table&lt;-cells |&gt;\n    group_by(clone, replicate, tracking.id) |&gt;\n    summarise(\n        volume=median(volume),\n        mean.thickness=median(mean.thickness),\n        radius=median(radius),\n        area=median(area),\n        sphericity=median(sphericity),\n        length=median(length),\n        dry.mass=median(dry.mass),\n        perimeter=median(perimeter),\n        length.to.width=median(length.to.width)\n    )\n\n`summarise()` has grouped output by 'clone', 'replicate'. You can override\nusing the `.groups` argument.\n\n\nThen we use the dplyr function sample_n, which samples a number of rows from a data frame at random. If the data frame is grouped (which our data is), the number we set applies to each group:\n\n#collect a random subset, of 5 rows for each tracking id\ntrackingid.small.data &lt;- sample_n(trackingid.summary.table, 5)\n\n#check that we have\nnrow(trackingid.small.data)\nglimpse(trackingid.small.data)\n\nWe write the output to a file:\n\n#output trackingid.small.data as a tab-separated value (tsv) file\nwrite_tsv(trackingid.small.data, file =\"/Users/dj757/gd/modules/BIO66I/data/trackingid.small.data.tsv\")\n\nLook at the trackingid.small.data data frame, so we know what we have:\n\n#how many rows do we have?\nnrow(trackingid.small.data)\n\n#what does the data look like?\nview(trackingid.small.data)"
+  },
+  {
+    "objectID": "workshop2.html#planning-for-your-report",
+    "href": "workshop2.html#planning-for-your-report",
+    "title": "BIO00066I Workshop 2",
+    "section": "\n7.2 Planning for your report",
+    "text": "7.2 Planning for your report"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "BIO00066I",
+    "section": "",
+    "text": "This website is for the module Becoming a Bioscientist: Research in Action - BIO00066I.\nYou can see the module description here"
+  }
+]

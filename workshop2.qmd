@@ -174,7 +174,7 @@ In workshop 1, we showed you how to [import data from files](https://3mmarand.gi
 ```{r}
 #| echo: true
 #| warning: false
-cells <-read_tsv(url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-01-19.tsv"),
+cells <-read_tsv("data/all-cell-data-FFT.filtered.2024-01-19.tsv",
     col_types = cols(
         clone = col_factor(),
         replicate = col_factor(),
