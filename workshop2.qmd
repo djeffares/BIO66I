@@ -182,7 +182,6 @@ cells <-read_tsv(url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.
         ineage.id=col_factor()
     )
 )
-
 ```
 
 ::: callout-note
@@ -387,10 +386,10 @@ ggplot(cells,aes(x=clone,y=width))+
 # Next step: modify the code
 
 ::: callout-important
-## Practise makes perfect
+## If there is something you don't uderstand, it's OK to ask us!
 :::
 
-To increase your ubderstanding, run through all the plots in section 3.5 with some other cell shape or size metric.
+To increase your understanding, run through all the plots in section 3.5 with some other cell shape or size metric.
 
 To start, find what metrics are present with:
 
@@ -413,42 +412,13 @@ We suggest using one of these, in place of `width`:
 -   length
 -   dry.mass
 
+```{r}
+write_tsv(trackingid.small.data, file ="/Users/dj757/gd/modules/BIO66I/docs/data/")
+```
+
 # Analysis with small data
 
-So far, we have used **all** the rows in our data frame. But perhaps, this isn't wise.
-
-```{r}
-
-#take the mean of each unique tracking id
-trackingid.summary.table<-cells |>
-    group_by(clone, replicate, tracking.id) |>
-    summarise(
-        volume=median(volume),
-        mean.thickness=median(mean.thickness),
-        radius=median(radius),
-        area=median(area),
-        sphericity=median(sphericity),
-        length=median(length),
-        dry.mass=median(dry.mass),
-        perimeter=median(perimeter),
-        length.to.width=median(length.to.width)
-    )
-
-#how many rows
-row.count<-nrow(trackingid.summary.table)
-
-#subset
-#sample_n samples a number of rows at random
-#If the data frame is grouped, the number applies to each group
-#Our sample is group by 
-trackingid.small.data <- sample_n(trackingid.summary.table, 5)
-
-glimpse(trackingid.summary.table)
-
-nrow(trackingid.small.data)
-
-glimpse(trackingid.summary.table)
-```
+So far, we have used **all** the rows in our data frame. But perhaps, this isn't wise, because the Livecyte tracking followed each cell over time. So each measurement of cell shape is not a *completely* an independent measurement.It is more of a technical replicate than a biological replicate. It is valuable to learn how to make plots and analyse small data sets, as well as large ones. So not we will create a very small subset of the data, and investigate this.
 
 # Reflection
 
@@ -463,6 +433,8 @@ Look at your script again. Add some comments, so that the next time you look at 
 Also, have a go at the consolidation exercises below.
 
 ## Consolidation exercises
+
+### Violin plots `geom_violin`
 
 1.  We used `geom_boxplot()`to show the differences between categories (clone A and clone B). Try `geom_violin` instead. Which one do you prefer?
 
@@ -492,8 +464,70 @@ ggplot(cells,aes(x=clone,y=length,fill=replicate))+
 
 ```
 
+
+::: callout-tip
+# Learning a small amount regularly is better than cramming.
+Because our brains can only concentrate for a short time.
+:::
+
+### Making the small data set
+
+This is how we made the small data set `trackingid.small.data`. Reading through and/or trying out this code will enhance your skills.
+
+Use the `dplyr` tools `group_by` and `summarise` to calculate the average of all the cell shape measurements for each cell. Each cell is marked by the Livecyte software with a tracking id (`tracking.id`), so we group cells by this. The code `group_by(clone, replicate, tracking.id)` will group each measurement by the clone, replicate **and** tracking id, then the `summarise` part calculates the mean values for all our metrics:
+
+```{r}
+#take the mean of each unique tracking id
+trackingid.summary.table<-cells |>
+    group_by(clone, replicate, tracking.id) |>
+    summarise(
+        volume=median(volume),
+        mean.thickness=median(mean.thickness),
+        radius=median(radius),
+        area=median(area),
+        sphericity=median(sphericity),
+        length=median(length),
+        dry.mass=median(dry.mass),
+        perimeter=median(perimeter),
+        length.to.width=median(length.to.width)
+    )
+```
+
+Then we use the `dplyr` function `sample_n`, which samples a number of rows from a data frame at random. If the data frame is grouped (which our data is), the number we set applies to each group:
+
+```{r}
+#| echo: true
+#| warning: false
+#| output: false
+#| eval: true
+
+#collect a random subset, of 5 rows for each tracking id
+trackingid.small.data <- sample_n(trackingid.summary.table, 5)
+
+#check that we have
+nrow(trackingid.small.data)
+glimpse(trackingid.small.data)
+```
+
+Look at the `trackingid.small.data` data frame, so we know what we have:
+
+```{r}
+#| echo: true
+#| warning: false
+#| output: false
+#| eval: false
+
+#how many rows do we have?
+nrow(trackingid.small.data)
+
+#what does the data look like?
+view(trackingid.small.data)
+```
+
+
 ## Planning for your report
+
+
 
 # The end.
 
-We hope this was useful.

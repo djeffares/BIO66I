@@ -1,0 +1,142 @@
+---
+title: "BIO00066I"
+subtitle: "Cell Biology Data Analysis Workshop 2"
+
+author: Daniel Jeffares
+date: 2024-01-25
+format:
+    html:
+        code-link: true
+        toc: true
+        toc-location: right
+        toc-depth: 2	
+
+editor: source
+---
+
+**Colour scheme**
+
+In these workshops, we highlight some elements in boxes like this:
+
+::: callout-important
+## Important concepts
+Particularly important ideas or skills.
+:::
+
+::: callout-warning
+## Be careful
+Where to be careful.
+:::
+
+::: callout-tip
+## Things to think about
+What does this result show about the biology?
+:::
+
+::: callout-note
+## Information
+[Mesenchymal stem cells](https://en.wikipedia.org/wiki/Mesenchymal_stem_cell) are multipotent, but not pluripotent.
+:::
+
+
+
+# Learning objectives
+
+::: callout-important
+## Philosophy
+
+Workshops are not a test. You may know how to start and make a lot of mistakes. It's OK to need help. You should be familiar with independent study content before the workshop. However, do not need to understand **every detail** as the workshop should build and consolidate your understanding. Tips:
+
+-   don't worry about making mistakes (we all make mistakes)
+-   discussing code with your neighbours will help
+-   look things up in your own code from earlier
+-   there are no stupid questions
+:::
+
+
+
+## Technical skills
+
+## Thinking like a data scientist
+
+# Introduction
+
+## The biology
+
+## Research questions
+
+## The data
+In this workshop we bla bla
+
+# Exercises
+
+## Part 1
+
+## Part 2
+
+## Part 3
+
+# Reflection
+
+# After the workshop
+
+## Consolodation exercises
+
+Optional
+
+## Planning for your report
+
+
+
+
+
+# Quarto elements
+
+
+## Basics quarto markdown
+
+[Markdown Basics](https://quarto.org/docs/authoring/markdown-basics.html)
+
+[YAML header info](https://quarto.org/docs/reference/formats/html.html)
+
+[code Execution options](https://quarto.org/docs/reference/formats/html.html#execution)
+
+## Callouts:
+See [this site](https://quarto.org/docs/authoring/callouts.html) for more info.
+
+There are five different types of callouts available:
+
+- note
+- warning
+- important
+- tip
+- caution
+
+::: callout-note
+## This is a callout note block. 
+Text or code goes here.
+```{r}
+mean(rnorm(100))
+```
+:::
+
+::: callout-warning
+## Callout warning
+warning
+:::
+
+::: callout-important
+## Callout important
+important
+:::
+
+::: callout-tip
+## Callout tip
+tip
+:::
+
+::: callout-caution
+## Callout caution
+caution
+:::
+

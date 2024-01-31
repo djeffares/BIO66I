@@ -144,7 +144,7 @@
     "href": "workshop2.html#consolidation-exercises",
     "title": "BIO00066I Workshop 2",
     "section": "\n7.1 Consolidation exercises",
-    "text": "7.1 Consolidation exercises\n\nWe used geom_boxplot()to show the differences between categories (clone A and clone B). Try geom_violin instead. Which one do you prefer?\n\n\nggplot(cells,aes(x=clone,y=width,fill=replicate))+\n    geom_violin()\n\n\nNow adjust the title with ggtitle(label), and the axis labels with xlab(label) and ylab(label), and the theme (the general style of the plot), with theme_classic(). Use whatever theme you feel makes the data clear.\n\n\nggplot(cells,aes(x=clone,y=length,fill=replicate))+\n    geom_violin()+\n    ggtitle(\"something\")+\n    xlab(\"clone\")+\n    ylab(\"length\")+\n    theme_classic()"
+    "text": "7.1 Consolidation exercises\n\n7.1.1 Violin plots geom_violin\n\n\nWe used geom_boxplot()to show the differences between categories (clone A and clone B). Try geom_violin instead. Which one do you prefer?\n\n\nggplot(cells,aes(x=clone,y=width,fill=replicate))+\n    geom_violin()\n\n\nNow adjust the title with ggtitle(label), and the axis labels with xlab(label) and ylab(label), and the theme (the general style of the plot), with theme_classic(). Use whatever theme you feel makes the data clear.\n\n\nggplot(cells,aes(x=clone,y=length,fill=replicate))+\n    geom_violin()+\n    ggtitle(\"something\")+\n    xlab(\"clone\")+\n    ylab(\"length\")+\n    theme_classic()\n\n\n7.1.2 Makig the small data set\nThis is how we made the small data set trackingid.small.data. Reading through and/or trying out this code will enhcnace your skills.\n\n\n\n\n\n\nLearning a small amount regularly is better than cramming!\n\n\n\n\n\n\nUse the dplyr tools group_by and summarise to calculate the average of all the cell shape measurements for each cell. Each cell is marked by the Livecyte software with a tracking id (tracking.id), so we will group cells by this. The code group_by(clone, replicate, tracking.id) will group each measurement by the clone, replicate and tracking id, then the summarise part calculates the mean values for all our metrics:\n\n#take the mean of each unique tracking id\ntrackingid.summary.table&lt;-cells |&gt;\n    group_by(clone, replicate, tracking.id) |&gt;\n    summarise(\n        volume=median(volume),\n        mean.thickness=median(mean.thickness),\n        radius=median(radius),\n        area=median(area),\n        sphericity=median(sphericity),\n        length=median(length),\n        dry.mass=median(dry.mass),\n        perimeter=median(perimeter),\n        length.to.width=median(length.to.width)\n    )\n\n`summarise()` has grouped output by 'clone', 'replicate'. You can override\nusing the `.groups` argument.\n\n\nWe will use the dplyr function sample_n, which samples a number of rows from a data frame at random. If the data frame is grouped (which our data is), the number we set applies to each group:\n\n#collect a random subset, of 5 rows for each tracking id\ntrackingid.small.data &lt;- sample_n(trackingid.summary.table, 5)\n\n#check that we have\nnrow(trackingid.small.data)\nglimpse(trackingid.small.data)\n\nNo look at our trackingid.summary.table, so we know what we have:\n\n#how many rows do we have?\nnrow(trackingid.summary.table)\n\n#what does the data look like?\nview(trackingid.summary.table)"
   },
   {
     "objectID": "workshop2.html#planning-for-your-report",
@@ -159,5 +159,96 @@
     "title": "BIO00066I",
     "section": "",
     "text": "This website is for the module Becoming a Bioscientist: Research in Action - BIO00066I.\nYou can see the module description here"
+  },
+  {
+    "objectID": "BIO00066I-template.html",
+    "href": "BIO00066I-template.html",
+    "title": "BIO00066I",
+    "section": "",
+    "text": "Colour scheme\nIn these workshops, we highlight some elements in boxes like this:"
+  },
+  {
+    "objectID": "BIO00066I-template.html#technical-skills",
+    "href": "BIO00066I-template.html#technical-skills",
+    "title": "BIO00066I",
+    "section": "Technical skills",
+    "text": "Technical skills"
+  },
+  {
+    "objectID": "BIO00066I-template.html#thinking-like-a-data-scientist",
+    "href": "BIO00066I-template.html#thinking-like-a-data-scientist",
+    "title": "BIO00066I",
+    "section": "Thinking like a data scientist",
+    "text": "Thinking like a data scientist"
+  },
+  {
+    "objectID": "BIO00066I-template.html#the-biology",
+    "href": "BIO00066I-template.html#the-biology",
+    "title": "BIO00066I",
+    "section": "The biology",
+    "text": "The biology"
+  },
+  {
+    "objectID": "BIO00066I-template.html#research-questions",
+    "href": "BIO00066I-template.html#research-questions",
+    "title": "BIO00066I",
+    "section": "Research questions",
+    "text": "Research questions"
+  },
+  {
+    "objectID": "BIO00066I-template.html#the-data",
+    "href": "BIO00066I-template.html#the-data",
+    "title": "BIO00066I",
+    "section": "The data",
+    "text": "The data\nIn this workshop we bla bla"
+  },
+  {
+    "objectID": "BIO00066I-template.html#part-1",
+    "href": "BIO00066I-template.html#part-1",
+    "title": "BIO00066I",
+    "section": "Part 1",
+    "text": "Part 1"
+  },
+  {
+    "objectID": "BIO00066I-template.html#part-2",
+    "href": "BIO00066I-template.html#part-2",
+    "title": "BIO00066I",
+    "section": "Part 2",
+    "text": "Part 2"
+  },
+  {
+    "objectID": "BIO00066I-template.html#part-3",
+    "href": "BIO00066I-template.html#part-3",
+    "title": "BIO00066I",
+    "section": "Part 3",
+    "text": "Part 3"
+  },
+  {
+    "objectID": "BIO00066I-template.html#consolodation-exercises",
+    "href": "BIO00066I-template.html#consolodation-exercises",
+    "title": "BIO00066I",
+    "section": "Consolodation exercises",
+    "text": "Consolodation exercises\nOptional"
+  },
+  {
+    "objectID": "BIO00066I-template.html#planning-for-your-report",
+    "href": "BIO00066I-template.html#planning-for-your-report",
+    "title": "BIO00066I",
+    "section": "Planning for your report",
+    "text": "Planning for your report"
+  },
+  {
+    "objectID": "BIO00066I-template.html#basics-quarto-markdown",
+    "href": "BIO00066I-template.html#basics-quarto-markdown",
+    "title": "BIO00066I",
+    "section": "Basics quarto markdown",
+    "text": "Basics quarto markdown\nMarkdown Basics\nYAML header info\ncode Execution options"
+  },
+  {
+    "objectID": "BIO00066I-template.html#callouts",
+    "href": "BIO00066I-template.html#callouts",
+    "title": "BIO00066I",
+    "section": "Callouts:",
+    "text": "Callouts:\nSee this site for more info.\nThere are five different types of callouts available:\n\nnote\nwarning\nimportant\ntip\ncaution\n\n\n\n\n\n\n\nThis is a callout note block.\n\n\n\nText or code goes here.\n\nmean(rnorm(100))\n\n[1] 0.255382\n\n\n\n\n\n\n\n\n\n\nCallout warning\n\n\n\nwarning\n\n\n\n\n\n\n\n\nCallout important\n\n\n\nimportant\n\n\n\n\n\n\n\n\nCallout tip\n\n\n\ntip\n\n\n\n\n\n\n\n\nCallout caution\n\n\n\ncaution"
   }
 ]

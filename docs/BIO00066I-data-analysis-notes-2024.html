@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.545">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>BIO00066I</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">BIO00066I</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./workshop2.html"> 
+<span class="menu-text">Workshop 2</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#notes-on-data-analysis" id="toc-notes-on-data-analysis" class="nav-link active" data-scroll-target="#notes-on-data-analysis">Notes on data analysis</a>
+  <ul class="collapse">
+  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section">2023-12-14</a></li>
+  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1">2023-12-17</a></li>
+  <li><a href="#section-2" id="toc-section-2" class="nav-link" data-scroll-target="#section-2">2023-12-18</a></li>
+  </ul></li>
+  <li><a href="#summary-so-far" id="toc-summary-so-far" class="nav-link" data-scroll-target="#summary-so-far">2024-01-17: summary so far</a>
+  <ul class="collapse">
+  <li><a href="#play-with-data-2023-12-18.r" id="toc-play-with-data-2023-12-18.r" class="nav-link" data-scroll-target="#play-with-data-2023-12-18.r">play-with-data-2023-12-18.R</a></li>
+  <li><a href="#looking-at-manual-cell-tracking-data-mtrackj-tracking-data-analysis" id="toc-looking-at-manual-cell-tracking-data-mtrackj-tracking-data-analysis" class="nav-link" data-scroll-target="#looking-at-manual-cell-tracking-data-mtrackj-tracking-data-analysis">Looking at Manual Cell Tracking data (mtrackJ): tracking-data-analysis</a></li>
+  <li><a href="#comparing-the-repeats" id="toc-comparing-the-repeats" class="nav-link" data-scroll-target="#comparing-the-repeats">Comparing the repeats:</a></li>
+  <li><a href="#comments-from-amnda-about-the-cells-lab-work" id="toc-comments-from-amnda-about-the-cells-lab-work" class="nav-link" data-scroll-target="#comments-from-amnda-about-the-cells-lab-work">2024-01-17 Comments from Amnda about the cells &amp; lab work</a></li>
+  </ul></li>
+  <li><a href="#consolodation-into-one-script-per-workshop" id="toc-consolodation-into-one-script-per-workshop" class="nav-link" data-scroll-target="#consolodation-into-one-script-per-workshop">2024-01-18 consolodation into one script per workshop</a>
+  <ul class="collapse">
+  <li><a href="#possible-workshops" id="toc-possible-workshops" class="nav-link" data-scroll-target="#possible-workshops">Possible workshops:</a></li>
+  <li><a href="#getting-quarto-running" id="toc-getting-quarto-running" class="nav-link" data-scroll-target="#getting-quarto-running">getting Quarto running:</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+
+
+<section id="notes-on-data-analysis" class="level1">
+<h1>Notes on data analysis</h1>
+<ul>
+<li>started 2023-12-14</li>
+</ul>
+<section id="section" class="level3">
+<h3 class="anchored" data-anchor-id="section">2023-12-14</h3>
+<p>The data is here on google drive: https://drive.google.com/drive/folders/12ede56NYuNhz1mOmS6zBmXKzxJ7qTLGg</p>
+<p>Download it all to /Users/dj757/gd/modules/BIO00066I-BABS4/data</p>
+</section>
+<section id="section-1" class="level3">
+<h3 class="anchored" data-anchor-id="section-1">2023-12-17</h3>
+<p>working dir is now: /Users/dj757/gd/modules/BIO00066I set up a git repo https://github.com/djeffares/BIO00066I</p>
+<p>BIO00066I-workshop2.Rmd started and BIO00066I-workshop2.html</p>
+<p>Cleaning up all the data files:</p>
+</section>
+<section id="section-2" class="level3">
+<h3 class="anchored" data-anchor-id="section-2">2023-12-18</h3>
+<p>MSCs mesenchymal stem cells / stromal cells are multipotent stem cells (but not pluripotent) mesenchymal: defined by cell surface marker can diff into mesenchymal cells: bone, cartilage, fat (connective tissues) in lots of tissues: bone marrow, adipose, etc ours are from BM</p>
+<p>MSCs: immuno-modulatory, make cytokines are heterogeneous have subpopulations - but not understood</p>
+<p>source: BM femoral head tissues (hip bone) MSCs infected with telomerase –&gt; immortalised cloned by limiting dilution to CF units creating clonal homogenous cell lines</p>
+<p>A &amp; B are different cell lines from <strong>one donor</strong> some are text book MSCs some we don’t know what they do: they are nullipotent but more immunomod clone A: text book (pluripotent) clone B: more immunomod</p>
+<p><strong>clone A</strong> <strong>clone B</strong></p>
+<p>Clone A: Y201 more migratory might move to a site in the body thinnner: len/width ratio</p>
+<pre><code>B: Y202
+less potent
+more rounded</code></pre>
+<p>remove area &lt; 500 ug dry mass &lt; 200 pg large ones?</p>
+<section id="data-clean-up-and-markdown-work" class="level4">
+<h4 class="anchored" data-anchor-id="data-clean-up-and-markdown-work">2024-01-12 data clean up and markdown work</h4>
+<p>Worked on comparing the two clones in the all-cell-data-FFT.tsv file. Found some differences, in the script analysis-cloneA-v-cloneB-2024-01-12.R Put this in to a markdown: comparing-clones.Rmd, which <strong>may</strong> be a workshop.</p>
+</section>
+<section id="looking-at-analysis-clonea-v-cloneb-2024-01-12.r-filtering" class="level4">
+<h4 class="anchored" data-anchor-id="looking-at-analysis-clonea-v-cloneb-2024-01-12.r-filtering">2024-01-16 looking at analysis-cloneA-v-cloneB-2024-01-12.R: filtering</h4>
+<p>To clean up the data, to remove area &lt; 500 ug dry mass &lt; 200 pg large ones? None of these make much sense, given the data. So I filtered by quantiles: c(0.0001,0.9999) for area, dry.mass and volume This data is saved in: all-cell-data-FFT.filtered.2024-01-16.tsv and all.filtering.plots.2024-01-16.pdf</p>
+</section>
+<section id="looking-at-manual-cell-tracking-data-mtrackj" class="level4">
+<h4 class="anchored" data-anchor-id="looking-at-manual-cell-tracking-data-mtrackj">2024-01-16 looking at Manual Cell Tracking data (mtrackJ)</h4>
+<p>data in: /Users/dj757/gd/modules/BIO00066I/raw-data/ A1 points python output.csv renamed A1-points-python-output.csv B2 points python output.csv B2-points-python-output.csv</p>
+<p>improved the column names: data/A1-points-python-output-improved-names-2024-01-16.csv</p>
+<p>script: tracking-data-analysis.R</p>
+</section>
+</section>
+</section>
+<section id="summary-so-far" class="level1">
+<h1>2024-01-17: summary so far</h1>
+<section id="play-with-data-2023-12-18.r" class="level3">
+<h3 class="anchored" data-anchor-id="play-with-data-2023-12-18.r">play-with-data-2023-12-18.R</h3>
+<p><strong>shows</strong> that these metrics make nice plots, as are they are very different bwteeen A and clone B - width - area - length - track.length - length.to.width.ratio - sphercity</p>
+<p>See: /Users/dj757/gd/modules/BIO00066I/plots/sample.metrics.2023-12-18.jpg</p>
+<p>script: play-with-data-2023-12-18.R inputs: all-cell-data-FFT.tsv</p>
+<p>TO DO: remove track length give them an excel file with different tabs? would the website file loading affect R project stuff (ask Emma)</p>
+<p>###: Comparing and filtering data from clone A and clone B <strong>Shows:</strong> - cell volume, dry mass and cell area are very different between clone A and clone B filtering - filtering by area &lt; 500 ug, dry mass &lt; 200 or for large ones doe not make much sense - we can filter by quantiles, see: all.filtering.plots. This shows the distrbutions a little better</p>
+<p>cloneA is thinner and longer cloneB is wider and shorter</p>
+<p>all params of these cells are statistically different: Some have SUBTLE differences “dry.mass 7.7e-166” “volume 7.7e-166” “length 0” “orientation 1.9e-21”</p>
+<p>Some are VERY DIFFERENT “sphericity 0” “mean.thickness 0” “radius 0” “area 0” “width 0” “displacement 0” “instantaneous.velocity 0”</p>
+<p>inputs: all-cell-data-FFT.tsv which contains /Users/dj757/gd/modules/BIO00066I/raw-data/ A1-FFT.csv A2-FFT.csv A3-FFT.csv B1-FFT.csv B2-FFT.csv B3-FFT.csv</p>
+<p>script: analysis-cloneA-v-cloneB-2024-01-12.R</p>
+<p>TO DO: do filtering to cut off the top ends a bit more add this to the workshop? do NOT trust the equipment! ie: the company recommended this - is this OK??</p>
+</section>
+<section id="looking-at-manual-cell-tracking-data-mtrackj-tracking-data-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="looking-at-manual-cell-tracking-data-mtrackj-tracking-data-analysis">Looking at Manual Cell Tracking data (mtrackJ): tracking-data-analysis</h3>
+<p><strong>Shows:</strong> that speed and track length are very different between A1 and B2</p>
+<p>script: tracking-data-analysis.R</p>
+<p>inputs: A1-points-python-output.csv B2-points-python-output.csv</p>
+</section>
+<section id="comparing-the-repeats" class="level3">
+<h3 class="anchored" data-anchor-id="comparing-the-repeats">Comparing the repeats:</h3>
+<p><strong>shows</strong> that clone B, replicate 3 is a little different</p>
+<p>script: comparing-repeats.R</p>
+<p>inputs: A1-points-python-output.csv B2-points-python-output.csv</p>
+<pre><code>TO DO:
+    igore movement from all FFT data
+    instead use the Manual Cell Tracking data</code></pre>
+<p>TO DO next: make some rose plots from: alb_A1_8bit-0.25 points.xlsx (this is what the python script used as input)</p>
+<pre><code>see what I can do with these alb_A1_8bit-0.25 points.xlsx
+    animated plots?
+    do they move in random directions? or vertical/horizonal?</code></pre>
+<p>possible workshops: 1. replicates and size metrics 2. movement information 1 3. extrapolation from lab stuff &amp; movement information 2 (rose plots)</p>
+<p>ALSO: molecular data secretome prpteomic analysis has been done and there is a manuscript on biorxiv: https://www.biorxiv.org/content/10.1101/2023.01.19.524473v1 calibration curve data from Amanda</p>
+</section>
+<section id="comments-from-amnda-about-the-cells-lab-work" class="level3">
+<h3 class="anchored" data-anchor-id="comments-from-amnda-about-the-cells-lab-work">2024-01-17 Comments from Amnda about the cells &amp; lab work</h3>
+<p>From an email</p>
+<p><strong>The broad question</strong> I’m posing&nbsp;to the students is whether we can use morphometric parametres (which I define as size, shape) and cells migration as predictors as stem cell function, as cell structure relates to function. I.e. are then one or two parametres (or a combination)&nbsp;that a typical stem cell that can become multiple cell types has which then differs in a stem cell that doesn’t differentiate. This could then be useful therapeutically to characterise cells quickly without the need for longer functional assays or methods that don’t currently distinguish different stem cells easily from one another.</p>
+<p><strong>The practical sessions the students complete are:</strong> 1. Cell Culture and seeding the two clonal cell lines on to glass&nbsp;coverslips 2. ‘Fixing’ the cells a few days later and staining their cytoskeleton&nbsp;and nuclei 3. Imaging the cells using fluorescent&nbsp;microscopy 4. Enzyme activity&nbsp;assay of alkaline phosphatase as a marker of differentiation&nbsp;(functional stem cell assay) This is where the students will create a calibration curve and extrapolate unknown data.</p>
+<p><strong>The data analysis then complements&nbsp;what the students will see visually&nbsp;in the lab</strong> as they can work with multiple parameters to first see how they vary and then secondly perhaps try and define for themselves a specific signature of parametres that could be the basis of identifying the same cells from a mixed population, for example making plots with parametres on different axis and overlaying the data to see if that distinguishes or not (length to width ratio vs sphericity could be a good one based on your plots). I don’t know whether we could do something like PCA here to look at differences, I’ve never done it before so could be a ridiculous idea.</p>
+<p><strong>The two clonal lines are genetically identical</strong> as they come from the same donor, but they have different gene expression patterns, as they are functionally different and as shown from proteomics and secretome data. As far as they have characterised them functionally (stem cell differentiation) they haven’t noticeably&nbsp;changed, similarly to HeLa cells and CHO cells that have been cultured for many years.</p>
+</section>
+</section>
+<section id="consolodation-into-one-script-per-workshop" class="level1">
+<h1>2024-01-18 consolodation into one script per workshop</h1>
+<section id="possible-workshops" class="level3">
+<h3 class="anchored" data-anchor-id="possible-workshops">Possible workshops:</h3>
+<ol type="1">
+<li>Common R workshop</li>
+<li>Replicates and size metrics</li>
+<li>Movement information 1</li>
+<li>Movement information 2 (rose plots) and calibration curve</li>
+</ol>
+<section id="cell-biology-workshop-1.-replicates-and-size-metrics" class="level4">
+<h4 class="anchored" data-anchor-id="cell-biology-workshop-1.-replicates-and-size-metrics">cell biology workshop 1. Replicates and size metrics</h4>
+<p>script: BIO00066I-workshop2-replicates-and-size-metrics.R workshop2-replicates-and-size-metrics.qmd</p>
+<p>Use these scripts as starting points:</p>
+<ul>
+<li><p>play-with-data-2023-12-18.R #makes a nice summary table of the clones</p></li>
+<li><p>analysis-cloneA-v-cloneB-2024-01-12.R #does some filtering and shows which metrics that are different</p></li>
+<li><p>BIO00066I-workshop2.Rmd #good for a simple into to the data</p></li>
+<li><p>comparing-repeats.R #shows how repeats differ</p></li>
+</ul>
+<p>combine all these scripts:</p>
+</section>
+</section>
+<section id="getting-quarto-running" class="level3">
+<h3 class="anchored" data-anchor-id="getting-quarto-running">getting Quarto running:</h3>
+<p>from: https://quarto.org/docs/get-started/</p>
+<ul>
+<li>installed Quarto</li>
+<li>follow instructios here for R Studio: https://quarto.org/docs/get-started/hello/rstudio.html</li>
+</ul>
+<p>EASY!!</p>
+<section id="section-3" class="level4">
+<h4 class="anchored" data-anchor-id="section-3">2024-01-19</h4>
+<p><strong>worked on script: BIO00066I-workshop2-replicates-and-size-metrics.R</strong></p>
+<p>this is more or less complete and it:</p>
+<ul>
+<li>introduces the full feature table data</li>
+<li>explores cell shape/size metrics with plots and stats</li>
+<li>shows which shape/size metrics are correlated (most of them!)</li>
+<li>cell shape metriics consistently distinguish between clones, in all reps</li>
+</ul>
+<p>NB: now usingdata is filtered to remove the top end and low end of area, dry.mass and volume as described in filtering-FFT-data-2024-01-19.R</p>
+<p>data from <a href="https://djeffares.github.io/teaching/BIO00066I/all-cell-data-FFT.filtered.2024-01-19.tsv">here</a></p>
+</section>
+<section id="section-4" class="level4">
+<h4 class="anchored" data-anchor-id="section-4">2024-01-20</h4>
+<p>worked on workshop 3: BIO00066I-workshop3-cell-movement-metrics.R</p>
+<p><strong>exploring cell movement metrics:</strong> first, in the FFTdata, showing that the movement metrics are <strong>not</strong> strongly correlated (unlike the cell shape data) but they do consistently distinguish between clones, in all reps</p>
+<p><strong>PCA</strong></p>
+<ul>
+<li>I tried to separate the clones by principal componets clustering</li>
+<li>It was not very convincing</li>
+<li>See pca-trial-2024-01-20.R and arranged.pca.plot.2024.01.20.jpeg</li>
+</ul>
+</section>
+<section id="workshop2-into-quarto-and-trial-of-hosting" class="level4">
+<h4 class="anchored" data-anchor-id="workshop2-into-quarto-and-trial-of-hosting">2024-01-23 workshop2 into quarto and trial of hosting:</h4>
+<p>based on this page: https://quarto.org/docs/publishing/github-pages.html</p>
+<p>I have the hosting working on the repo BIO66I, see: https://djeffares.github.io/BIO66I/</p>
+<p>This is deployed from branch: gh-pages, from the folder docs/</p>
+<p>To update make a new .qmd on terminal: quarto render (in the fir where the qmd’s are, this puts the htmls in docs) git add docs/*, commit and push you will then need to wait a bit for the pages build and deployment in workflows on github</p>
+<p>NOTE:</p>
+<p>The navbar is controlled in _quarto.yml</p>
+<p>BIO66I/data/ contains all the data in branch main</p>
+<p>but the only data available for download is in branch gh-pages, in dir docs/data this is at: https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-01-19.tsv</p>
+<p>NOTE: be careful that you are in branch gh-pages when adding, commiting and pushing</p>
+</section>
+<section id="moving-the-directory" class="level4">
+<h4 class="anchored" data-anchor-id="moving-the-directory">Moving the directory:</h4>
+<p>from /Users/dj757/gd/modules/BIO00066I to /Users/dj757/gd/modules/BIO66I</p>
+<p>because I got the BIO66I to be published, and its simpler to type!</p>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
