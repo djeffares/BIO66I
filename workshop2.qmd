@@ -420,6 +420,10 @@ write_tsv(trackingid.small.data, file ="/Users/dj757/gd/modules/BIO66I/docs/data
 
 So far, we have used **all** the rows in our data frame. But perhaps, this isn't wise, because the Livecyte tracking followed each cell over time. So each measurement of cell shape is not a *completely* an independent measurement.It is more of a technical replicate than a biological replicate. It is valuable to learn how to make plots and analyse small data sets, as well as large ones. So not we will create a very small subset of the data, and investigate this.
 
+First load the small data
+
+#trackingid.small.datahttps://djeffares.github.io/BIO66I/data/trackingid.small.data.tsv
+
 # Reflection
 
 -   After loading the data, what did we do first?
