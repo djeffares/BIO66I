@@ -194,58 +194,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   
 
 
-</header><p><strong>Colour scheme</strong></p>
-<p>In these workshops, we highlight some elements in boxes like this:</p>
-<div class="callout callout-style-default callout-important callout-titled">
+</header><div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Important concepts
+Welcome
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Particularly important ideas or skills.</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Be careful
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Where to be careful.</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Things to think about
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>What does this result show about the biology?</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Information
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p><a href="https://en.wikipedia.org/wiki/Mesenchymal_stem_cell">Mesenchymal stem cells</a> are multipotent, but not pluripotent.</p>
+<p>Welcome to the second R workshop for <strong>BIO00066I</strong> Becoming a Bioscientist: Research in Action.</p>
+<p>In this workshop, we will analyse data created with a Livecyte microscope, which performs live cell imaging, tracking individual cells, and measurings cell shape and size parameters for thousands of cells as they grow and divide. Here, the data is from <a href="https://en.wikipedia.org/wiki/Mesenchymal_stem_cell">mesenchymal stromal cells</a>. You will see the same cell lines in the BIO00066I laboratory work.</p>
 </div>
 </div>
 <section id="learning-objectives" class="level1" data-number="1"><h1 data-number="1">
@@ -261,7 +221,9 @@ Information
 <ul>
 <li>How to interpret data with care</li>
 <li>How to integrate knowledge from laboratory work and computational analysis</li>
-</ul></section><section id="introduction" class="level1" data-number="2"><h1 data-number="2">
+</ul>
+<p>The Module learning outcomes <a href="https://www.york.ac.uk/students/studying/manage/programmes/module-catalogue/module/BIO00066I/latest">can be seen here</a>.</p>
+</section><section id="introduction" class="level1" data-number="2"><h1 data-number="2">
 <span class="header-section-number">2</span> Introduction</h1>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -284,23 +246,25 @@ Philosophy
 </div>
 <section id="the-biology" class="level2" data-number="2.1"><h2 data-number="2.1" class="anchored" data-anchor-id="the-biology">
 <span class="header-section-number">2.1</span> The biology</h2>
-<p>Today we will look at some data from mesenchymal stem cells (MSCs, sometimes called stromal cells). MCSs are are <em>multipotent</em> stem cells, than can differentiate into many kinds of mesenchymal cells: bone, cartilage and fat cells. They are not <em>pluripotent</em>, in that they do have limits about how they differentiate.</p>
+<p>Today we will look at some data from mesenchymal stromal cells (MSCs, sometimes called <em>stem</em> cells). MCSs are are <em>multipotent</em> cells, than can differentiate into many kinds of mesenchymal cells, including bone, cartilage and fat cells. They are not <em>pluripotent</em>, in that they do have limits about how they differentiate.</p>
 <p>MSCs are also:</p>
 <ul>
 <li>immuno-modulatory (they make cytokines)</li>
 <li>heterogeneous (they have subpopulations that are different from each other)</li>
 </ul>
-<p><strong>The MSCs we are looking at</strong> are from bone marrow femoral head tissues (from the hip bone). These MSCs were <em>immortalised</em> (by XXX), and then cloned by limiting dilution. We will compare the data on cell shape and size from just <strong>two clones</strong>, both obtained from one person’s femoral head tissues. Each <em>clone</em> was derived from a <em>single cell</em> from the person.</p>
-<p>We call these two clones <em>clone A</em> and <em>clone B</em>. Today, we will use our data analysis skills to explore how these cells differ.</p>
+<p><strong>The MSCs we are looking at</strong> are from bone marrow femoral head tissues (from the hip bone). These MSCs were <em>immortalised</em> (by transforming them with a telomerase gene), and then cloned by limiting dilution. We will compare the data on cell shape and size from just <strong>two clones</strong>, both obtained from one person’s femoral head tissues. Each <em>clone</em> was derived from a <em>single cell</em> from the person. We call these two clones <em>clone A</em> and <em>clone B</em>. Today, we will use our data analysis skills to explore how these cell line differ. Remember, these two cell lines were both obtained from one person. You probably have these kinds of MSCs too.</p>
 </section><section id="research-questions" class="level2" data-number="2.2"><h2 data-number="2.2" class="anchored" data-anchor-id="research-questions">
 <span class="header-section-number">2.2</span> Research questions</h2>
 <ol type="1">
-<li>What parameters do we have in the data obtained from the XXX machine/method?</li>
+<li>What parameters do we have in the data obtained from the Livecyte machine/method?</li>
 <li>Which parameters differ between the clones?</li>
 <li>Which parameters are correlated?</li>
 </ol></section><section id="the-data" class="level2" data-number="2.3"><h2 data-number="2.3" class="anchored" data-anchor-id="the-data">
 <span class="header-section-number">2.3</span> The data</h2>
-<p>The data we have today are derived from an XXX machine. We grew each clones in XXX media, and captured cell shape an size information for many cells from each clones with XXX machine. For each clone, we measured three <em>biological replicates</em>.</p>
+<p>The data we have today are derived from live cell imagining of mesenchymal stromal cells with a Livecyte microscope and the software it has. Each clones was cultured and the microscope captured cell shape an size information for thousands of cells from each clone (clone A and clone B). For each clone, we measured three <em>biological replicates</em>.</p>
+<p>The Livecyte tracked each cell every 23 minutes, giving each data point a <strong>tracking ID</strong> (which tracks a unique cell ‘object’) and a <strong>lineage ID</strong>, which recalls the lineage of cells as they divide. For example, if cell 1, divied into cell 1A and cell 1B, they are all recorded by the Livecyte as being part of lineage ID 1.</p>
+<p>This video shows what Livecyte can do (perhaps turn the sound down, or whatch later).</p>
+<div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/lposS9SNngY?si=XQXYAslkA3vK3Pzh" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -338,6 +302,19 @@ Thinking like a data scientist
 </div>
 </section></section><section id="exercises" class="level1" data-number="3"><h1 data-number="3">
 <span class="header-section-number">3</span> Exercises</h1>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Develop your R script, carefully.
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>As we run though the exercises, copy the code to your script. Keep your script neat and tidy as much as you can. <strong>#Comments</strong> In R scripts, lines that start with the hash symbol (<code>#</code>) are comments. Add comments so you can remember what this code does. Commenting code makes it readable, for you and anyone else. Good data science includes clearly commented code.</p>
+</div>
+</div>
 <section id="getting-started" class="level2" data-number="3.1"><h2 data-number="3.1" class="anchored" data-anchor-id="getting-started">
 <span class="header-section-number">3.1</span> Getting started</h2>
 <ol type="1">
@@ -370,22 +347,7 @@ Thinking like a data scientist
 <ol start="7" type="1">
 <li>Make sure all these lines of code are in your script, with comments.</li>
 <li>Save the script.</li>
-</ol>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Comment your code!
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>In R scripts, lines that start with the hash symbol (<code>#</code>) are comments.</p>
-<p>Commenting code makes it readable, for you and anyone else. Good data science includes clearly commented code.</p>
-</div>
-</div>
-</section><section id="loading-the-data" class="level2" data-number="3.2"><h2 data-number="3.2" class="anchored" data-anchor-id="loading-the-data">
+</ol></section><section id="loading-the-data" class="level2" data-number="3.2"><h2 data-number="3.2" class="anchored" data-anchor-id="loading-the-data">
 <span class="header-section-number">3.2</span> Loading the data</h2>
 <p>In workshop 1, we showed you how to <a href="https://3mmarand.github.io/R4BABS/r4babs1/week-8/workshop.html#importing-data-from-files">import data from files</a>. Today, we load a tab-separated value (TSV) file from a website:</p>
 <div class="cell">
@@ -650,7 +612,7 @@ If there is something you don’t uderstand, it’s OK to ask us!
 <span>    <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#check that we have</span></span>
+<span><span class="co">#check what we have</span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">small.tracking.data</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">small.tracking.data</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
