@@ -180,6 +180,7 @@ cells <-read_tsv(url("https://djeffares.github.io/BIO66I/all-cell-data-FFT.filte
 We use the `read_tsv` function to read the tab-separated value file. Clicking on the link in the `read_tsv` takes you to a website about this function. **All the code chunks in these workshops have links like this.** The `clone = col_factor(),replicate = col_factor()` *etc* let's R know that we want these columns to be factors, rather than numeric values. Factors are used to represent categorical data.
 :::
 
+
 ## Exploring the data
 
 It is important to know what data you have. How many rows and columns *etc*. There are many ways to do this in R. Here are some of our favourites. Copy and past these into your R script, and try them out.
@@ -206,15 +207,48 @@ summary(cells)
 glimpse(cells)
 ```
 
+You may have noticed that we have two clones (cloneA and cloneB). For each clone, we have three replicates. For each replicate, we have many readings of cell widths, cell volume, cell sphericity, and so on.
+
 ::: callout-tip
 # Which method of do *you* like the best?
 
 Why not take a note of this, and use it all the time?
 :::
 
-### What is in the data?
+## Cleaning up
 
-You may have noticed that we have two clones (cloneA and cloneB). For each clone, we have three replicates. For each replicate, we have many readings of cell widths, cell volume, cell sphericity and so on.
+When you ran `names(cells)` you will have seen *many* metrics from the Livecyte software. We don't need all these, and the movement metrics them are unreliable, so let's remove them. It is simple to remove columns of data, using the `select` command, like so:
+
+```{r}
+#| echo: true
+#| warning: false
+#| output: false
+#| eval: false
+
+#see what we have
+names(cells)
+
+#remove all the movement metrics (which are not reliable)
+cells <- select(cells, 
+                -position.x,
+                -position.y, 
+                -pixel.position.x, 
+                -pixel.position.y,
+                -displacement,
+                -instantaneous.velocity,
+                -instantaneous.velocity.x,
+                -instantaneous.velocity.y,
+                -track.length
+)
+
+#check that our data is simpler
+names(cells)
+```
+
+In the `select` function, using the minus sign `-` before a column name *removes it*. We can also also use `select` to define which columns to *keep*, by omitting the `-`. For example `cells <- select(cells, clone, replicate, volume)` will only keep the columns we listed.
+
+
+## Save your work regularly
 
 **Now save your data and save your script.** This command will save **all** the variables you have loaded, or created so far:
 
@@ -337,7 +371,6 @@ We can test this approximately by plotting data, as below. It doesn't look perfe
 
 ggplot(cells, aes(x = width)) +
   geom_density()
-
 ```
 
 The nonparametric equivalent of a t-Test is a **Wilcoxon rank sum test**. There are two ways to run this test in R. We can do `wilcox.test(vectorA, vectorB)`, where vectorA and vectorB contain the numeric values we want to test.
@@ -363,6 +396,11 @@ Parametric tests are based on assumptions about the distribution of the real dat
 Fortunately, you can add the results of nonparametric tests to ggplot, by adding `stat_compare_means()` to our plot. Note that below we do not force R to split up the replicates as we did above.
 
 ```{r}
+#| echo: true
+#| warning: false
+#| output: false
+#| eval: false
+
 ggplot(cells,aes(x=clone,y=width))+
     geom_boxplot()+
     stat_compare_means()
@@ -426,33 +464,105 @@ summary(small.tracking.data)
 
 ## Plotting a small data set
 
-Previously we used `geom_boxplot()` to compare clone A and clone B. Lets comp
+Previously we used `geom_boxplot()` to compare clone A and clone B. Box and whisker plots (`geom_boxplot`) and violin plots (`geom_violin`, which we describe below) are good ways of displaying *large* amounts of data, but they can be misleading for small data sets. For small data sets it is better to simpler plot all the data points, so the audience has all the information. Let's compare boxplot and a ggplot method to plot all the data (`geom_jitter`).
 
 
 ```{r}
-names(small.tracking.data)
-ggplot(small.tracking.data, aes(x=clone, y=width))+
-    geom_boxplot()
+#| echo: true
+#| warning: false
+#| output: false
+#| eval: false
 
+ggplot(small.tracking.data, aes(x=clone, y=width))+
+    geom_boxplot(fill=NA)+
+    geom_jitter(width = 0.2,size=3,pch=1)+
+    theme_minimal()
+
+names(small.tracking.data)
 ```
 
 
+::: callout-tip
+## if you have time
+Try two alternations of this plot.
 
+1. Remove the `geom_boxplot(fill=NA)+` line. Does it display the data more clearly?
+
+2. Replace  width in `y=width` with some other cell shape/size parameter. Using `names(small.tracking.data)` will show what metrics we have.
+:::
 
 ## Statistical tests with small data and large sets
 
+We use statistical tests like the Wilcoxon rank sum test (`wilcox.test`) to estimate how likely to be drawn from the same 'population' (or distribution). If the P-value is very low (eg: one chance in 10,000 or 0.0001), then we can conclude that the two data sets are indeed different. **But the power of such a test depends on the number of data points.** 
+
+We can prove that to ourselves by comparing a Wilcox test results from the `small.tracking.data` and the much larger `cells` data set:
+
+
+```{r}
+#test with small.tracking.data
+wilcox.test(width ~ clone, data = small.tracking.data)
+
+#test with small.tracking.data
+wilcox.test(width ~ clone, data = cells)
+```
+
+
+::: callout-warning
+## P-values can be misleading
+P-values are not the biology. Use them with caution, and your own judgment. Sometimes very small differences, or very weak correlations can be statistically significant, but have little relevance for the biology.
+:::
+
+
+## Comparing plots side by side
+
+Now, lets look plotting the small and large data sets side by side. Sometimes, a plot can give us a better sense of the data that a P-value.
+
+```{r}
+#| echo: true
+#| warning: false
+#| output: false
+#| eval: true
+
+#plot with the large data
+#storing the plot in an object called large.data.plot
+large.data.plot <- ggplot(cells, aes(x=clone, y=width))+
+    geom_boxplot()+
+    geom_jitter(width = 0.2,size=3,pch=1)+
+    stat_compare_means()+
+    ylim(0,200)+
+    ggtitle("large data")
+
+#plot with the small data
+#storing the plot in an object called small.data.plot
+small.data.plot <- ggplot(small.tracking.data, aes(x=clone, y=width))+
+    geom_boxplot()+
+    geom_jitter(width = 0.2,size=3,pch=1)+
+    stat_compare_means()+
+    ylim(0,200)+
+    ggtitle("small data")
+
+#create a two panel plot, with large.data.plot and small.data.plot
+ggarrange(large.data.plot,small.data.plot)
+```
+
+The `geom_jitter` with the large data set looks *terrible*! This is not a good way to show this data. So remove this part of the plot, and try again. You may also want ot try using `geom_violin` instead of `geom_boxplot`. 
+
+You will also notice that we set the same *y* axis range for both plots, with `ylim(0,200)`. We did this so we can compare the plots side by side. 
 
 # Reflection
 
--   After loading the data, what did we do first?
--   What did making the plots do that summary statistics (liek average, or median) cannot do?
--   What did we learn about the two clones?
+- After loading the data, what did we do first?
+- What did making the plots do that summary statistics (liek average, or median) cannot do?
+- What did we learn about the two clones?
+- How do we plot and consider P-values for small and large data sets?
+
+# The end
+
+**This is the end of the workshop for today.** We provide some consolidation exercises, extra material and advice about the R Studio project below.
 
 # After the workshop
 
-Look at your script again. Add some comments, so that the next time you look at it, it will make more sense to you.
-
-Also, have a go at the consolidation exercises below.
+Look at your script again. Add some comments, so that the next time you look at it, it will make more sense to you. Also, have a go at the consolidation exercises below.
 
 ## Consolidation exercises
 
@@ -470,7 +580,7 @@ ggplot(cells,aes(x=clone,y=width,fill=replicate))+
     geom_violin()
 ```
 
-2.  Now adjust the title with `ggtitle(label)`, and the axis labels with `xlab(label)` and `ylab(label)`, and the **theme** (the general style of the plot), with `theme_classic()`. Use whatever theme you feel makes the data clear.
+2.  Now adjust the title with `ggtitle(label)`, and the axis labels with `xlab(label)` and `ylab(label)`, and the **theme** (the general style of the plot), with `theme_classic()`. There are many themes for ggplot, [which you can see here](https://ggplot2.tidyverse.org/reference/ggtheme.html). Use whatever theme you feel makes the data clear and simple.
 
 ```{r}
 #| echo: true
@@ -486,12 +596,6 @@ ggplot(cells,aes(x=clone,y=length,fill=replicate))+
     theme_classic()
 
 ```
-
-
-::: callout-tip
-# Learning a small amount regularly is better than cramming.
-Because our brains can only concentrate for a short time.
-:::
 
 
 ### Making the small data set
@@ -536,10 +640,6 @@ nrow(trackingid.small.data)
 glimpse(trackingid.small.data)
 ```
 
-
-
-
-
 We write the output to a file:
 
 ```{r}
@@ -564,6 +664,11 @@ view(trackingid.small.data)
 
 ## Planning for your report
 
-# The end.
+For this module, 30% of the grade is for an R Studio project. The script that you are creating now is the start of this. Here is some information that will help you to prepare to submit your project.
+
+::: callout-important
+## For the R Studio project
+Create a logical folder structure for your analysis. Your submission should include the script you used for your work, any accessory functions and the data itself. Your script should be well-commented, well-organised and follow good practice in use of spacing, indentation and variable naming. It should include all the code required to reproduce data import and formatting as well as the summary information, analyses and figures in your report. 
+:::
 
 

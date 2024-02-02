@@ -1,4 +1,13 @@
 /.quarto/
 .Rproj.user
 *.Rda
+.avif
+.png
+.pdf
+.jpeg
+.jpg
+.DS_Store
+.RData
+
+
 
