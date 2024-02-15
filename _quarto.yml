@@ -10,6 +10,8 @@ website:
         text: Home
       - href: workshop2.qmd
         text: "Workshop 2"
+      - href: workshop3.qmd
+        text: "Workshop 3"
         
 format:
   html:

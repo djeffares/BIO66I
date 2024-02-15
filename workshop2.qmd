@@ -13,7 +13,6 @@ format:
         toc-depth: 2
         
 editor: source
-
 ---
 
 ::: callout-note
