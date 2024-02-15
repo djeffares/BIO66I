@@ -221,7 +221,7 @@
     "href": "workshop3.html",
     "title": "BIO00066I Workshop 3",
     "section": "",
-    "text": "Philosophy\n\n\n\nWorkshops are not a test. You may make a lot of mistakes - that is fine. It’s OK to need help. the staff are here to help you, so don’t be afraid to ask for help! :-)\n\n\n\n\nToday we will work with plotting movement data from the Livecyte microscope.\nWe will learn some new R plotting skills:\n\nfacet_wrap a method to plot one variable split up over different treatments (or chromosomes, or days, or replicates)\nhow to create a correlation data frame using the correlate function. This allows us to explore many correlations between different metrics. Typically, these metrics are stored in the columns of our data frames.\n\n\n\n\nWe encourage you to develop your data handling skills. By: - keeping our script clear, simple, and well-annotated - developing your own habits to keep your awareness on what data the data contains\n\n\n\n\n\n\nKnow your data!\n\n\n\nTo understand the biology captured in the data, you need to know what is in the data. At each step, be sure you know the rows, the columns and what they mean. Keep notes about this in your script."
+    "text": "Work in progress\n\n\n\nThis page is a work in progress."
   },
   {
     "objectID": "workshop3.html#the-biology",
@@ -304,14 +304,14 @@
     "objectID": "workshop3.html#technical-skills",
     "href": "workshop3.html#technical-skills",
     "title": "BIO00066I Workshop 3",
-    "section": "",
-    "text": "Today we will work with plotting movement data from the Livecyte microscope.\nWe will learn some new R plotting skills:\n\nfacet_wrap a method to plot one variable split up over different treatments (or chromosomes, or days, or replicates)\nhow to create a correlation data frame using the correlate function. This allows us to explore many correlations between different metrics. Typically, these metrics are stored in the columns of our data frames."
+    "section": "1.1 Technical skills",
+    "text": "1.1 Technical skills\nToday we will work with plotting movement data from the Livecyte microscope.\nWe will learn some new R plotting skills:\n\nfacet_wrap a method to plot one variable split up over different treatments (or chromosomes, or days, or replicates)\nhow to create a correlation data frame using the correlate function. This allows us to explore many correlations between different metrics. Typically, these metrics are stored in the columns of our data frames."
   },
   {
     "objectID": "workshop3.html#thinking-like-a-data-scientist",
     "href": "workshop3.html#thinking-like-a-data-scientist",
     "title": "BIO00066I Workshop 3",
-    "section": "",
-    "text": "We encourage you to develop your data handling skills. By: - keeping our script clear, simple, and well-annotated - developing your own habits to keep your awareness on what data the data contains\n\n\n\n\n\n\nKnow your data!\n\n\n\nTo understand the biology captured in the data, you need to know what is in the data. At each step, be sure you know the rows, the columns and what they mean. Keep notes about this in your script."
+    "section": "1.2 Thinking like a data scientist",
+    "text": "1.2 Thinking like a data scientist\nWe encourage you to develop your data handling skills. By: - keeping our script clear, simple, and well-annotated - developing your own habits to keep your awareness on what data the data contains\n\n\n\n\n\n\nKnow your data!\n\n\n\nTo understand the biology captured in the data, you need to know what is in the data. At each step, be sure you know the rows, the columns and what they mean. Keep notes about this in your script."
   }
 ]
