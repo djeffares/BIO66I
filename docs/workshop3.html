@@ -159,6 +159,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#automated-livecyte-cell-movment-data" id="toc-automated-livecyte-cell-movment-data" class="nav-link" data-scroll-target="#automated-livecyte-cell-movment-data"><span class="header-section-number">3.2</span> Automated Livecyte cell movment data</a></li>
   <li><a href="#making-plots" id="toc-making-plots" class="nav-link" data-scroll-target="#making-plots"><span class="header-section-number">3.3</span> Making plots</a></li>
   <li><a href="#manual-tracking-data" id="toc-manual-tracking-data" class="nav-link" data-scroll-target="#manual-tracking-data"><span class="header-section-number">3.4</span> Manual tracking data</a></li>
+  <li><a href="#plotting-manual-tracking-data" id="toc-plotting-manual-tracking-data" class="nav-link" data-scroll-target="#plotting-manual-tracking-data"><span class="header-section-number">3.5</span> Plotting manual tracking data</a></li>
+  <li><a href="#examining-correlations" id="toc-examining-correlations" class="nav-link" data-scroll-target="#examining-correlations"><span class="header-section-number">3.6</span> Examining correlations</a></li>
   </ul>
 </li>
   <li><a href="#reflection" id="toc-reflection" class="nav-link" data-scroll-target="#reflection"><span class="header-section-number">4</span> Reflection</a></li>
@@ -501,7 +503,7 @@ Optional
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 201
 Columns: 13
-$ CID                           &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2…
+$ LID                           &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2…
 $ TID                           &lt;dbl&gt; 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 1, 2…
 $ track.duration                &lt;dbl&gt; 230, 1587, 1702, 2484, 2484, 1725, 2484,…
 $ track.length                  &lt;dbl&gt; 80.850, 633.822, 711.651, 963.285, 870.3…
@@ -517,7 +519,7 @@ $ cell.line                     &lt;chr&gt; "A1", "A1", "A1", "A1", "A1", "A1", 
 </div>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">track</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "CID"                           "TID"                          
+<pre><code> [1] "LID"                           "TID"                          
  [3] "track.duration"                "track.length"                 
  [5] "meandering.index"              "euclidean.distance"           
  [7] "mean.speed"                    "track.present.at.start.or.end"
@@ -526,11 +528,65 @@ $ cell.line                     &lt;chr&gt; "A1", "A1", "A1", "A1", "A1", "A1", 
 [13] "cell.line"                    </code></pre>
 </div>
 </div>
-<p>In this data <code>TID</code> is the Livecyte <em>tracking ID</em>, a unique number that the microscope gives to each ‘object’ it can identify.</p>
-<p><code>CID</code> is the Livecyte <em>cell ID</em>. This keeps track of the cell lineage (ie: the initial cells, and the subsequent daughter cells that are derived from it as it divides). When a cell divides, it keeps the same <em>cell ID</em>, but <em>each</em> daughter cell is assigned a new <em>tracking ID</em>.</p>
-<section id="section" class="level3" data-number="3.4.1"><h3 data-number="3.4.1" class="anchored" data-anchor-id="section">
-<span class="header-section-number">3.4.1</span> </h3>
-</section></section></section><section id="reflection" class="level1" data-number="4"><h1 data-number="4">
+<p>In this data, <code>TID</code> is the Livecyte <strong>tracking ID</strong>, a unique number that the microscope gives to each ‘object’ it can identify. <code>LID</code> is the Livecyte <strong>lineage ID</strong>. This keeps track of the cell lineage (ie: the initial cells, and the subsequent daughter cells that are derived from it as it divides). When a cell divides, both ‘daughter cells’ keep the same <strong>lineage ID</strong>, but each is assigned a new unique <strong>tracking ID</strong>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="docs/figure1.jpg" class="img-fluid figure-img"></p>
+<figcaption><strong>Figure 1.</strong> The <strong>tracking ID (TID)</strong> is a unique ID that the microscope assigned to each object (cell), as it tracks it through time. The <strong>lineage ID (LID)</strong> is a number assigned to the ‘family’ of cells that derived by cell division during the the experiment. When a cell divides, each daughter cell is given a new tracking ID, but they keep their lineage ID, because they are still part of the same family.</figcaption></figure>
+</div>
+</section><section id="plotting-manual-tracking-data" class="level2" data-number="3.5"><h2 data-number="3.5" class="anchored" data-anchor-id="plotting-manual-tracking-data">
+<span class="header-section-number">3.5</span> Plotting manual tracking data</h2>
+<p>Let’s start by looking at the <strong>distance</strong> that each cell has travelled durig the experiment. This is recorded as <code>euclidean.distance</code>. This is the <em>shortest distance</em> between two points, so it does not take any meaderig into account. We can compare the clones (<code>cell.line</code>) like so:</p>
+<div class="cell">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#compare euclidean.distance between cell lines</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">track</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">cell.line</span>,y<span class="op">=</span><span class="va">euclidean.distance</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/stat_compare_means.html">stat_compare_means</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="workshop3_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Improve the plot
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Try these things to improve this plot:</p>
+<ul>
+<li>use <code>geom_violin</code> instead of <code>geom_boxplot</code>
+</li>
+<li>adding <code>theme_classic</code>
+</li>
+<li>making the <em>x</em>-axis and <em>y</em>-axis look better with <code>xlab("something")</code>, <code>ylab("something")</code>
+</li>
+<li>giving the plot a title with <code>ggtitle("top title", subtitle ="sub text")</code>
+</li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Optional: alter the plot
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When you have the plot looking the way you like, examine some of the other cell movement metrics. To find out what is available, use <code>names(track)</code>.</p>
+</div>
+</div>
+</section><section id="examining-correlations" class="level2" data-number="3.6"><h2 data-number="3.6" class="anchored" data-anchor-id="examining-correlations">
+<span class="header-section-number">3.6</span> Examining correlations</h2>
+</section></section><section id="reflection" class="level1" data-number="4"><h1 data-number="4">
 <span class="header-section-number">4</span> Reflection</h1>
 </section><section id="after-the-workshop" class="level1" data-number="5"><h1 data-number="5">
 <span class="header-section-number">5</span> After the workshop</h1>
