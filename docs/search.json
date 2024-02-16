@@ -214,7 +214,7 @@
     "href": "BIO00066I-template.html#callouts",
     "title": "BIO00066I",
     "section": "Callouts:",
-    "text": "Callouts:\nSee this site for more info.\nThere are five different types of callouts available:\n\nnote\nwarning\nimportant\ntip\ncaution\n\n\n\n\n\n\n\nThis is a callout note block.\n\n\n\nText or code goes here.\n\nmean(rnorm(100))\n\n[1] 0.255382\n\n\n\n\n\n\n\n\n\n\nCallout warning\n\n\n\nwarning\n\n\n\n\n\n\n\n\nCallout important\n\n\n\nimportant\n\n\n\n\n\n\n\n\nCallout tip\n\n\n\ntip\n\n\n\n\n\n\n\n\nCallout caution\n\n\n\ncaution"
+    "text": "Callouts:\nSee this site for more info.\nThere are five different types of callouts available:\n\nnote\nwarning\nimportant\ntip\ncaution\n\n\n\n\n\n\n\nThis is a callout note block.\n\n\n\nText or code goes here.\n\nmean(rnorm(100))\n\n[1] 0.1885506\n\n\n\n\n\n\n\n\n\n\nCallout warning\n\n\n\nwarning\n\n\n\n\n\n\n\n\nCallout important\n\n\n\nimportant\n\n\n\n\n\n\n\n\nCallout tip\n\n\n\ntip\n\n\n\n\n\n\n\n\nCallout caution\n\n\n\ncaution"
   },
   {
     "objectID": "workshop3.html",
@@ -227,22 +227,22 @@
     "objectID": "workshop3.html#the-biology",
     "href": "workshop3.html#the-biology",
     "title": "BIO00066I Workshop 3",
-    "section": "2.1 The biology",
-    "text": "2.1 The biology\nToday, we will continue our quest to understand mesenchymal stromal cells (MSCs). Remember, the two clones we are studying were both obtained from one person, and they have been transformed with telomerase to make them immortal (so they don’t age). Then, they have been cultured in a lab for years.\nIn workshop 2, we say that these two clones were different shapes. This time, we examine how they move.\n\n\n\n\n\n\nSometimes, it is a good question that makes a good scientist.\n\n\n\nWhy do these clones maintain different shapes after growing in the lab for so long? Why don’t they revert to being the same?"
+    "section": "\n2.1 The biology",
+    "text": "2.1 The biology\nToday, we will continue our quest to understand mesenchymal stromal cells (MSCs). Remember, the two clones we are studying were both obtained from one person, and they have been transformed with telomerase to make them immortal (so they don’t age). Then, they have been cultured in a lab for years.\nIn workshop 2, we saw that these two clones were different shapes. This time, we examine how they move.\n\n\n\n\n\n\nSometimes, asking a good question is the most important step!\n\n\n\nWhy do these clones maintain different shapes after growing in the lab for so long? Why don’t they revert to being the same?"
   },
   {
     "objectID": "workshop3.html#research-questions",
     "href": "workshop3.html#research-questions",
     "title": "BIO00066I Workshop 3",
-    "section": "2.3 Research questions",
-    "text": "2.3 Research questions\n\nDo the two mesenchymal stromal cell clones move differently?\nWhat data set(s) are most relaible?\nWhat are the best parameters to distinguish them?"
+    "section": "\n2.3 Research questions",
+    "text": "2.3 Research questions\n\nDo the two mesenchymal stromal cell clones move differently?\nWhat data set(s) are most reliable?\nWhat are the best parameters to distinguish the clones?"
   },
   {
     "objectID": "workshop3.html#the-data",
     "href": "workshop3.html#the-data",
     "title": "BIO00066I Workshop 3",
-    "section": "2.2 The data",
-    "text": "2.2 The data\nIn this workshop we bla bla"
+    "section": "\n2.2 The data",
+    "text": "2.2 The data\nIn this workshop, we first examine cell movement data that was collected in an automated way by the Livecyte microscope. This shows something interesting, but it is not very reliable, because the Livecyte is not perfect at tracking individual cells.\nPeople are better at tracking individual cells. So we then look at some manual tracking data. We will se such metrics as euclidean.distance (how far the cells have moved), mean.speed (how fast they go), and meandering.index (how much they meander and change their minds about where they are going!).\nWhile we could guess how the cells differ from looking down the microscope, we can use our data science skills in two ways to enrich our perception, by:\n\nshowing metrics with plots - this will enhance out intuition\nusing statistical tests to test our intuitions\nthe tests will determine which metrics (if any) are significantly different between the clones\n\nThis work transforms intuitions into evidence."
   },
   {
     "objectID": "workshop3.html#part-1",
@@ -255,28 +255,28 @@
     "objectID": "workshop3.html#part-2",
     "href": "workshop3.html#part-2",
     "title": "BIO00066I Workshop 3",
-    "section": "3.2 Part 2",
+    "section": "\n3.2 Part 2",
     "text": "3.2 Part 2"
   },
   {
     "objectID": "workshop3.html#part-3",
     "href": "workshop3.html#part-3",
     "title": "BIO00066I Workshop 3",
-    "section": "3.3 Part 3",
+    "section": "\n3.3 Part 3",
     "text": "3.3 Part 3"
   },
   {
     "objectID": "workshop3.html#consolodation-exercises",
     "href": "workshop3.html#consolodation-exercises",
     "title": "BIO00066I Workshop 3",
-    "section": "5.1 Consolodation exercises",
+    "section": "\n5.1 Consolodation exercises",
     "text": "5.1 Consolodation exercises\nOptional"
   },
   {
     "objectID": "workshop3.html#planning-for-your-report",
     "href": "workshop3.html#planning-for-your-report",
     "title": "BIO00066I Workshop 3",
-    "section": "5.2 Planning for your report",
+    "section": "\n5.2 Planning for your report",
     "text": "5.2 Planning for your report"
   },
   {
@@ -304,14 +304,49 @@
     "objectID": "workshop3.html#technical-skills",
     "href": "workshop3.html#technical-skills",
     "title": "BIO00066I Workshop 3",
-    "section": "1.1 Technical skills",
-    "text": "1.1 Technical skills\nToday we will work with plotting movement data from the Livecyte microscope.\nWe will learn some new R plotting skills:\n\nfacet_wrap a method to plot one variable split up over different treatments (or chromosomes, or days, or replicates)\nhow to create a correlation data frame using the correlate function. This allows us to explore many correlations between different metrics. Typically, these metrics are stored in the columns of our data frames."
+    "section": "\n1.1 Technical skills",
+    "text": "1.1 Technical skills\nToday we will work with plotting movement data from the Livecyte microscope.\nWe will learn some new R plotting skills:\n\n\nfacet_wrap a method to plot one variable split up over different treatments (or chromosomes, or days, or replicates)\nhow to create a correlation data frame using the correlate function. This allows us to explore many correlations between different metrics. Typically, these metrics are stored in the columns of our data frames."
   },
   {
     "objectID": "workshop3.html#thinking-like-a-data-scientist",
     "href": "workshop3.html#thinking-like-a-data-scientist",
     "title": "BIO00066I Workshop 3",
-    "section": "1.2 Thinking like a data scientist",
-    "text": "1.2 Thinking like a data scientist\nWe encourage you to develop your data handling skills. By: - keeping our script clear, simple, and well-annotated - developing your own habits to keep your awareness on what data the data contains\n\n\n\n\n\n\nKnow your data!\n\n\n\nTo understand the biology captured in the data, you need to know what is in the data. At each step, be sure you know the rows, the columns and what they mean. Keep notes about this in your script."
+    "section": "\n1.2 Thinking like a data scientist",
+    "text": "1.2 Thinking like a data scientist\nWe encourage you to develop your data handling skills. By:\n\nkeeping our script clear, simple, and well-annotated\ndeveloping your own habits to keep your awareness on what data the data contains\n\n\n\n\n\n\n\n\nKnow your data!\n\n\n\nTo understand the biology captured in the data, you need to know what is in the data. At each step, be sure you know the rows, the columns and what they mean. Keep notes about this in your script."
+  },
+  {
+    "objectID": "workshop3.html#setting-up",
+    "href": "workshop3.html#setting-up",
+    "title": "BIO00066I Workshop 3",
+    "section": "\n3.1 Setting up",
+    "text": "3.1 Setting up\n\nStart up R Studio, and open your Project.\nOpen the script your worked on in workshop 2\n\n\nWe will keep working on this script. We advise you to mark clearly where workshop 1, workshop 2 and workshop 3 are. Something like this will help:\n\n########################################################\n#WORKSHOP 3: CELL MOVEMENT DATA\n########################################################\n\nThen clear the previous work, and load the libraries we need:\n\n#clear previous data\nrm(list=ls())\n\n#load the tidyverse\nlibrary(tidyverse)\n\n#load the corr library: this is for examining correlations between many metrics\nlibrary(corrr)\n\n#we need this to make pretty plots with the 'ggarrange' package\nlibrary(ggpubr)"
+  },
+  {
+    "objectID": "workshop3.html#loading-automated-livecyte-movment-data",
+    "href": "workshop3.html#loading-automated-livecyte-movment-data",
+    "title": "BIO00066I Workshop 3",
+    "section": "\n3.2 Loading automated Livecyte movment data",
+    "text": "3.2 Loading automated Livecyte movment data\n\n# Read the automated Livecyte data\ncells &lt;-read_tsv(url(\"https://djeffares.github.io/BIO66I/all-cell-data-FFT.filtered.2024-01-19.tsv\"),\n                 col_types = cols(\n                   clone = col_factor(),\n                   replicate = col_factor(),\n                   tracking.id=col_factor(),\n                   lineage.id=col_factor()\n                 )\n)"
+  },
+  {
+    "objectID": "workshop3.html#automated-livecyte-cell-movment-data",
+    "href": "workshop3.html#automated-livecyte-cell-movment-data",
+    "title": "BIO00066I Workshop 3",
+    "section": "\n3.2 Automated Livecyte cell movment data",
+    "text": "3.2 Automated Livecyte cell movment data\nNow read in the data from the file all-cell-data-FFT.filtered.2024-01-19.tsv. This contains some cell movment data.\n\n# Read the automated Livecyte data\ncells &lt;-read_tsv(url(\"https://djeffares.github.io/BIO66I/all-cell-data-FFT.filtered.2024-01-19.tsv\"),\n                 col_types = cols(\n                   clone = col_factor(),\n                   replicate = col_factor(),\n                   tracking.id=col_factor(),\n                   lineage.id=col_factor()\n                 )\n)\n\nLets see what data we have:\n\nnames(cells)\n\n\n\n\n\n\n\nKeep it simple\n\n\n\nIn data science, we can easily get confused. keep the data as simple as you can (but no simpler).\n\n\nIn the spirit of keeping it simple, let’s retain only the columns in this data frame that we need, using the select function. The cells data framt still have all the data, so it is not lost.\n\nnames(cells)\n\n [1] \"clone\"                    \"replicate\"               \n [3] \"frame\"                    \"tracking.id\"             \n [5] \"lineage.id\"               \"position.x\"              \n [7] \"position.y\"               \"pixel.position.x\"        \n [9] \"pixel.position.y\"         \"volume\"                  \n[11] \"mean.thickness\"           \"radius\"                  \n[13] \"area\"                     \"sphericity\"              \n[15] \"length\"                   \"width\"                   \n[17] \"orientation\"              \"dry.mass\"                \n[19] \"displacement\"             \"instantaneous.velocity\"  \n[21] \"instantaneous.velocity.x\" \"instantaneous.velocity.y\"\n[23] \"track.length\"             \"perimeter\"               \n[25] \"length.to.width\"         \n\n#select only the columns we need\ncell.move.data &lt;- select(cells,\n        clone,\n        replicate,\n        displacement, \n        track.length, \n        instantaneous.velocity\n)\n#check that we have\nnames(cell.move.data)\n\n[1] \"clone\"                  \"replicate\"              \"displacement\"          \n[4] \"track.length\"           \"instantaneous.velocity\"\n\n#get a simple summaru, using summary and also glimpse\nsummary(cell.move.data)\n\n    clone       replicate  displacement     track.length   \n cloneA:55555   1:30373   Min.   :  0.00   Min.   :  0.00  \n cloneB:36330   2:36393   1st Qu.:  4.72   1st Qu.: 10.80  \n                3:25119   Median : 22.17   Median : 46.59  \n                          Mean   : 46.42   Mean   : 91.31  \n                          3rd Qu.: 62.35   3rd Qu.:126.91  \n                          Max.   :487.55   Max.   :984.29  \n instantaneous.velocity\n Min.   :0.0000000     \n 1st Qu.:0.0008046     \n Median :0.0025395     \n Mean   :0.0035334     \n 3rd Qu.:0.0050956     \n Max.   :0.0448467     \n\nglimpse(cell.move.data)\n\nRows: 91,885\nColumns: 5\n$ clone                  &lt;fct&gt; cloneA, cloneA, cloneA, cloneA, cloneA, cloneA,…\n$ replicate              &lt;fct&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…\n$ displacement           &lt;dbl&gt; 0.00, 14.96, 0.00, 10.92, 12.93, 14.13, 13.13, …\n$ track.length           &lt;dbl&gt; 0.00, 14.96, 0.00, 10.92, 15.74, 21.72, 26.23, …\n$ instantaneous.velocity &lt;dbl&gt; 0.000000000, 0.010829316, 0.000000000, 0.003954…\n\n\nNow save your working data:\n\n#lets save our data\nsave.image(\"BIO00066I-workshop3-cell-movement-metrics.Rda\")\n\n#you can load this any time later with:\nload(\"BIO00066I-workshop3-cell-movement-metrics.Rda\")"
+  },
+  {
+    "objectID": "workshop3.html#making-plots",
+    "href": "workshop3.html#making-plots",
+    "title": "BIO00066I Workshop 3",
+    "section": "\n3.3 Making plots",
+    "text": "3.3 Making plots\nlet’s see how clone A and clone B move. First, we’ll plot the instantaneous.velocity:\n\n#instantaneous.velocity - geom_violin\nggplot(cell.move.data,aes(x=clone,y=instantaneous.velocity,colour=clone))+\n    geom_violin(alpha=0.5)+\n    stat_compare_means()\n\n\n\n\n\n\n\nThis plot isn’t very revealing is it? That is because most of the instantaneous.velocity values are very low, and the data are certainly not normally distributed. Biological data is often like this. Plotting metrics on a log scale is often the solution. Log2 or log10 scales are commonly used.\n\n\n\n\n\n\nAdjust this plot yourself\n\n\n\nSo that you plot y=log10(instantaneous.velocity). Does it look better?\n\n\n\n\n\n\n\n\nEnhance the plot with facet_wrap\n\n\n\nThis time, show the repeats by adding a new line to the plot code:\nfacet_wrap(~replicate)+\nWhat is facet_wrap?. Our first categorical value that we split up the data into was clone A and clone B. facet_wrap splits the data up again into a second categorical value, and plots each category. In this case our second category was ~replicate.\n\n\nIf these adjustments to the code worked, you will end up with a plot like this. What does this tell you about clone movement?.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nOptional\n\n\n\nUse your plot code to explore, displacement, track.length and/or instantaneous.velocity."
+  },
+  {
+    "objectID": "workshop3.html#manual-tracking-data",
+    "href": "workshop3.html#manual-tracking-data",
+    "title": "BIO00066I Workshop 3",
+    "section": "\n3.4 Manual tracking data",
+    "text": "3.4 Manual tracking data\nSometimes, the automated measurements are not the best quality. In this case, we know that the Livecyte microscope is not very good at tracking cells, so the cell movement metrics are not as good as we would like.\nSo Amanda spent many hours manually tracking cells. These results were processed into manual tracking data. First, load the data and of course examine what you have.\n\n#load the manual tracking data\ntrack &lt;-read_tsv(url(\"https://djeffares.github.io/BIO66I/A1-and-B2-tracking.data.tsv\"))\n\n#check it out\nglimpse(track)\n\nRows: 201\nColumns: 13\n$ CID                           &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2…\n$ TID                           &lt;dbl&gt; 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 1, 2…\n$ track.duration                &lt;dbl&gt; 230, 1587, 1702, 2484, 2484, 1725, 2484,…\n$ track.length                  &lt;dbl&gt; 80.850, 633.822, 711.651, 963.285, 870.3…\n$ meandering.index              &lt;dbl&gt; 0.08401856, 0.20254946, 0.47929912, 0.13…\n$ euclidean.distance            &lt;dbl&gt; 6.79290, 128.38031, 341.09370, 128.90071…\n$ mean.speed                    &lt;dbl&gt; 0.3515217, 0.3993837, 0.4181263, 0.38779…\n$ track.present.at.start.or.end &lt;lgl&gt; TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, T…\n$ track.never.divides           &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE…\n$ start.time.total.time         &lt;dbl&gt; 0.00000000, 0.04166667, 0.30681818, 0.59…\n$ end.time.total.time           &lt;dbl&gt; 0.03787879, 0.30303030, 0.58712121, 1.00…\n$ track.duration.total.time     &lt;dbl&gt; 0.03787879, 0.26136364, 0.28030303, 0.40…\n$ cell.line                     &lt;chr&gt; \"A1\", \"A1\", \"A1\", \"A1\", \"A1\", \"A1\", \"A1\"…\n\nnames(track)\n\n [1] \"CID\"                           \"TID\"                          \n [3] \"track.duration\"                \"track.length\"                 \n [5] \"meandering.index\"              \"euclidean.distance\"           \n [7] \"mean.speed\"                    \"track.present.at.start.or.end\"\n [9] \"track.never.divides\"           \"start.time.total.time\"        \n[11] \"end.time.total.time\"           \"track.duration.total.time\"    \n[13] \"cell.line\"                    \n\n\nIn this data TID is the Livecyte tracking ID, a unique number that the microscope gives to each ‘object’ it can identify.\nCID is the Livecyte cell ID. This keeps track of the cell lineage (ie: the initial cells, and the subsequent daughter cells that are derived from it as it divides). When a cell divides, it keeps the same cell ID, but each daughter cell is assigned a new tracking ID.\n\n3.4.1"
   }
 ]

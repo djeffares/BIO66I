@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.4.545">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
 <meta name="author" content="Daniel Jeffares">
 <meta name="dcterms.date" content="2024-01-25">
-
 <title>BIO00066I - BIO00066I Workshop 3</title>
 <style>
 code{white-space: pre-wrap;}
@@ -22,8 +19,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
-
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
@@ -40,8 +70,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -67,18 +96,12 @@ ul.task-list li input[type="checkbox"] {
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script>
-
-
-<link rel="stylesheet" href="styles.css">
+}</script><link rel="stylesheet" href="styles.css">
 </head>
-
 <body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
-      <div class="navbar-container container-fluid">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark"><div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">BIO00066I</span>
@@ -90,7 +113,7 @@ ul.task-list li input[type="checkbox"] {
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="nav-item">
+<li class="nav-item">
     <a class="nav-link" href="./index.html"> 
 <span class="menu-text">Home</span></a>
   </li>  
@@ -103,52 +126,53 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Workshop 3</span></a>
   </li>  
 </ul>
-          </div> <!-- /navcollapse -->
+</div> <!-- /navcollapse -->
           <div class="quarto-navbar-tools">
 </div>
       </div> <!-- /container-fluid -->
-    </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+    </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">On this page</h2>
    
   <ul class="collapse">
-  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">1</span> Learning objectives</a>
+<li>
+<a href="#learning-objectives" id="toc-learning-objectives" class="nav-link active" data-scroll-target="#learning-objectives"><span class="header-section-number">1</span> Learning objectives</a>
   <ul class="collapse">
-  <li><a href="#technical-skills" id="toc-technical-skills" class="nav-link" data-scroll-target="#technical-skills"><span class="header-section-number">1.1</span> Technical skills</a></li>
+<li><a href="#technical-skills" id="toc-technical-skills" class="nav-link" data-scroll-target="#technical-skills"><span class="header-section-number">1.1</span> Technical skills</a></li>
   <li><a href="#thinking-like-a-data-scientist" id="toc-thinking-like-a-data-scientist" class="nav-link" data-scroll-target="#thinking-like-a-data-scientist"><span class="header-section-number">1.2</span> Thinking like a data scientist</a></li>
-  </ul></li>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction"><span class="header-section-number">2</span> Introduction</a>
+  </ul>
+</li>
+  <li>
+<a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction"><span class="header-section-number">2</span> Introduction</a>
   <ul class="collapse">
-  <li><a href="#the-biology" id="toc-the-biology" class="nav-link" data-scroll-target="#the-biology"><span class="header-section-number">2.1</span> The biology</a></li>
+<li><a href="#the-biology" id="toc-the-biology" class="nav-link" data-scroll-target="#the-biology"><span class="header-section-number">2.1</span> The biology</a></li>
   <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data"><span class="header-section-number">2.2</span> The data</a></li>
   <li><a href="#research-questions" id="toc-research-questions" class="nav-link" data-scroll-target="#research-questions"><span class="header-section-number">2.3</span> Research questions</a></li>
-  </ul></li>
-  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">3</span> Exercises</a>
-  <ul class="collapse">
-  <li><a href="#part-1" id="toc-part-1" class="nav-link" data-scroll-target="#part-1"><span class="header-section-number">3.1</span> Part 1</a></li>
-  <li><a href="#part-2" id="toc-part-2" class="nav-link" data-scroll-target="#part-2"><span class="header-section-number">3.2</span> Part 2</a></li>
-  <li><a href="#part-3" id="toc-part-3" class="nav-link" data-scroll-target="#part-3"><span class="header-section-number">3.3</span> Part 3</a></li>
-  </ul></li>
-  <li><a href="#reflection" id="toc-reflection" class="nav-link" data-scroll-target="#reflection"><span class="header-section-number">4</span> Reflection</a></li>
-  <li><a href="#after-the-workshop" id="toc-after-the-workshop" class="nav-link" data-scroll-target="#after-the-workshop"><span class="header-section-number">5</span> After the workshop</a>
-  <ul class="collapse">
-  <li><a href="#consolodation-exercises" id="toc-consolodation-exercises" class="nav-link" data-scroll-target="#consolodation-exercises"><span class="header-section-number">5.1</span> Consolodation exercises</a></li>
-  <li><a href="#planning-for-your-report" id="toc-planning-for-your-report" class="nav-link" data-scroll-target="#planning-for-your-report"><span class="header-section-number">5.2</span> Planning for your report</a></li>
-  </ul></li>
   </ul>
-</nav>
+</li>
+  <li>
+<a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">3</span> Exercises</a>
+  <ul class="collapse">
+<li><a href="#setting-up" id="toc-setting-up" class="nav-link" data-scroll-target="#setting-up"><span class="header-section-number">3.1</span> Setting up</a></li>
+  <li><a href="#automated-livecyte-cell-movment-data" id="toc-automated-livecyte-cell-movment-data" class="nav-link" data-scroll-target="#automated-livecyte-cell-movment-data"><span class="header-section-number">3.2</span> Automated Livecyte cell movment data</a></li>
+  <li><a href="#making-plots" id="toc-making-plots" class="nav-link" data-scroll-target="#making-plots"><span class="header-section-number">3.3</span> Making plots</a></li>
+  <li><a href="#manual-tracking-data" id="toc-manual-tracking-data" class="nav-link" data-scroll-target="#manual-tracking-data"><span class="header-section-number">3.4</span> Manual tracking data</a></li>
+  </ul>
+</li>
+  <li><a href="#reflection" id="toc-reflection" class="nav-link" data-scroll-target="#reflection"><span class="header-section-number">4</span> Reflection</a></li>
+  <li>
+<a href="#after-the-workshop" id="toc-after-the-workshop" class="nav-link" data-scroll-target="#after-the-workshop"><span class="header-section-number">5</span> After the workshop</a>
+  <ul class="collapse">
+<li><a href="#consolodation-exercises" id="toc-consolodation-exercises" class="nav-link" data-scroll-target="#consolodation-exercises"><span class="header-section-number">5.1</span> Consolodation exercises</a></li>
+  <li><a href="#planning-for-your-report" id="toc-planning-for-your-report" class="nav-link" data-scroll-target="#planning-for-your-report"><span class="header-section-number">5.2</span> Planning for your report</a></li>
+  </ul>
+</li>
+  </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title">BIO00066I Workshop 3</h1>
 <p class="subtitle lead">Cell Biology Data Analysis Workshop 3</p>
 </div>
@@ -176,10 +200,7 @@ ul.task-list li input[type="checkbox"] {
   
 
 
-</header>
-
-
-<div class="callout callout-style-default callout-warning callout-titled">
+</header><div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
@@ -192,8 +213,8 @@ Work in progress
 <p>This page is a work in progress.</p>
 </div>
 </div>
-<section id="learning-objectives" class="level1" data-number="1">
-<h1 data-number="1"><span class="header-section-number">1</span> Learning objectives</h1>
+<section id="learning-objectives" class="level1" data-number="1"><h1 data-number="1">
+<span class="header-section-number">1</span> Learning objectives</h1>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -207,18 +228,22 @@ Philosophy
 <p>Workshops are not a test. You may make a lot of mistakes - that is fine. It’s OK to need help. the staff are here to help you, so don’t be afraid to ask for help! :-)</p>
 </div>
 </div>
-<section id="technical-skills" class="level2" data-number="1.1">
-<h2 data-number="1.1" class="anchored" data-anchor-id="technical-skills"><span class="header-section-number">1.1</span> Technical skills</h2>
+<section id="technical-skills" class="level2" data-number="1.1"><h2 data-number="1.1" class="anchored" data-anchor-id="technical-skills">
+<span class="header-section-number">1.1</span> Technical skills</h2>
 <p>Today we will work with plotting movement data from the Livecyte microscope.</p>
 <p>We will learn some new R plotting skills:</p>
 <ul>
-<li><code>facet_wrap</code> a method to plot one variable split up over different treatments (or chromosomes, or days, or replicates)</li>
+<li>
+<code>facet_wrap</code> a method to plot one variable split up over different treatments (or chromosomes, or days, or replicates)</li>
 <li>how to create a <strong>correlation data frame</strong> using the <code>correlate</code> function. This allows us to explore many correlations between different metrics. Typically, these metrics are stored in the <em>columns</em> of our data frames.</li>
+</ul></section><section id="thinking-like-a-data-scientist" class="level2" data-number="1.2"><h2 data-number="1.2" class="anchored" data-anchor-id="thinking-like-a-data-scientist">
+<span class="header-section-number">1.2</span> Thinking like a data scientist</h2>
+<p>We encourage you to develop your data handling skills. By:</p>
+<ul>
+<li>keeping our script clear, simple, and well-annotated</li>
+<li>developing your own habits to keep your awareness on <strong>what data the data contains</strong>
+</li>
 </ul>
-</section>
-<section id="thinking-like-a-data-scientist" class="level2" data-number="1.2">
-<h2 data-number="1.2" class="anchored" data-anchor-id="thinking-like-a-data-scientist"><span class="header-section-number">1.2</span> Thinking like a data scientist</h2>
-<p>We encourage you to develop your data handling skills. By: - keeping our script clear, simple, and well-annotated - developing your own habits to keep your awareness on <strong>what data the data contains</strong></p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -232,71 +257,291 @@ Know your data!
 <p>To understand the biology captured in the data, you need to know what is in the data. At each step, be sure you know the rows, the columns and what they mean. Keep notes about this in your script.</p>
 </div>
 </div>
-</section>
-</section>
-<section id="introduction" class="level1" data-number="2">
-<h1 data-number="2"><span class="header-section-number">2</span> Introduction</h1>
-<section id="the-biology" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="the-biology"><span class="header-section-number">2.1</span> The biology</h2>
+</section></section><section id="introduction" class="level1" data-number="2"><h1 data-number="2">
+<span class="header-section-number">2</span> Introduction</h1>
+<section id="the-biology" class="level2" data-number="2.1"><h2 data-number="2.1" class="anchored" data-anchor-id="the-biology">
+<span class="header-section-number">2.1</span> The biology</h2>
 <p>Today, we will continue our quest to understand <strong>mesenchymal stromal cells (MSCs)</strong>. Remember, the two clones we are studying were both obtained from <em>one person</em>, and they have been transformed with telomerase to make them immortal (so they don’t age). Then, they have been cultured in a lab for years.</p>
-<p>In <a href="https://djeffares.github.io/BIO66I/workshop2.html">workshop 2</a>, we say that these two clones were different shapes. This time, we examine how they move.</p>
+<p>In <a href="https://djeffares.github.io/BIO66I/workshop2.html">workshop 2</a>, we saw that these two clones were different shapes. This time, we examine how they <em>move</em>.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Sometimes, it is a good question that makes a good scientist.
+Sometimes, asking a good question is the most important step!
 </div>
 </div>
 <div class="callout-body-container callout-body">
 <p>Why do these clones maintain different shapes after growing in the lab for so long? Why don’t they revert to being the same?</p>
 </div>
 </div>
-</section>
-<section id="the-data" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="the-data"><span class="header-section-number">2.2</span> The data</h2>
-<p>In this workshop we bla bla</p>
-</section>
-<section id="research-questions" class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="research-questions"><span class="header-section-number">2.3</span> Research questions</h2>
+</section><section id="the-data" class="level2" data-number="2.2"><h2 data-number="2.2" class="anchored" data-anchor-id="the-data">
+<span class="header-section-number">2.2</span> The data</h2>
+<p>In this workshop, we first examine cell movement data that was collected in an automated way by the Livecyte microscope. This shows something interesting, but it is not very reliable, because the Livecyte is <em>not perfect</em> at tracking individual cells.</p>
+<p>People are better at tracking individual cells. So we then look at some <em>manual</em> tracking data. We will se such metrics as <code>euclidean.distance</code> (how far the cells have moved), <code>mean.speed</code> (how fast they go), and <code>meandering.index</code> (how much they <em>meander</em> and change their minds about where they are going!).</p>
+<p>While we could <em>guess</em> how the cells differ from looking down the microscope, we can use our data science skills in two ways to enrich our perception, by:</p>
+<ul>
+<li>showing metrics with plots - this will enhance out intuition</li>
+<li>using statistical tests to test our intuitions</li>
+<li>the tests will determine which metrics (if any) are <strong>significantly different</strong> between the clones</li>
+</ul>
+<p>This work transforms intuitions into evidence.</p>
+</section><section id="research-questions" class="level2" data-number="2.3"><h2 data-number="2.3" class="anchored" data-anchor-id="research-questions">
+<span class="header-section-number">2.3</span> Research questions</h2>
 <ul>
 <li>Do the two mesenchymal stromal cell clones move differently?</li>
-<li>What data set(s) are most relaible?</li>
-<li>What are the best parameters to distinguish them?</li>
+<li>What data set(s) are most reliable?</li>
+<li>What are the best parameters to distinguish the clones?</li>
+</ul></section></section><section id="exercises" class="level1" data-number="3"><h1 data-number="3">
+<span class="header-section-number">3</span> Exercises</h1>
+<section id="setting-up" class="level2" data-number="3.1"><h2 data-number="3.1" class="anchored" data-anchor-id="setting-up">
+<span class="header-section-number">3.1</span> Setting up</h2>
+<ul>
+<li>Start up R Studio, and open your Project.</li>
+<li>Open the script your worked on in <a href="https://djeffares.github.io/BIO66I/workshop2.html">workshop 2</a>
+</li>
 </ul>
-</section>
-</section>
-<section id="exercises" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Exercises</h1>
-<section id="part-1" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="part-1"><span class="header-section-number">3.1</span> Part 1</h2>
-</section>
-<section id="part-2" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="part-2"><span class="header-section-number">3.2</span> Part 2</h2>
-</section>
-<section id="part-3" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="part-3"><span class="header-section-number">3.3</span> Part 3</h2>
-</section>
-</section>
-<section id="reflection" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Reflection</h1>
-</section>
-<section id="after-the-workshop" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> After the workshop</h1>
-<section id="consolodation-exercises" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="consolodation-exercises"><span class="header-section-number">5.1</span> Consolodation exercises</h2>
+<p>We will keep working on this script. We advise you to mark clearly where workshop 1, workshop 2 and workshop 3 are. Something like this will help:</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">########################################################</span></span>
+<span><span class="co">#WORKSHOP 3: CELL MOVEMENT DATA</span></span>
+<span><span class="co">########################################################</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then clear the previous work, and load the libraries we need:</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#clear previous data</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#load the tidyverse</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#load the corr library: this is for examining correlations between many metrics</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/corrr">corrr</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#we need this to make pretty plots with the 'ggarrange' package</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rpkgs.datanovia.com/ggpubr/">ggpubr</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="automated-livecyte-cell-movment-data" class="level2" data-number="3.2"><h2 data-number="3.2" class="anchored" data-anchor-id="automated-livecyte-cell-movment-data">
+<span class="header-section-number">3.2</span> Automated Livecyte cell movment data</h2>
+<p>Now read in the data from the file <strong>all-cell-data-FFT.filtered.2024-01-19.tsv</strong>. This contains some cell movment data.</p>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Read the automated Livecyte data</span></span>
+<span><span class="va">cells</span> <span class="op">&lt;-</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_tsv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/connections.html">url</a></span><span class="op">(</span><span class="st">"https://djeffares.github.io/BIO66I/all-cell-data-FFT.filtered.2024-01-19.tsv"</span><span class="op">)</span>,</span>
+<span>                 col_types <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/cols.html">cols</a></span><span class="op">(</span></span>
+<span>                   clone <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_factor.html">col_factor</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                   replicate <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_factor.html">col_factor</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                   tracking.id<span class="op">=</span><span class="fu"><a href="https://readr.tidyverse.org/reference/parse_factor.html">col_factor</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>                   lineage.id<span class="op">=</span><span class="fu"><a href="https://readr.tidyverse.org/reference/parse_factor.html">col_factor</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>                 <span class="op">)</span></span>
+<span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Lets see what data we have:</p>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">cells</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Keep it simple
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In data science, we can easily get confused. keep the data as simple as you can (but no simpler).</p>
+</div>
+</div>
+<p>In the spirit of <strong>keeping it simple</strong>, let’s retain only the columns in this data frame that we need, using the <code>select</code> function. The <code>cells</code> data framt still have all the data, so it is not lost.</p>
+<div class="cell">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">cells</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "clone"                    "replicate"               
+ [3] "frame"                    "tracking.id"             
+ [5] "lineage.id"               "position.x"              
+ [7] "position.y"               "pixel.position.x"        
+ [9] "pixel.position.y"         "volume"                  
+[11] "mean.thickness"           "radius"                  
+[13] "area"                     "sphericity"              
+[15] "length"                   "width"                   
+[17] "orientation"              "dry.mass"                
+[19] "displacement"             "instantaneous.velocity"  
+[21] "instantaneous.velocity.x" "instantaneous.velocity.y"
+[23] "track.length"             "perimeter"               
+[25] "length.to.width"         </code></pre>
+</div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#select only the columns we need</span></span>
+<span><span class="va">cell.move.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">cells</span>,</span>
+<span>        <span class="va">clone</span>,</span>
+<span>        <span class="va">replicate</span>,</span>
+<span>        <span class="va">displacement</span>, </span>
+<span>        <span class="va">track.length</span>, </span>
+<span>        <span class="va">instantaneous.velocity</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#check that we have</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">cell.move.data</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "clone"                  "replicate"              "displacement"          
+[4] "track.length"           "instantaneous.velocity"</code></pre>
+</div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#get a simple summaru, using summary and also glimpse</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">cell.move.data</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    clone       replicate  displacement     track.length   
+ cloneA:55555   1:30373   Min.   :  0.00   Min.   :  0.00  
+ cloneB:36330   2:36393   1st Qu.:  4.72   1st Qu.: 10.80  
+                3:25119   Median : 22.17   Median : 46.59  
+                          Mean   : 46.42   Mean   : 91.31  
+                          3rd Qu.: 62.35   3rd Qu.:126.91  
+                          Max.   :487.55   Max.   :984.29  
+ instantaneous.velocity
+ Min.   :0.0000000     
+ 1st Qu.:0.0008046     
+ Median :0.0025395     
+ Mean   :0.0035334     
+ 3rd Qu.:0.0050956     
+ Max.   :0.0448467     </code></pre>
+</div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">cell.move.data</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 91,885
+Columns: 5
+$ clone                  &lt;fct&gt; cloneA, cloneA, cloneA, cloneA, cloneA, cloneA,…
+$ replicate              &lt;fct&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+$ displacement           &lt;dbl&gt; 0.00, 14.96, 0.00, 10.92, 12.93, 14.13, 13.13, …
+$ track.length           &lt;dbl&gt; 0.00, 14.96, 0.00, 10.92, 15.74, 21.72, 26.23, …
+$ instantaneous.velocity &lt;dbl&gt; 0.000000000, 0.010829316, 0.000000000, 0.003954…</code></pre>
+</div>
+</div>
+<p>Now save your working data:</p>
+<div class="cell">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#lets save our data</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/save.html">save.image</a></span><span class="op">(</span><span class="st">"BIO00066I-workshop3-cell-movement-metrics.Rda"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#you can load this any time later with:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"BIO00066I-workshop3-cell-movement-metrics.Rda"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="making-plots" class="level2" data-number="3.3"><h2 data-number="3.3" class="anchored" data-anchor-id="making-plots">
+<span class="header-section-number">3.3</span> Making plots</h2>
+<p>let’s see how clone A and clone B move. First, we’ll plot the <code>instantaneous.velocity</code>:</p>
+<div class="cell">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#instantaneous.velocity - geom_violin</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">cell.move.data</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">clone</span>,y<span class="op">=</span><span class="va">instantaneous.velocity</span>,colour<span class="op">=</span><span class="va">clone</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span><span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/stat_compare_means.html">stat_compare_means</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="workshop3_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This plot isn’t very revealing is it? That is because most of the <code>instantaneous.velocity</code> values are very low, and the data are certainly not <em>normally distributed</em>. Biological data is often like this. Plotting metrics on a <strong>log scale</strong> is often the solution. Log<sup>2</sup> or log<sup>10</sup> scales are commonly used.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Adjust this plot yourself
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>So that you plot <code>y=log10(instantaneous.velocity)</code>. Does it look better?</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Enhance the plot with facet_wrap
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This time, show the repeats by adding a new line to the plot code:</p>
+<p><code>facet_wrap(~replicate)+</code></p>
+<p><strong>What is <code>facet_wrap</code>?</strong>. Our <strong>first categorical value</strong> that we split up the data into was clone A and clone B. <code>facet_wrap</code> splits the data up again into a <strong>second categorical value</strong>, and plots each category. In this case our second category was <code>~replicate</code>.</p>
+</div>
+</div>
+<p>If these adjustments to the code worked, you will end up with a plot like this. <strong>What does this tell you about clone movement?</strong>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="workshop3_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Optional
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use your plot code to explore, <code>displacement</code>, <code>track.length</code> and/or <code>instantaneous.velocity</code>.</p>
+</div>
+</div>
+</section><section id="manual-tracking-data" class="level2" data-number="3.4"><h2 data-number="3.4" class="anchored" data-anchor-id="manual-tracking-data">
+<span class="header-section-number">3.4</span> Manual tracking data</h2>
+<p>Sometimes, the automated measurements are not the best quality. In this case, we know that the Livecyte microscope is not very good at tracking cells, so the cell movement metrics are not as good as we would like.</p>
+<p>So Amanda spent many hours <em>manually</em> tracking cells. These results were processed into manual tracking data. First, load the data and of course <strong>examine what you have</strong>.</p>
+<div class="cell">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#load the manual tracking data</span></span>
+<span><span class="va">track</span> <span class="op">&lt;-</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_tsv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/connections.html">url</a></span><span class="op">(</span><span class="st">"https://djeffares.github.io/BIO66I/A1-and-B2-tracking.data.tsv"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#check it out</span></span>
+<span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">track</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 201
+Columns: 13
+$ CID                           &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2…
+$ TID                           &lt;dbl&gt; 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 1, 2…
+$ track.duration                &lt;dbl&gt; 230, 1587, 1702, 2484, 2484, 1725, 2484,…
+$ track.length                  &lt;dbl&gt; 80.850, 633.822, 711.651, 963.285, 870.3…
+$ meandering.index              &lt;dbl&gt; 0.08401856, 0.20254946, 0.47929912, 0.13…
+$ euclidean.distance            &lt;dbl&gt; 6.79290, 128.38031, 341.09370, 128.90071…
+$ mean.speed                    &lt;dbl&gt; 0.3515217, 0.3993837, 0.4181263, 0.38779…
+$ track.present.at.start.or.end &lt;lgl&gt; TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, T…
+$ track.never.divides           &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE…
+$ start.time.total.time         &lt;dbl&gt; 0.00000000, 0.04166667, 0.30681818, 0.59…
+$ end.time.total.time           &lt;dbl&gt; 0.03787879, 0.30303030, 0.58712121, 1.00…
+$ track.duration.total.time     &lt;dbl&gt; 0.03787879, 0.26136364, 0.28030303, 0.40…
+$ cell.line                     &lt;chr&gt; "A1", "A1", "A1", "A1", "A1", "A1", "A1"…</code></pre>
+</div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">track</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "CID"                           "TID"                          
+ [3] "track.duration"                "track.length"                 
+ [5] "meandering.index"              "euclidean.distance"           
+ [7] "mean.speed"                    "track.present.at.start.or.end"
+ [9] "track.never.divides"           "start.time.total.time"        
+[11] "end.time.total.time"           "track.duration.total.time"    
+[13] "cell.line"                    </code></pre>
+</div>
+</div>
+<p>In this data <code>TID</code> is the Livecyte <em>tracking ID</em>, a unique number that the microscope gives to each ‘object’ it can identify.</p>
+<p><code>CID</code> is the Livecyte <em>cell ID</em>. This keeps track of the cell lineage (ie: the initial cells, and the subsequent daughter cells that are derived from it as it divides). When a cell divides, it keeps the same <em>cell ID</em>, but <em>each</em> daughter cell is assigned a new <em>tracking ID</em>.</p>
+<section id="section" class="level3" data-number="3.4.1"><h3 data-number="3.4.1" class="anchored" data-anchor-id="section">
+<span class="header-section-number">3.4.1</span> </h3>
+</section></section></section><section id="reflection" class="level1" data-number="4"><h1 data-number="4">
+<span class="header-section-number">4</span> Reflection</h1>
+</section><section id="after-the-workshop" class="level1" data-number="5"><h1 data-number="5">
+<span class="header-section-number">5</span> After the workshop</h1>
+<section id="consolodation-exercises" class="level2" data-number="5.1"><h2 data-number="5.1" class="anchored" data-anchor-id="consolodation-exercises">
+<span class="header-section-number">5.1</span> Consolodation exercises</h2>
 <p>Optional</p>
-</section>
-<section id="planning-for-your-report" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="planning-for-your-report"><span class="header-section-number">5.2</span> Planning for your report</h2>
+</section><section id="planning-for-your-report" class="level2" data-number="5.2"><h2 data-number="5.2" class="anchored" data-anchor-id="planning-for-your-report">
+<span class="header-section-number">5.2</span> Planning for your report</h2>
 
 
-</section>
-</section>
-
-</main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -684,7 +929,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
-
 
 
 

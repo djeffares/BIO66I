@@ -1,4 +1,4 @@
-CID	TID	track.duration	track.length	meandering.index	euclidean.distance	mean.speed	track.present.at.start.or.end	track.never.divides	start.time.total.time	end.time.total.time	track.duration.total.time	cell.line
+LID	TID	track.duration	track.length	meandering.index	euclidean.distance	mean.speed	track.present.at.start.or.end	track.never.divides	start.time.total.time	end.time.total.time	track.duration.total.time	cell.line
 1	1	230	80.85	0.084018558	6.792900411	0.351521739	TRUE	FALSE	0	0.037878788	0.037878788	A1
 1	2	1587	633.822	0.202549464	128.3803066	0.399383743	FALSE	FALSE	0.041666667	0.303030303	0.261363636	A1
 1	3	1702	711.651	0.479299118	341.0936965	0.418126322	FALSE	FALSE	0.306818182	0.587121212	0.28030303	A1
