@@ -702,7 +702,7 @@ Correlation computed with
 </div>
 <p>Finally, we can show all the correlation coefficients in one plot. This gives us a unique and revealing sense of the data.</p>
 <div class="cell">
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#plot dsata in the track.correlations.pivot table</span></span>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#plot data in the track.correlations.pivot table</span></span>
 <span><span class="co">#using geom_tile (for coloured boxes) and geom_text (to show the correlation coefficient values) </span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">track.correlations.pivot</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">Variable1</span>, <span class="va">Variable2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html">geom_tile</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">corr.coeff</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
