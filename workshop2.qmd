@@ -1,5 +1,5 @@
 ---
-title: "BIO00087H Workshop 1"
+title: "BIO00066I Workshop 2"
 subtitle: "Cell Biology Data Analysis Workshop 2"
 
 author: Daniel Jeffares
@@ -296,7 +296,6 @@ summary.table <- cells |>
         sphericity=median(sphericity),
         length=median(length),
         dry.mass=median(dry.mass),
-        perimeter=median(perimeter),
         length.to.width=median(length.to.width)
 )
 ```
@@ -613,7 +612,6 @@ trackingid.summary.table<-cells |>
         length=median(length),
         width=median(width),
         dry.mass=median(dry.mass),
-        perimeter=median(perimeter),
         length.to.width=median(length.to.width)
     )
 ```

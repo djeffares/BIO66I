@@ -1,15 +1,14 @@
 ---
-title: "BIO00087H"
-subtitle: "Genomics"
+title: "BIO00066I"
+subtitle: "Becoming a Bioscientist: Research in Action"
 author: "Daniel Jeffares"
-date: 2024-02-21
+date: 2024-02-22
 
 ---
 
+This page is to contain the workshops for BIO00066I, Becoming a Bioscientist: Research in Action.
 
-Genomics has become one fundamental component of biological science. It is used in biomedicine, ecology, industrial microbiology, cell biology and evolutionary genetics. This is a relatively new discipline, that uses its own computational methods and concepts. This module teaches the current state of the art in genomic science and genome data analysis. Topics include genome biology in the tree of life, genome function, evolutionary concepts, collaborative projects and databases and ethics. This module will explain current DNA/RNA sequencing technologies, genome assembly, annotation and interpretation of genomic data. Workshops will provide an opportunity to develop skills and awareness of a variety of data analysis methods.
-
-The module summary is [here](https://www.york.ac.uk/students/studying/manage/programmes/module-catalogue/module/BIO00087H/latest)
+The module summary is [here](https://www.york.ac.uk/students/studying/manage/programmes/module-catalogue/module/BIO00066I/latest)
 
 
 

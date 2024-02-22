@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Daniel Jeffares">
 <meta name="dcterms.date" content="2024-01-25">
-<title>BIO00066I - BIO00087H Workshop 1</title>
+<title>BIO00066I - BIO00066I Workshop 2</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -180,7 +180,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title">BIO00087H Workshop 1</h1>
+<h1 class="title">BIO00066I Workshop 2</h1>
 <p class="subtitle lead">Cell Biology Data Analysis Workshop 2</p>
 </div>
 
@@ -364,7 +364,7 @@ Develop your R script, carefully.
 <span class="header-section-number">3.2</span> Loading the data</h2>
 <p>In workshop 1, we showed you how to <a href="https://3mmarand.github.io/R4BABS/r4babs1/week-8/workshop.html#importing-data-from-files">import data from files</a>. Today, we load a tab-separated value (TSV) file from a website:</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cells</span> <span class="op">&lt;-</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_tsv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/connections.html">url</a></span><span class="op">(</span><span class="st">"https://djeffares.github.io/BIO66I/all-cell-data-FFT.filtered.2024-01-19.tsv"</span><span class="op">)</span>,</span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cells</span> <span class="op">&lt;-</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_tsv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/connections.html">url</a></span><span class="op">(</span><span class="st">"https://djeffares.github.io/BIO66I/all-cell-data-FFT.filtered.2024-02-22.tsv"</span><span class="op">)</span>,</span>
 <span>    col_types <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/cols.html">cols</a></span><span class="op">(</span></span>
 <span>        clone <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_factor.html">col_factor</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>        replicate <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_factor.html">col_factor</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -484,7 +484,6 @@ dplyr is wonderful
 <span>        sphericity<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">sphericity</span><span class="op">)</span>,</span>
 <span>        length<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">length</span><span class="op">)</span>,</span>
 <span>        dry.mass<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">dry.mass</span><span class="op">)</span>,</span>
-<span>        perimeter<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">perimeter</span><span class="op">)</span>,</span>
 <span>        length.to.width<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">length.to.width</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -570,7 +569,7 @@ Making plots with ggplot
     Wilcoxon rank sum test with continuity correction
 
 data:  width by clone
-W = 562074424, p-value &lt; 2.2e-16
+W = 657964994, p-value &lt; 2.2e-16
 alternative hypothesis: true location shift is not equal to 0</code></pre>
 </div>
 </div>
@@ -694,7 +693,7 @@ alternative hypothesis: true location shift is not equal to 0</code></pre>
     Wilcoxon rank sum test with continuity correction
 
 data:  width by clone
-W = 562074424, p-value &lt; 2.2e-16
+W = 657964994, p-value &lt; 2.2e-16
 alternative hypothesis: true location shift is not equal to 0</code></pre>
 </div>
 </div>
@@ -791,7 +790,6 @@ P-values can be misleading
 <span>        length<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">length</span><span class="op">)</span>,</span>
 <span>        width<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">width</span><span class="op">)</span>,</span>
 <span>        dry.mass<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">dry.mass</span><span class="op">)</span>,</span>
-<span>        perimeter<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">perimeter</span><span class="op">)</span>,</span>
 <span>        length.to.width<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">length.to.width</span><span class="op">)</span></span>
 <span>    <span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
