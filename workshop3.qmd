@@ -15,10 +15,13 @@ format:
 editor: source
 ---
 
+::: callout-warning
+## Work in progress
 
+This page is a work in progress.
+:::
 
 # Learning objectives
-
 
 ::: callout-important
 ## Philosophy
@@ -28,23 +31,23 @@ Workshops are not a test. You may make a lot of mistakes - that is fine. It's OK
 
 ## Technical skills
 
-Today we will work with plotting movement data from the Livecyte microscope. 
+Today we will work with plotting movement data from the Livecyte microscope.
 
 We will learn some new R plotting skills:
 
-- `facet_wrap` a method to plot one variable split up over different treatments (or chromosomes, or days, or replicates)
-- how to create a **correlation data frame** using the `correlate` function. This allows us to explore many correlations between different metrics. Typically, these metrics are stored in the *columns* of our data frames.
-
+-   `facet_wrap` a method to plot one variable split up over different treatments (or chromosomes, or days, or replicates)
+-   how to create a **correlation data frame** using the `correlate` function. This allows us to explore many correlations between different metrics. Typically, these metrics are stored in the *columns* of our data frames.
 
 ## Thinking like a data scientist
 
 We encourage you to develop your data handling skills. By:
-- keeping our script clear, simple, and well-annotated
-- developing your own habits to keep your awareness on **what data the data contains**
 
+-   keeping our script clear, simple, and well-annotated
+-   developing your own habits to keep your awareness on **what data the data contains**
 
 ::: callout-warning
-## Know your data! 
+## Know your data!
+
 To understand the biology captured in the data, you need to know what is in the data. At each step, be sure you know the rows, the columns and what they mean. Keep notes about this in your script.
 :::
 
@@ -52,45 +55,363 @@ To understand the biology captured in the data, you need to know what is in the 
 
 ## The biology
 
-Today, we will continue our quest to understand  **mesenchymal stromal cells (MSCs)**. Remember, the two clones we are studying were both obtained from *one person*, and they have been transformed with telomerase to make them immortal (so they don't age). Then, they have been cultured in a lab for years. 
+Today, we will continue our quest to understand **mesenchymal stromal cells (MSCs)**. Remember, the two clones we are studying were both obtained from *one person*, and they have been transformed with telomerase to make them immortal (so they don't age). Then, they have been cultured in a lab for years.
 
-In [workshop 2](https://djeffares.github.io/BIO66I/workshop2.html), we say that these two clones were different shapes. This time, we examine how they move. 
+In [workshop 2](https://djeffares.github.io/BIO66I/workshop2.html), we saw that these two clones were different shapes. This time, we examine how they *move*.
 
 ::: callout-tip
-## Sometimes, it is a good question that makes a good scientist.
+## Sometimes, asking a good question is the most important step!
+
 Why do these clones maintain different shapes after growing in the lab for so long? Why don't they revert to being the same?
 :::
 
-
 ## The data
-In this workshop we bla bla
+
+In this workshop, we first examine cell movement data that was collected in an automated way by the Livecyte microscope. This shows something interesting, but it is not very reliable, because the Livecyte is *not perfect* at tracking individual cells.
+
+People are better at tracking individual cells. So we then look at some *manual* tracking data. We will se such metrics as `euclidean.distance` (how far the cells have moved), `mean.speed` (how fast they go), and `meandering.index` (how much they *meander* and change their minds about where they are going!).
+
+While we could *guess* how the cells differ from looking down the microscope, we can use our data science skills in two ways to enrich our perception, by:
+
+-   showing metrics with plots - this will enhance out intuition
+-   using statistical tests to test our intuitions
+-   the tests will determine which metrics (if any) are **significantly different** between the clones
+
+This work transforms intuitions into evidence.
 
 ## Research questions
 
-- Do the two mesenchymal stromal cell clones move differently?
-- What data set(s) are most relaible?
-- What are the best parameters to distinguish them?
-
+-   Do the two mesenchymal stromal cell clones move differently?
+-   What data set(s) are most reliable?
+-   What are the best parameters to distinguish the clones?
 
 # Exercises
 
-## Part 1
+## Setting up
 
-## Part 2
+-   Start up R Studio, and open your Project.
+-   Open the script your worked on in [workshop 2](https://djeffares.github.io/BIO66I/workshop2.html)
 
-## Part 3
+We will keep working on this script. We advise you to mark clearly where workshop 1, workshop 2 and workshop 3 are. Something like this will help:
+
+```{r}
+########################################################
+#WORKSHOP 3: CELL MOVEMENT DATA
+########################################################
+```
+
+Then clear the previous work, and load the libraries we need:
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: true
+
+#clear previous data
+rm(list=ls())
+
+#load the tidyverse
+library(tidyverse)
+
+#load the corr library: this is for examining correlations between many metrics
+library(corrr)
+
+#we need this to make pretty plots with the 'ggarrange' package
+library(ggpubr)
+
+```
+
+## Automated Livecyte cell movment data
+
+Now read in the data from the file **all-cell-data-FFT.filtered.2024-02-22.tsv**. This contains some cell movment data.
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: true
+
+# Read the automated Livecyte data
+cells <-read_tsv(url("https://djeffares.github.io/BIO66I/all-cell-data-FFT.filtered.2024-02-22.tsv"),
+                 col_types = cols(
+                   clone = col_factor(),
+                   replicate = col_factor(),
+                   tracking.id=col_factor(),
+                   lineage.id=col_factor()
+                 )
+)
+```
+
+Lets see what data we have:
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+
+names(cells)
+```
+
+::: callout-important
+## Keep it simple
+
+In data science, we can easily get confused. keep the data as simple as you can (but no simpler).
+:::
+
+In the spirit of **keeping it simple**, let's retain only the columns in this data frame that we need, using the `select` function. The `cells` data framt still have all the data, so it is not lost.
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: true
+
+names(cells)
+#select only the columns we need
+cell.move.data <- select(cells,
+        clone,
+        replicate,
+        displacement, 
+        track.length, 
+        instantaneous.velocity
+)
+#check that we have
+names(cell.move.data)
+
+#get a simple summaru, using summary and also glimpse
+summary(cell.move.data)
+glimpse(cell.move.data)
+```
+
+Now save your working data:
+
+```{r}
+#lets save our data
+save.image("BIO00066I-workshop3-cell-movement-metrics.Rda")
+
+#you can load this any time later with:
+load("BIO00066I-workshop3-cell-movement-metrics.Rda")
+```
+
+## Making plots
+
+let's see how clone A and clone B move. First, we'll plot the `instantaneous.velocity`:
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: true
+
+#instantaneous.velocity - geom_violin
+ggplot(cell.move.data,aes(x=clone,y=instantaneous.velocity,colour=clone))+
+    geom_violin(alpha=0.5)+
+    stat_compare_means()
+
+```
+
+This plot isn't very revealing is it? That is because most of the `instantaneous.velocity` values are very low, and the data are certainly not *normally distributed*. Biological data is often like this. Plotting metrics on a **log scale** is often the solution. Log^2^ or log^10^ scales are commonly used.
+
+::: callout-tip
+## Adjust this plot yourself
+
+So that you plot `y=log10(instantaneous.velocity)`. Does it look better?
+:::
+
+::: callout-tip
+## Enhance the plot with facet_wrap
+
+This time, show the repeats by adding a new line to the plot code:
+
+`facet_wrap(~replicate)+`
+
+**What is `facet_wrap`?**. Our **first categorical value** that we split up the data into was clone A and clone B. `facet_wrap` splits the data up again into a **second categorical value**, and plots each category. In this case our second category was `~replicate`.
+:::
+
+If these adjustments to the code worked, you will end up with a plot like this. **What does this tell you about clone movement?**.
+
+```{r}
+#| echo: false
+#| warning: false
+#| eval: true
+
+ggplot(cell.move.data,aes(x=clone,y=log10(instantaneous.velocity),colour=clone))+
+    geom_violin(alpha=0.5)+
+    facet_wrap(~replicate)+
+    stat_compare_means()
+```
+
+::: callout-tip
+## Optional
+
+Use your plot code to explore, `displacement`, `track.length` and/or `instantaneous.velocity`.
+:::
+
+## Manual tracking data
+
+Sometimes, the automated measurements are not the best quality. In this case, we know that the Livecyte microscope is not very good at tracking cells, so the cell movement metrics are not as good as we would like.
+
+So Amanda spent many hours *manually* tracking cells. These results were processed into manual tracking data. First, load the data and of course **examine what you have**.
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: true
+
+#load the manual tracking data
+track <-read_tsv(url("https://djeffares.github.io/BIO66I/A1-and-B2-tracking.data.tsv"))
+
+#check it out
+glimpse(track)
+names(track)
+```
+
+In this data, `TID` is the Livecyte **tracking ID**, a unique number that the microscope gives to each 'object' it can identify. `LID` is the Livecyte **lineage ID**. This keeps track of the cell lineage (ie: the initial cells, and the subsequent daughter cells that are derived from it as it divides). When a cell divides, both 'daughter cells' keep the same **lineage ID**, but each is assigned a new unique **tracking ID**.
+
+![**Figure 1.** The **tracking ID (TID)** is a unique ID that the microscope assigned to each object (cell), as it tracks it through time. The **lineage ID (LID)** is a number assigned to the ‘family’ of cells that derived by cell division during the the experiment. When a cell divides, each daughter cell is given a new tracking ID, but they keep their lineage ID, because they are still part of the same family.](docs/figure1.jpg)
+
+## Plotting manual tracking data
+
+Let's start by looking at the **distance** that each cell has traveled during the experiment. This is recorded as `euclidean.distance`. This is the *shortest distance* between two points, so it does not take any meanderings into account. We can compare the clones (`cell.line`) like so:
+
+```{r}
+#compare euclidean.distance between cell lines
+ggplot(track, aes(x=cell.line,y=euclidean.distance))+
+  geom_boxplot()+
+  stat_compare_means()
+```
+
+::: callout-important
+## Improve the plot
+
+Try these things to improve this plot:
+
+-   use `geom_violin` instead of `geom_boxplot`
+-   adding `theme_classic`
+-   making the *x*-axis and *y*-axis look better with `xlab("something")` and `ylab("something")`
+-   giving the plot a title with `ggtitle("top title", subtitle ="sub text")`
+:::
+
+::: callout-important
+## Optional: alter the plot
+
+When you have the plot looking the way you like, examine some of the other cell movement metrics. To find out what is available, use `names(track)`.
+:::
+
+## Correlations abound!
+
+With biological data (and data from many other sources), different measurements of the same set of 'things' are often correlated. For example, human height and weight are strongly correlated. So it is with cells.
+
+We *could* examine each correlation one by one, like so:
+
+```{r}
+#examine whether track.length and mean.speed are correlated
+cor.test(track$track.length,track$mean.speed,method="spearman")
+```
+
+::: callout-warning
+## A Non parametric warning
+
+Here we use the non parametric test `method="spearman` to calculate correlations, because we know from looking at the data that the `track.length` and probably `mean.speed` are not normally distributed. In a [Spearman rank correlation](https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient), `rho` is the correlation coefficient (sometimes rho is written using the Greek symbol **$\rho$**).
+:::
+
+But since there are 11 cell movment metrics, this would quickly become boring. And (just as importantly) the data would be a challenge to understand.
+
+**Fortunately, there is an easier way.** First we use the `correlate` function to calculate all pairwise correlations. We save the correlation coefficients in the `track.correlations` data frame.
+
+```{r}
+#calculate all pairwise correlations
+track.correlations <- 
+  track |>
+  correlate(method="spearman")
+#see what we have
+head(track.correlations)
+```
+
+Then we use `pivot_longer` ass we did in [BIO00066I core workshop 1](https://3mmarand.github.io/R4BABS/r4babs4/week-1/workshop.html#visualisation), to simplify the data format.
+
+![**Figure 2.** How `pivot_longer` reshapes data. Notice that no data is lost. does.](https://www.fromthebottomoftheheap.net/assets/img/posts/tidyr-longer-wider.gif)
+
+We will use `pivot_longer` this way:
+
+```{r}
+#Adjust the name of the first column to "Variable1"
+names(track.correlations)[1]="Variable1"
+
+#simplify the data with pivot_longer
+track.correlations.pivot <- 
+  track.correlations |> 
+  pivot_longer(-Variable1, names_to = "Variable2", values_to = "corr.coeff")
+
+#examine what we have
+head(track.correlations.pivot)
+```
+
+Finally, we can show all the correlation coefficients in one plot. This gives us a unique and revealing sense of the data.
+
+```{r}
+#plot data in the track.correlations.pivot table
+#using geom_tile (for coloured boxes) and geom_text (to show the correlation coefficient values) 
+ggplot(track.correlations.pivot, aes(Variable1, Variable2)) +
+  geom_tile(aes(fill = corr.coeff)) +
+  geom_text(aes(label = round(corr.coeff, 1))) +
+  scale_fill_gradient(low = "white", high = "red")+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
+
+
+::: callout-tip
+## Some points to note in this plot:
+- `round(corr.coeff, 1)` reduces the number of  decimal places to 1.
+- try the plot with only: ` geom_text(aes(label = corr.coeff))+` (eek!)
+- `element_text(angle = 90, vjust = 0.5, hjust=1)` changes the direction of the x axis labels
+- try omitting this line (again, eeek!)
+- **the `geom_tile` method can be used to plot any pairwise interaction data**
+:::
+
 
 # Reflection
+
+::: callout-important
+## It is critical to think about what our analysis shows aout the biology
+**Do this now.** 
+
+- What do we know about the clones now?
+- What do you know about how they move?
+- Which metrics are correlated?
+- What do correlations with negative $\rho$ mean?
+:::
+
+
+Today you have learned some data handling and plotting skills. These are:
+
+- How to use `facet_wrap` to split plots by a second category
+- How to plot values on a `log10()` scale
+- How to 'lengthen' and simplify data using `pivot_longer`
+- How to calculate and display numerous correlations in a grid with `geom_tile`
+
 
 # After the workshop
 
 ## Consolodation exercises
 
-Optional
+### Explore the data
+
+Use the code from section **3.5 Plotting manual tracking data** to plot other feactures of the manual tracking data. Options are: `track.length`, `track.length`, `meandering.index`, euclidean.distance` and `mean.speed`.
+
+### Improve the correlation heat map
+
+What if we wanted to show only the correlations where the absolute value of $\rho$ was greater than 0.30? Try using the pipe operator `|>` to filter the `track.correlations.pivot` data before plotting, with: 
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+
+#filter the data
+track.correlations.pivot |>
+  filter(abs(corr.coeff) > 0.25) |>
+#put the plotting code here  
+```
+
 
 ## Planning for your report
 
-
-
-
-
+The RStudio project is worth 30% of this module. We will examine this based on XXX and YYY. So spending just **10 minutes** tidying your code now will make your future life easier. For example, look at your variable names, and make them clearer.

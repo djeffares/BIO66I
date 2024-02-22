@@ -1,5 +1,5 @@
 ---
-title: "BIO00066I Workshop 2"
+title: "BIO00087H Workshop 1"
 subtitle: "Cell Biology Data Analysis Workshop 2"
 
 author: Daniel Jeffares
@@ -17,9 +17,6 @@ editor: source
 
 ::: callout-note
 ## Welcome
-Welcome to the second R workshop for **BIO00066I** Becoming a Bioscientist: Research in Action.
-
-In this workshop, we will analyse  data created with a Livecyte microscope, which performs live cell imaging, tracking individual cells, and measurings cell shape and size parameters for thousands of cells as they grow and divide. Here, the data is from [mesenchymal stromal cells](https://en.wikipedia.org/wiki/Mesenchymal_stem_cell). You will see the same cell lines in the BIO00066I laboratory work.
 :::
 
 # Learning objectives
@@ -55,7 +52,7 @@ Workshops are not a test. It's OK to make mistakes. It's OK to need help. You sh
 
 ## The biology
 
-Today we will look at some data from mesenchymal stromal  cells (MSCs, sometimes called *stem* cells). MCSs are are *multipotent* cells, than can differentiate into many kinds of mesenchymal cells, including bone, cartilage and fat cells. They are not *pluripotent*, in that they do have limits about how they differentiate.
+Today we will look at some data from mesenchymal stem  cells (MSCs, sometimes called *stromal* cells). MCSs are are *multipotent* cells, than can differentiate into many kinds of mesenchymal cells, including bone, cartilage and fat cells. They are not *pluripotent*, in that they do have limits about how they differentiate.
 
 MSCs are also:
 
@@ -72,11 +69,11 @@ MSCs are also:
 
 ## The data
 
-The data we have today are derived from live cell imagining of mesenchymal stromal cells with a Livecyte microscope and the software it has. Each clones was cultured and the microscope captured cell shape an size information for thousands of cells from each clone (clone A and clone B). For each clone, we measured three *biological replicates*. 
+The data we have today are derived from live cell imagining of mesenchymal stem cells with a Livecyte microscope and the software it has. Each clones was cultured and the microscope captured cell shape and size information for thousands of cells from each clone (clone A and clone B). For each clone, we measured three *biological replicates*. 
 
-The Livecyte tracked each cell every 23 minutes, giving each data point a **tracking ID** (which tracks a unique cell 'object') and a **lineage ID**, which recalls the lineage of cells as they divide. For example, if cell 1, divied into cell 1A and cell 1B, they are all recorded by the Livecyte as being part of lineage ID 1.
+The Livecyte tracked each cell every 23 minutes, giving each data point a **tracking ID** (which tracks a unique cell 'object') and a **lineage ID**, which recalls the lineage of cells as they divide. For example, if cell 1, divided into cell 1A and cell 1B, they are all recorded by the Livecyte as being part of lineage ID 1.
 
-This video shows what Livecyte can do (perhaps turn the sound down, or whatch later).
+This video shows what Livecyte can do (perhaps turn the sound down, or watch later).
 
 {{< video https://youtu.be/lposS9SNngY?si=XQXYAslkA3vK3Pzh  >}}
 
@@ -162,7 +159,7 @@ In workshop 1, we showed you how to [import data from files](https://3mmarand.gi
 ```{r}
 #| echo: true
 #| warning: false
-cells <-read_tsv(url("https://djeffares.github.io/BIO66I/all-cell-data-FFT.filtered.2024-01-19.tsv"),
+cells <-read_tsv(url("https://djeffares.github.io/BIO66I/all-cell-data-FFT.filtered.2024-02-22.tsv"),
     col_types = cols(
         clone = col_factor(),
         replicate = col_factor(),
@@ -501,7 +498,7 @@ We can prove that to ourselves by comparing a Wilcox test results from the `smal
 #test with small.tracking.data
 wilcox.test(width ~ clone, data = small.tracking.data)
 
-#test with small.tracking.data
+#test with 'cells' data frame - a *much* larger data set  
 wilcox.test(width ~ clone, data = cells)
 ```
 

@@ -14,6 +14,11 @@ format:
 editor: source
 ---
 
+\setmainfont{Times New Roman}
+
+Greek letters: rho $\rho$
+
+
 **Colour scheme**
 
 In these workshops, we highlight some elements in boxes like this:
