@@ -614,9 +614,10 @@ trackingid.summary.table<-cells |>
         dry.mass=median(dry.mass),
         length.to.width=median(length.to.width)
     )
+
 ```
 
-names(cells)
+
 
 Then we use the `dplyr` function `sample_n`, which samples a number of rows from a data frame at random. If the data frame is grouped (which our data is), the number we set applies to each group:
 
