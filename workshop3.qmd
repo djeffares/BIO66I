@@ -15,18 +15,12 @@ format:
 editor: source
 ---
 
-::: callout-warning
-## Work in progress
-
-This page is a work in progress.
-:::
-
 # Learning objectives
 
 ::: callout-important
 ## Philosophy
 
-Workshops are not a test. You may make a lot of mistakes - that is fine. It's OK to need help. the staff are here to help you, so don't be afraid to ask for help! :-)
+Workshops are not a test. You may make a lot of mistakes - that is fine. It's OK to need help. The staff are here to help you, so don't be afraid to ask us anything :-)
 :::
 
 ## Technical skills
@@ -407,6 +401,10 @@ Fortunately, this information in the data already. We do *not* see the entire 'l
 So we can filter out these lines by putting `filter(track.present.at.start.or.end != TRUE)` in our code. Let's check if this makes any difference by comparing `track.length`without the filter, and then with the filter:
 
 ```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+
 #track.length without the filter
 no.filter.plot<- track |> 
   ggplot(aes(x=cell.line, y = track.length))+
