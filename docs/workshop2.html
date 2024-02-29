@@ -797,7 +797,7 @@ P-values can be misleading
 using the `.groups` argument.</code></pre>
 </div>
 </div>
-<p>Then we use the <code>dplyr</code> function <code>sample_n</code>, which samples a number of rows from a data frame at random. If the data frame is grouped (which our data is), the number we set applies to each group:</p>
+<p>Then we use the <code>dplyr</code> function <code>sample_n</code>, which samples a number of rows from a data frame at random. If the data frame is grouped (which our data is),the number we set applies to each group:</p>
 <div class="cell">
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#collect a random subset, of 5 rows for each tracking id</span></span>
 <span><span class="va">trackingid.small.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample_n.html">sample_n</a></span><span class="op">(</span><span class="va">trackingid.summary.table</span>, <span class="fl">5</span><span class="op">)</span></span>

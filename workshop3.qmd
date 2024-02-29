@@ -181,6 +181,7 @@ summary(cell.move.data)
 glimpse(cell.move.data)
 ```
 
+
 Now save your working data:
 
 ```{r}
@@ -265,15 +266,21 @@ names(track)
 
 In this data, `TID` is the Livecyte **tracking ID**, a unique number that the microscope gives to each 'object' it can identify. `LID` is the Livecyte **lineage ID**. This keeps track of the cell lineage (ie: the initial cells, and the subsequent daughter cells that are derived from it as it divides). When a cell divides, both 'daughter cells' keep the same **lineage ID**, but each is assigned a new unique **tracking ID**.
 
+::: callout-warning
+## Different names, same metric!
+Note that different analysis software can use different terminologies to define their metrics. How confusing! In our case `instantaneous.velocity` from the `cells` data frame is the same as `mean.speed` in the `tracking` data. Both of these metrics are a measure of distance traveled/time.
+:::
+
+
 ![**Figure 1.** The **tracking ID (TID)** is a unique ID that the microscope assigned to each object (cell), as it tracks it through time. The **lineage ID (LID)** is a number assigned to the ‘family’ of cells that derived by cell division during the the experiment. When a cell divides, each daughter cell is given a new tracking ID, but they keep their lineage ID, because they are still part of the same family.](docs/figure1.jpg)
 
 ## Plotting manual tracking data
 
-Let's start by looking at the **distance** that each cell has traveled during the experiment. This is recorded as `euclidean.distance`. This is the *shortest distance* between two points, so it does not take any meanderings into account. We can compare the clones (`cell.line`) like so:
+Let's start by looking at the **speed** that each cell moves at during the experiment. This is recorded as `mean.speed` in this data set (the same as the `instantenous.velocity` in the `cells` data set). We can compare the clones (`cell.line`) like so:
 
 ```{r}
-#compare euclidean.distance between cell lines
-ggplot(track, aes(x=cell.line,y=euclidean.distance))+
+#compare mean.speed between cell lines
+ggplot(track, aes(x=cell.line,y=mean.speed))+
   geom_boxplot()+
   stat_compare_means()
 ```
@@ -289,11 +296,7 @@ Try these things to improve this plot:
 -   giving the plot a title with `ggtitle("top title", subtitle ="sub text")`
 :::
 
-::: callout-important
-## Optional: alter the plot
-
-When you have the plot looking the way you like, examine some of the other cell movement metrics. To find out what is available, use `names(track)`.
-:::
+After the workshop, we advise you to plot some other movement metrics from the `tracking` data.
 
 ## Correlations abound!
 
@@ -367,6 +370,7 @@ ggplot(track.correlations.pivot, aes(Variable1, Variable2)) +
 :::
 
 
+
 # Reflection
 
 ::: callout-important
@@ -394,11 +398,50 @@ Today you have learned some data handling and plotting skills. These are:
 
 ### Explore the data
 
-Use the code from section **3.5 Plotting manual tracking data** to plot other feactures of the manual tracking data. Options are: `track.length`, `track.length`, `meandering.index`, euclidean.distance` and `mean.speed`.
+Use the code from section **3.5 Plotting manual tracking data** to plot other features of the manual tracking data. We advise you to plot: `track.length`, `track.duration`, `meandering.index`, and `euclidean.distance`.
+
+Sometimes, we need to be careful with the data. For `track.length`, `track.duration`, we want to choose tracking data *only* for cells that we have observed it's entire life - from when it is 'born' from the parental cell, to when it divides again.
+
+Fortunately, this information in the data already. We do *not* see the entire 'lifetime' of any cell tracked object that have the value `TRUE` in in the column `track.present.at.start.or.end`, because we starting tracking them some time after they were born, or stopped tracking them before they divided again.
+
+So we can filter out these lines by putting `filter(track.present.at.start.or.end != TRUE)` in our code. Let's check if this makes any difference by comparing `track.length`without the filter, and then with the filter:
+
+```{r}
+#track.length without the filter
+no.filter.plot<- track |> 
+  ggplot(aes(x=cell.line, y = track.length))+
+  geom_violin()+
+  stat_compare_means()+
+  ggtitle("no filter")
+
+#track.length WITH the filter
+filter.plot<- track |> 
+  filter(track.present.at.start.or.end != TRUE) |> 
+  ggplot(aes(x=cell.line, y = track.length))+
+  geom_violin()+
+  stat_compare_means()+
+  ggtitle("with filter")
+
+#show plots side by side
+ggarrange(no.filter.plot,filter.plot)
+
+```
+
+::: callout-note
+# Did this make a difference?
+- Did we get a different result after this 'cleaning up', with this large data set?
+- Might we have a different result after this cleaning up, with a small data set?
+:::
+
+
+#### Explore other metrics
+
+Try using the code above to explore other metrics in the `track` data other than `track.length`. Options include `track.duration`, track.duration.total.time`, `euclidean.distance` and `euclidean.distance`.
 
 ### Improve the correlation heat map
 
-What if we wanted to show only the correlations where the absolute value of $\rho$ was greater than 0.30? Try using the pipe operator `|>` to filter the `track.correlations.pivot` data before plotting, with: 
+What if we wanted to show only the correlations where the absolute value of $\rho$ was greater than 0.25? Try using the pipe operator `|>` to filter the `track.correlations.pivot` data before plotting, with: 
+
 
 ```{r}
 #| echo: true
@@ -408,10 +451,25 @@ What if we wanted to show only the correlations where the absolute value of $\rh
 #filter the data
 track.correlations.pivot |>
   filter(abs(corr.coeff) > 0.25) |>
-#put the plotting code here  
+#now we put the plotting code here 
+  ggplot(aes(Variable1, Variable2)) +
+  geom_tile(aes(fill = corr.coeff)) +
+  geom_text(aes(label = round(corr.coeff, 1))) +
+  scale_fill_gradient(low = "white", high = "red")+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
-
 
 ## Planning for your report
 
-The RStudio project is worth 30% of this module. We will examine this based on XXX and YYY. So spending just **10 minutes** tidying your code now will make your future life easier. For example, look at your variable names, and make them clearer.
+The RStudio project is worth 30% of this module. The submission of your RStudio project should:
+
+- have a logical folder structure for your analysis
+- contain a well-commented script
+- be well-organised and follow good practice in use of spacing, indentation and variable naming. 
+
+The details are described [in this document](https://docs.google.com/document/d/1Qo2PCfF2Wi1hQKDV_rTaL3ssJotNFhVTAJqZI5DD_CQ/edit?usp=sharing).
+
+The aim of all this is to make the code and the data analysis clear and readable for someone else.
+
+So spending just **10 minutes** tidying your code now will make your future life easier. For example, look at your variable names, and make them clearer. 
+

@@ -133,6 +133,7 @@ ul.task-list li input[type="checkbox"] {
   <ul class="collapse">
   <li><a href="#possible-workshops" id="toc-possible-workshops" class="nav-link" data-scroll-target="#possible-workshops">Possible workshops:</a></li>
   <li><a href="#getting-quarto-running" id="toc-getting-quarto-running" class="nav-link" data-scroll-target="#getting-quarto-running">getting Quarto running:</a></li>
+  <li><a href="#work-for-workshop-4" id="toc-work-for-workshop-4" class="nav-link" data-scroll-target="#work-for-workshop-4">Work for workshop 4</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -309,10 +310,22 @@ more rounded</code></pre>
 <h4 class="anchored" data-anchor-id="starting-on-workshop-3">2024-02-15 starting on workshop 3</h4>
 <p>starting with: BIO00066I-workshop3-cell-movement-metrics.R</p>
 </section>
-<section id="improing-the-analysis-with-the-new-dates-data-for-w2" class="level4">
-<h4 class="anchored" data-anchor-id="improing-the-analysis-with-the-new-dates-data-for-w2">Improing the analysis with the new dates data for w2</h4>
-<p>See script: BIO00066I-new-w2-gated-data.R</p>
-<p>obtained all data from EB /Users/dj757/gd/modules/BIO66I/raw-data/2016-08-26_14-47-36_P*csv</p>
+<section id="improving-the-analysis-with-the-new-dates-data-for-w2" class="level4">
+<h4 class="anchored" data-anchor-id="improving-the-analysis-with-the-new-dates-data-for-w2">Improving the analysis with the new dates data for w2</h4>
+<p>See script: BIO00066I-new-w2-gated-data.R obtained all data from AB /Users/dj757/gd/modules/BIO66I/raw-data/2016-08-26_14-47-36_P*csv</p>
+</section>
+</section>
+<section id="work-for-workshop-4" class="level3">
+<h3 class="anchored" data-anchor-id="work-for-workshop-4">Work for workshop 4</h3>
+<p>from AB: Yes you’re right that the two files are alb_B2_8bit-0.25 tracks.xlsx and alb_A1_8bit-0.25 tracks.xlsx</p>
+<p>The difference&nbsp;is the files you attached to the email. You’ve got the&nbsp; alb_A1_8bit-0.25 points.xlsx attached to the email rather than alb_A1_8bit-0.25 tracks.xlsx. The points data is the raw data I obtained from cell tracking on imageJ. Whereas the tracks file is the output from python which analysed the point file to give metrics.</p>
+<section id="new-names-for-manual-point-and-track-data" class="level5">
+<h5 class="anchored" data-anchor-id="new-names-for-manual-point-and-track-data">new names for manual point and track data:</h5>
+<p>alb_A1_8bit-0.25 points.xlsx alb_B2_8bit-0.25 points.xlsx</p>
+<p>alb_A1_8bit-0.25 tracks.xlsx alb_B2_8bit-0.25 tracks.xlsx</p>
+<p>From AB:</p>
+<p>I’ve renamed the files to match&nbsp;each other, added labels to the columns and put the correct units in.</p>
+<p>What I would&nbsp;like to do on R if we can for each clone is: - Sort the data so we have summaries for each individual cell of the following metrics (mean speed, total distance travelled, euclidean&nbsp;distance (shortest distance&nbsp;from start to finish/as crow flies), meandering index (total distance travelled/euclidean&nbsp;distance) - For A1 the measurements&nbsp;for the first cell I tracked (from lineage 1, cell 1) is the first 15 rows of the spreadsheet. Cell I15 is the total distance travelled, cell J15 is the euclidean&nbsp;distance the mean speed is the mean of cells M6 - M15</p>
 
 
 </section>
