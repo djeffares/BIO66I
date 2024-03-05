@@ -489,3 +489,15 @@ The aim of all this is to make the code and the data analysis clear and readable
 
 So spending just **10 minutes** tidying your code now will make your future life easier. For example, look at your variable names, and make them clearer. 
 
+## In case install.packages fails
+
+If `install.packages("corrr")` fails, you can obtain the `track.correlations` data frame like this:
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+
+track.correlations <-read_tsv(url("https://djeffares.github.io/BIO66I/track.correlations.tsv"))
+```
+

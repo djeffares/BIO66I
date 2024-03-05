@@ -418,5 +418,12 @@
     "title": "BIO00066I Workshop 3",
     "section": "\n5.2 Note to dan",
     "text": "5.2 Note to dan\nFilter before making the track.correlations.pivot as above.\n\n#filter the data\ntrack.correlations.pivot |&gt;\n  filter(abs(corr.coeff) &gt; 0.25) |&gt;\n#put the plotting code here"
+  },
+  {
+    "objectID": "workshop3.html#in-case-install.packages-fails",
+    "href": "workshop3.html#in-case-install.packages-fails",
+    "title": "BIO00066I Workshop 3",
+    "section": "\n5.3 In case install.packages fails",
+    "text": "5.3 In case install.packages fails\nIf install.packages(\"corrr\") fails, you can obtain the track.correlations data frame like this:\n\ntrack.correlations &lt;-read_tsv(url(\"https://djeffares.github.io/BIO66I/track.correlations.tsv\"))"
   }
 ]
