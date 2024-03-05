@@ -94,6 +94,24 @@ We will keep working on this script. We advise you to mark clearly where worksho
 ########################################################
 ```
 
+First we will install the `corrr` package. Do do this, we do:
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+
+install.packages("corrr")
+```
+
+:::callout-note
+# install.packages is like installing an app on your phone.
+R obtains the package from the [The Comprehensive R Archive Network (CRAN)](https://cran.r-project.org/), which is like the 'app store' for R. You need an internet connection to use it, but once you have installed a package once, you never need to install it again. Unless you are using a new computer.
+:::
+
+Note that in `install.packages` command we need to put quotes `"` around the library name (`corrr` in this case), whereas when we load a library with `library(corrr)`.
+
+
 Then clear the previous work, and load the libraries we need:
 
 ```{r}

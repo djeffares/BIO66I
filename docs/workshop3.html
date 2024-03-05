@@ -322,9 +322,27 @@ Sometimes, asking a good question is the most important step!
 <span><span class="co">#WORKSHOP 3: CELL MOVEMENT DATA</span></span>
 <span><span class="co">########################################################</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>First we will install the <code>corrr</code> package. Do do this, we do:</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"corrr"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+install.packages is like installing an app on your phone.
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>R obtains the package from the <a href="https://cran.r-project.org/">The Comprehensive R Archive Network (CRAN)</a>, which is like the ‘app store’ for R. You need an internet connection to use it, but once you have installed a package once, you never need to install it again. Unless you are using a new computer.</p>
+</div>
+</div>
+<p>Note that in <code>install.packages</code> command we need to put quotes <code>"</code> around the library name (<code>corrr</code> in this case), whereas when we load a library with <code><a href="https://github.com/tidymodels/corrr">library(corrr)</a></code>.</p>
 <p>Then clear the previous work, and load the libraries we need:</p>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#clear previous data</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#clear previous data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">#load the tidyverse</span></span>
@@ -340,7 +358,7 @@ Sometimes, asking a good question is the most important step!
 <span class="header-section-number">3.2</span> Automated Livecyte cell movment data</h2>
 <p>Now read in the data from the file <strong>all-cell-data-FFT.filtered.2024-02-22.tsv</strong>. This contains some cell movment data.</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Read the automated Livecyte data</span></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Read the automated Livecyte data</span></span>
 <span><span class="va">cells</span> <span class="op">&lt;-</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_tsv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/connections.html">url</a></span><span class="op">(</span><span class="st">"https://djeffares.github.io/BIO66I/all-cell-data-FFT.filtered.2024-02-22.tsv"</span><span class="op">)</span>,</span>
 <span>                 col_types <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/cols.html">cols</a></span><span class="op">(</span></span>
 <span>                   clone <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_factor.html">col_factor</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -352,7 +370,7 @@ Sometimes, asking a good question is the most important step!
 </div>
 <p>Lets see what data we have:</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">cells</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">cells</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -369,7 +387,7 @@ Keep it simple
 </div>
 <p>In the spirit of <strong>keeping it simple</strong>, let’s retain only the columns in this data frame that we need, using the <code>select</code> function. The <code>cells</code> data framt still have all the data, so it is not lost.</p>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">cells</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">cells</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "clone"                    "replicate"               
  [3] "frame"                    "tracking.id"             
@@ -384,7 +402,7 @@ Keep it simple
 [21] "instantaneous.velocity.x" "instantaneous.velocity.y"
 [23] "track.length"             "length.to.width"         </code></pre>
 </div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#select only the columns we need</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#select only the columns we need</span></span>
 <span><span class="va">cell.move.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">cells</span>,</span>
 <span>        <span class="va">clone</span>,</span>
 <span>        <span class="va">replicate</span>,</span>
@@ -398,7 +416,7 @@ Keep it simple
 <pre><code>[1] "clone"                  "replicate"              "displacement"          
 [4] "track.length"           "instantaneous.velocity"</code></pre>
 </div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#get a simple summaru, using summary and also glimpse</span></span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#get a simple summaru, using summary and also glimpse</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">cell.move.data</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>    clone       replicate  displacement     track.length   
@@ -418,7 +436,7 @@ Keep it simple
  Max.   :0.060         
  NA's   :15314         </code></pre>
 </div>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">cell.move.data</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">cell.move.data</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 101,042
 Columns: 5
@@ -431,7 +449,7 @@ $ instantaneous.velocity &lt;dbl&gt; NA, 0.0011713431, 0.0025367271, 0.001327834
 </div>
 <p>Now save your working data:</p>
 <div class="cell">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#lets save our data</span></span>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#lets save our data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/save.html">save.image</a></span><span class="op">(</span><span class="st">"BIO00066I-workshop3-cell-movement-metrics.Rda"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">#you can load this any time later with:</span></span>
@@ -441,13 +459,13 @@ $ instantaneous.velocity &lt;dbl&gt; NA, 0.0011713431, 0.0025367271, 0.001327834
 <span class="header-section-number">3.3</span> Making plots</h2>
 <p>let’s see how clone A and clone B move. First, we’ll plot the <code>instantaneous.velocity</code>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#instantaneous.velocity - geom_violin</span></span>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#instantaneous.velocity - geom_violin</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">cell.move.data</span>,<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">clone</span>,y<span class="op">=</span><span class="va">instantaneous.velocity</span>,colour<span class="op">=</span><span class="va">clone</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span><span class="op">(</span>alpha<span class="op">=</span><span class="fl">0.5</span><span class="op">)</span><span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/stat_compare_means.html">stat_compare_means</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="workshop3_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="workshop3_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -485,7 +503,7 @@ Enhance the plot with facet_wrap
 <div class="cell">
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="workshop3_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="workshop3_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -508,7 +526,7 @@ Optional
 <p>Sometimes, the automated measurements are not the best quality. In this case, we know that the Livecyte microscope is not very good at tracking cells, so the cell movement metrics are not as good as we would like.</p>
 <p>So Amanda spent many hours <em>manually</em> tracking cells. These results were processed into manual tracking data. First, load the data and of course <strong>examine what you have</strong>.</p>
 <div class="cell">
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#load the manual tracking data</span></span>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#load the manual tracking data</span></span>
 <span><span class="va">track</span> <span class="op">&lt;-</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_tsv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/connections.html">url</a></span><span class="op">(</span><span class="st">"https://djeffares.github.io/BIO66I/A1-and-B2-tracking.data.tsv"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">#check it out</span></span>
@@ -530,7 +548,7 @@ $ end.time.total.time           &lt;dbl&gt; 0.03787879, 0.30303030, 0.58712121, 
 $ track.duration.total.time     &lt;dbl&gt; 0.03787879, 0.26136364, 0.28030303, 0.40…
 $ cell.line                     &lt;chr&gt; "A1", "A1", "A1", "A1", "A1", "A1", "A1"…</code></pre>
 </div>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">track</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">track</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "LID"                           "TID"                          
  [3] "track.duration"                "track.length"                 
@@ -563,7 +581,7 @@ Different names, same metric!
 <span class="header-section-number">3.5</span> Plotting manual tracking data</h2>
 <p>Let’s start by looking at the <strong>speed</strong> that each cell moves at during the experiment. This is recorded as <code>mean.speed</code> in this data set (the same as the <code>instantenous.velocity</code> in the <code>cells</code> data set). We can compare the clones (<code>cell.line</code>) like so:</p>
 <div class="cell">
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#compare mean.speed between cell lines</span></span>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#compare mean.speed between cell lines</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">track</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">cell.line</span>,y<span class="op">=</span><span class="va">mean.speed</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/stat_compare_means.html">stat_compare_means</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -575,7 +593,7 @@ Different names, same metric!
 </div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="workshop3_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="workshop3_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -609,7 +627,7 @@ Improve the plot
 <p>With biological data (and data from many other sources), different measurements of the same set of ‘things’ are often correlated. For example, human height and weight are strongly correlated. So it is with cells.</p>
 <p>We <em>could</em> examine each correlation one by one, like so:</p>
 <div class="cell">
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#examine whether track.length and mean.speed are correlated</span></span>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#examine whether track.length and mean.speed are correlated</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/cor.test.html">cor.test</a></span><span class="op">(</span><span class="va">track</span><span class="op">$</span><span class="va">track.length</span>,<span class="va">track</span><span class="op">$</span><span class="va">mean.speed</span>,method<span class="op">=</span><span class="st">"spearman"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -639,7 +657,7 @@ A Non parametric warning
 <p>But since there are 11 cell movment metrics, this would quickly become boring. And (just as importantly) the data would be a challenge to understand.</p>
 <p><strong>Fortunately, there is an easier way.</strong> First we use the <code>correlate</code> function to calculate all pairwise correlations. We save the correlation coefficients in the <code>track.correlations</code> data frame.</p>
 <div class="cell">
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#calculate all pairwise correlations</span></span>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#calculate all pairwise correlations</span></span>
 <span><span class="va">track.correlations</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">track</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://corrr.tidymodels.org/reference/correlate.html">correlate</a></span><span class="op">(</span>method<span class="op">=</span><span class="st">"spearman"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -649,7 +667,7 @@ Correlation computed with
 • Method: 'spearman'
 • Missing treated using: 'pairwise.complete.obs'</code></pre>
 </div>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#see what we have</span></span>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#see what we have</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">track.correlations</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 11
@@ -673,7 +691,7 @@ Correlation computed with
 </div>
 <p>We will use <code>pivot_longer</code> this way:</p>
 <div class="cell">
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#Adjust the name of the first column to "Variable1"</span></span>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#Adjust the name of the first column to "Variable1"</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">track.correlations</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">=</span><span class="st">"Variable1"</span></span>
 <span></span>
 <span><span class="co">#simplify the data with pivot_longer</span></span>
@@ -697,7 +715,7 @@ Correlation computed with
 </div>
 <p>Finally, we can show all the correlation coefficients in one plot. This gives us a unique and revealing sense of the data.</p>
 <div class="cell">
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#plot data in the track.correlations.pivot table</span></span>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#plot data in the track.correlations.pivot table</span></span>
 <span><span class="co">#using geom_tile (for coloured boxes) and geom_text (to show the correlation coefficient values) </span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">track.correlations.pivot</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">Variable1</span>, <span class="va">Variable2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html">geom_tile</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">corr.coeff</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -709,7 +727,7 @@ Correlation computed with
 </div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="workshop3_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="workshop3_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -775,7 +793,7 @@ It is critical to think about what our analysis shows aout the biology
 <p>Fortunately, this information in the data already. We do <em>not</em> see the entire ‘lifetime’ of any cell tracked object that have the value <code>TRUE</code> in in the column <code>track.present.at.start.or.end</code>, because we starting tracking them some time after they were born, or stopped tracking them before they divided again.</p>
 <p>So we can filter out these lines by putting <code>filter(track.present.at.start.or.end != TRUE)</code> in our code. Let’s check if this makes any difference by comparing <code>track.length</code>without the filter, and then with the filter:</p>
 <div class="cell">
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#track.length without the filter</span></span>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#track.length without the filter</span></span>
 <span><span class="va">no.filter.plot</span><span class="op">&lt;-</span> <span class="va">track</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">cell.line</span>, y <span class="op">=</span> <span class="va">track.length</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
@@ -816,7 +834,7 @@ Did this make a difference?
 <span class="header-section-number">5.1.2</span> Improve the correlation heat map</h3>
 <p>What if we wanted to show only the correlations where the absolute value of <span class="math inline">\(\rho\)</span> was greater than 0.25? Try using the pipe operator <code>|&gt;</code> to filter the <code>track.correlations.pivot</code> data before plotting, with:</p>
 <div class="cell">
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#filter the data</span></span>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#filter the data</span></span>
 <span><span class="va">track.correlations.pivot</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">corr.coeff</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0.25</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span><span class="co">#now we put the plotting code here </span></span>
