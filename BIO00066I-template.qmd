@@ -44,7 +44,6 @@ What does this result show about the biology?
 :::
 
 
-
 # Learning objectives
 
 ::: callout-important
@@ -57,8 +56,6 @@ Workshops are not a test. You may know how to start and make a lot of mistakes. 
 -   look things up in your own code from earlier
 -   there are no stupid questions
 :::
-
-
 
 ## Technical skills
 

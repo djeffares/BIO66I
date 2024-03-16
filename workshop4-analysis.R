@@ -104,19 +104,18 @@ names(cells)
 A.points <-read_excel("/Users/dj757/gd/modules/BIO66I/raw-data/alb_A1_8bit-0.25 points.xlsx",skip=1)
 B.points <-read_excel("/Users/dj757/gd/modules/BIO66I/raw-data/alb_B2_8bit-0.25 points.xlsx", skip=1)
 
+#clean up names
 A.points <- janitor::clean_names(A.points)
 B.points <- janitor::clean_names(B.points)
 A.points <- A.points[,1:15]
 names(A.points)
 names(B.points)
 
-#clear up names:
-names(A.points)[2]="lineage.id"
+#names(A.points)[2]="lineage.id"
 
 names(A.points) <- names(B.points)
 length(names(A.points))
 length(names(B.points))
-
 
 #this data needs some manual renaming
 A.points$clone="A"
@@ -125,6 +124,10 @@ B.points$clone="B"
 points <- bind_rows(A.points,B.points)
 #alb_A1_8bit-0.25 points correct
 
+#remove some columns that we don't need:
+names(points)
+
+
 #in this file we have CID (cell id?) and before we talked about lineage id
 names(points)
 
@@ -132,21 +135,157 @@ names(points)
 #and make the column names upper case so it simpler for the students
 names(points)[2] = "LID"
 names(points)[3] = "TID"
-names(points) <- toupper(names(points))
+#names(points) <- toupper(names(points))
 
 #get rid of text after the underscore in points
 names(points)<-str_split_i(names(points), "_",1)
 
-#have a look at one lineage LID 
+
+#to remove
+#Nr
+#Elucidean distance
+##I [val]
+#Track Length (um)
+#D2R [祄]
+#alpha [deg]
+#delta alpha [deg]
+#...16
+
+#remove solumns we don't need
+#points <- select(points, -nr, -i, -d2r, -alpha, -delta)
+#names(points)
+
+#give columns betetr names
+#len: track.length (distance it has moved from its start points)
+#d2s: euclidean.distance
+#d2p: jump.distance (distance from current point to previous point)
+#v: velocity
+
+#give better names
+points <- points |>
+  rename(euclidean.distance = d2s) |>
+  rename(track.length = len) |>
+  rename(jump.distance = d2p) |>
+  rename(time = t) |>
+  rename(velocity = v) |>
+  rename(x.position = x) |>
+  rename(y.position = y) 
+
+
+#output the points data
+write_csv(points, "data/points.data.2024-03-16.csv")
+
+points<-read_csv("data/points.data.2024-03-16.csv",
+  col_types = cols(LID = col_factor(),TID = col_factor(),pid = col_factor())
+)
+
+#save it
+save.image("workshop4.anaysis.2024-03-16.Rda")
+
+####################################################################
+#DATA CLEAN UP DONE
+####################################################################
+
+#remove all data and start again
+rm(list=ls())
+library(tidyverse)
+library(readxl)
+library(ggpubr)
+#install.packages("gganimate")
+#install.packages("gifski")
+library(gganimate)
+
+
+#load data
+points<-read_csv("data/points.data.2024-03-16.csv",
+                 col_types = cols(LID = col_factor(),TID = col_factor(),pid = col_factor())
+)
+
+
+#how fast to they move
 points |>
-  filter(LID==4)|>
-  ggplot(aes(x=x,y=y,colour=clone))+
+  ggplot(aes(x=clone,y=log10(velocity)))+
+  geom_violin()+
+  stat_compare_means()
+
+#rose plot: adjust so the median of mean_x_mm is zero
+#and mean_y_mm is zero
+#ie: centralize all the values
+points2<- points |> 
+  group_by(LID) |> 
+  mutate(med.x = mean(x.position, na.rm = TRUE))|>
+  mutate(adjusted.x =  x.position - med.x) |>
+  mutate(med.y = mean(y.position, na.rm = TRUE))|>
+  mutate(adjusted.y =  y.position - med.y)
+points2
+
+#make a rose plot  
+points2 |>  
+  ggplot(aes(x=adjusted.x,y=adjusted.y,colour = euclidean.distance))+
+  geom_point(alpha=0.5, size=3)+
+  geom_hline(yintercept = 0)+
+  geom_vline(xintercept = 0)+
+  facet_wrap(~clone)
+
+#how to they move?
+
+#show all lineages in A
+points |>
+  filter(clone == "A")|>
+  ggplot(aes(x=x.position,y=y.position,colour=clone))+
   geom_point(size=1)+
-  facet_wrap(~TID)
+  facet_wrap(~LID)
+
+#show one lineage, from one clone and colour by TID
+points |>
+  filter(clone == "B" & LID==4)|>
+  ggplot(aes(x=x.position,y=y.position,colour=TID))+
+  geom_point(size=1)
+
+
+#try colouring by time:
+
+#let's animate this
+static.plot <-points |>
+  filter(clone == "B", LID == 1) |>
+  ggplot(aes(x=x.position,y=y.position, colour=TID))+
+  geom_point(size=10, pch=1)
+static.plot
+
+#try: 
+#filter(clone == "B")
+#facet_wrap(~LID)
+#geom_point(size=5, pch=1)
+
+animated.plot <- static.plot +
+  transition_time(time) +
+  shadow_mark(past = T, future=F, alpha=0.5)
+
+#amimate it!
+animate(animated.plot, width =800, height = 800)
+
+#save as gif
+anim_save("clineB.ineage2gif", animated.plot)
+
+#do they follow each other?
+#can we find out if they follow eacgh othe by correlations of x and y
+
+
+
+
+
+#make rose plots for clone A and clone B side by side
+#
+
+#do they follow each other
+
+
+
+names(points)
   
 #how mnay unique LIDs
-unique(subset(points, clone = "A")$TID)
-unique(subset(points, clone = "B")$TID)
+#unique(subset(points, clone = "A")$TID)
+#unique(subset(points, clone = "B")$TID)
 
 #clean names
 A.tracking <- janitor::clean_names(A.tracking)

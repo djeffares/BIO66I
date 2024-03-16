@@ -15,3 +15,48 @@ format:
 editor: source
 ---
 
+
+# Learning objectives
+
+::: callout-important
+## Philosophy
+
+- **Workshops are not a test.** 
+- Don't worry about making mistakes. 
+- The staff are here to help.
+:::
+
+## Technical skills
+
+Today, we will learn how to:
+ 
+- create a linear model, and use it to predict 
+
+## Thinking like a data scientist
+
+# Introduction
+
+## The biology
+
+## Research questions
+
+## The data
+In this workshop we bla bla
+
+# Exercises
+
+## Part 1
+
+## Part 2
+
+## Part 3
+
+# Reflection
+
+# After the workshop
+
+## Consolodation exercises
+
+Optional
+
+## Planning for your report
