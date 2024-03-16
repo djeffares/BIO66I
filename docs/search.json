@@ -431,14 +431,14 @@
     "href": "workshop4.html",
     "title": "BIO00066I Workshop 4",
     "section": "",
-    "text": "Philosophy\n\n\n\n\nWorkshops are not a test.\nDon’t worry about making mistakes.\nThe staff are here to help.\n\n\n\n\nToday, we will learn how to:\n\ncreate a linear model, and use it to predict the a y value, given an x value\nin our case we use absorbance x to predict alkaline phosphatase activity y"
+    "text": "This workshop is a work in prgress."
   },
   {
     "objectID": "workshop4.html#the-biology",
     "href": "workshop4.html#the-biology",
     "title": "BIO00066I Workshop 4",
     "section": "\n2.1 The biology",
-    "text": "2.1 The biology"
+    "text": "2.1 The biology\nWe saw in workshop 3 that clone A moves faster than clone B. This time we will use R to explore MCS cell movement in more depth. Use x and y coordinates from manually tracked cells.\nWe have 10 manually tracked cell lineages of clone A and 9 manually tracked cell lineages of clone B.\n\n\nFigure 1. The tracking ID (TID) is a unique ID that the microscope assigned to each object (cell), as it tracks it through time. The lineage ID (LID) is a number assigned to the ‘family’ of cells that derived by cell division during the the experiment. When a cell divides, each daughter cell is given a new tracking ID, but they keep their lineage ID, because they are still part of the same family.\n\n#show all lineages in A points |&gt; ggplot(aes(x=x.position,y=y.position,colour=clone))+ geom_point(size=1)+ facet_wrap(~LID) #filter(clone == “A”)|&gt;\n#show one lineage, from one clone and colour by TID points |&gt; filter(clone == “B” & LID==4)|&gt; ggplot(aes(x=x.position,y=y.position,colour=TID))+ geom_point(size=1)"
   },
   {
     "objectID": "workshop4.html#research-questions",
@@ -493,8 +493,8 @@
     "objectID": "workshop4.html#technical-skills",
     "href": "workshop4.html#technical-skills",
     "title": "BIO00066I Workshop 4",
-    "section": "",
-    "text": "Today, we will learn how to:\n\ncreate a linear model, and use it to predict the a y value, given an x value\nin our case we use absorbance x to predict alkaline phosphatase activity y"
+    "section": "\n1.1 Technical skills",
+    "text": "1.1 Technical skills\nToday, we will learn how to:\n\nUse a linear model to predict some y values, given some x values\nIn our case we use absorbance (x values) to predict alkaline phosphatase activity (y values)\nMake animated plots\n\nUse multiple test correction"
   },
   {
     "objectID": "workshop4.html#part-1-standard-curve",
@@ -508,7 +508,7 @@
     "href": "workshop4.html#load-libraries-install-packages",
     "title": "BIO00066I Workshop 4",
     "section": "\n3.1 Load libraries (install packages)",
-    "text": "3.1 Load libraries (install packages)\n\nrm(list=ls())\nlibrary(tidyverse)\n\nWarning: package 'ggplot2' was built under R version 4.3.2\n\n\n── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──\n✔ dplyr     1.1.4     ✔ readr     2.1.4\n✔ forcats   1.0.0     ✔ stringr   1.5.1\n✔ ggplot2   3.5.0     ✔ tibble    3.2.1\n✔ lubridate 1.9.3     ✔ tidyr     1.3.0\n✔ purrr     1.0.2     \n── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──\n✖ dplyr::filter() masks stats::filter()\n✖ dplyr::lag()    masks stats::lag()\nℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors\n\nlibrary(readxl)\nlibrary(ggpubr)\n#install.packages(\"gganimate\")\n#install.packages(\"gifski\")\nlibrary(gganimate)\n\nWarning: package 'gganimate' was built under R version 4.3.2"
+    "text": "3.1 Load libraries (install packages)\n\nrm(list=ls())\nlibrary(tidyverse)\nlibrary(readxl)\nlibrary(ggpubr)\n#install.packages(\"gganimate\")\n#install.packages(\"gifski\")\nlibrary(gganimate)"
   },
   {
     "objectID": "workshop4.html#load-data",
@@ -522,13 +522,20 @@
     "href": "workshop4.html#plot-enzyme-data",
     "title": "BIO00066I Workshop 4",
     "section": "\n3.3 Plot enzyme data",
-    "text": "3.3 Plot enzyme data\n\npNPP.plot &lt;- ap.pivot |&gt;\n  ggplot(aes(x=absorb, y=pNPP.conc))+\n  geom_point()+\n  geom_smooth(method=\"lm\")\npNPP.plot\n\n`geom_smooth()` using formula = 'y ~ x'\n\n\n\n\n\n\n\n\nHow close are the reps? What if we use ggplot(aes(x=absorb, y=pNPP.conc,colour = rep))\nsave the plot with ggsave\n\nggsave(\"pNPP.plot.pdf\",pNPP.plot)  \n\nSaving 7 x 5 in image\n`geom_smooth()` using formula = 'y ~ x'"
+    "text": "3.3 Plot enzyme data\n\npNPP.plot &lt;- ap.pivot |&gt;\n  ggplot(aes(x=absorb, y=pNPP.conc))+\n  geom_point()+\n  geom_smooth(method=\"lm\")\npNPP.plot\n\n\n\n\n\n\n\nHow close are the reps? What if we use ggplot(aes(x=absorb, y=pNPP.conc,colour = rep))\nsave the plot with ggsave\n\nggsave(\"pNPP.plot.pdf\",pNPP.plot)"
   },
   {
     "objectID": "workshop4.html#make-a-linear-model",
     "href": "workshop4.html#make-a-linear-model",
     "title": "BIO00066I Workshop 4",
     "section": "\n3.4 Make a linear model",
-    "text": "3.4 Make a linear model\n\nlinear_model &lt;- lm(pNPP.conc ~ absorb , data = ap.pivot)\nabsorbance_values &lt;- data.frame(absorb = c(1,2,3))\n\nGiven some absorbence values, make a prediction of some pNPP concentrations\n\npredicted.pnpp.concs &lt;- predict(linear_model,absorbance_values)\npredicted.pnpp.concs\n\n        1         2         3 \n0.2241678 0.4624258 0.7006838"
+    "text": "3.4 Make a linear model\n\nlinear_model &lt;- lm(pNPP.conc ~ absorb , data = ap.pivot)\nabsorbance_values &lt;- data.frame(absorb = c(1,2,3))\n\nGiven some absorbence values, make a prediction of some pNPP concentrations\n\npredicted.pnpp.concs &lt;- predict(linear_model,absorbance_values)\npredicted.pnpp.concs"
+  },
+  {
+    "objectID": "workshop4.html#thinking-like-a-data-scientist",
+    "href": "workshop4.html#thinking-like-a-data-scientist",
+    "title": "BIO00066I Workshop 4",
+    "section": "\n1.2 Thinking like a data scientist",
+    "text": "1.2 Thinking like a data scientist\nIt might seem like a lot of trouble to use R to read in a small number of x and y values from an Excel sheet to a standard curve, and then estimate some new y values. We could probably do this in Excel.\nBut what if we have 200 standard curves, and we want o automate the process? What if we have 50,000 x and y values and a non-linear model? For big data, R is the only sensible way. There are other software tools for statitical analysis, but we don’t teach them here."
   }
 ]

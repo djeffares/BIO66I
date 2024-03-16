@@ -210,7 +210,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   
 
 
-</header><section id="learning-objectives" class="level1" data-number="1"><h1 data-number="1">
+</header><div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+This workshop is a work in prgress.
+</div>
+</div>
+<div class="callout-body-container callout-body">
+
+</div>
+</div>
+<section id="learning-objectives" class="level1" data-number="1"><h1 data-number="1">
 <span class="header-section-number">1</span> Learning objectives</h1>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -233,15 +246,27 @@ Philosophy
 <span class="header-section-number">1.1</span> Technical skills</h2>
 <p>Today, we will learn how to:</p>
 <ul>
-<li>create a linear model, and use it to predict the a <em>y</em> value, given an <em>x</em> value</li>
-<li>in our case we use absorbance <em>x</em> to predict alkaline phosphatase activity <em>y</em>
+<li>Use a linear model to predict some <strong><em>y</em></strong> values, given some <strong><em>x</em></strong> values</li>
+<li>In our case we use absorbance (<strong><em>x</em></strong> <strong>values</strong>) to predict alkaline phosphatase activity (<strong><em>y</em></strong> <strong>values</strong>)</li>
+<li>Make <strong>animated plots</strong>
 </li>
+<li>Use multiple test correction</li>
 </ul></section><section id="thinking-like-a-data-scientist" class="level2" data-number="1.2"><h2 data-number="1.2" class="anchored" data-anchor-id="thinking-like-a-data-scientist">
 <span class="header-section-number">1.2</span> Thinking like a data scientist</h2>
+<p>It might seem like a lot of trouble to use <strong>R</strong> to read in a small number of <strong><em>x</em></strong> and <strong><em>y</em></strong> values from an Excel sheet to a standard curve, and then estimate some new <strong><em>y</em></strong> values. We <em>could</em> probably do this in Excel.</p>
+<p>But what if we have 200 standard curves, and we want o automate the process? What if we have 50,000 <strong><em>x</em></strong> and <strong><em>y</em></strong> values and a non-linear model? For big data, <strong>R is the only sensible way</strong>. There are <a href="https://www.inwt-statistics.com/blog/comparison-of-r-python-sas-spss-and-stata">other software tools for statitical analysis</a>, but we don’t teach them here.</p>
 </section></section><section id="introduction" class="level1" data-number="2"><h1 data-number="2">
 <span class="header-section-number">2</span> Introduction</h1>
 <section id="the-biology" class="level2" data-number="2.1"><h2 data-number="2.1" class="anchored" data-anchor-id="the-biology">
 <span class="header-section-number">2.1</span> The biology</h2>
+<p>We saw in workshop 3 that clone A moves faster than clone B. This time we will use R to explore MCS cell movement in more depth. Use <strong><em>x</em></strong> and <strong><em>y</em></strong> coordinates from <em>manually</em> tracked cells.</p>
+<p>We have 10 manually tracked cell lineages of clone A and 9 manually tracked cell lineages of clone B.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure"><p><img src="docs/figure1.jpg" class="img-fluid figure-img"></p>
+<figcaption><strong>Figure 1.</strong> The <strong>tracking ID (TID)</strong> is a unique ID that the microscope assigned to each object (cell), as it tracks it through time. The <strong>lineage ID (LID)</strong> is a number assigned to the ‘family’ of cells that derived by cell division during the the experiment. When a cell divides, each daughter cell is given a new tracking ID, but they keep their lineage ID, because they are still part of the same family.</figcaption></figure>
+</div>
+<p>#show all lineages in A points |&gt; ggplot(aes(x=x.position,y=y.position,colour=clone))+ geom_point(size=1)+ facet_wrap(~LID) #filter(clone == “A”)|&gt;</p>
+<p>#show one lineage, from one clone and colour by TID points |&gt; filter(clone == “B” &amp; LID==4)|&gt; ggplot(aes(x=x.position,y=y.position,colour=TID))+ geom_point(size=1)</p>
 </section><section id="research-questions" class="level2" data-number="2.2"><h2 data-number="2.2" class="anchored" data-anchor-id="research-questions">
 <span class="header-section-number">2.2</span> Research questions</h2>
 </section><section id="the-data" class="level2" data-number="2.3"><h2 data-number="2.3" class="anchored" data-anchor-id="the-data">
@@ -253,41 +278,23 @@ Philosophy
 <span class="header-section-number">3.1</span> Load libraries (install packages)</h2>
 <div class="cell">
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/rm.html">rm</a></span><span class="op">(</span>list<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/ls.html">ls</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'ggplot2' was built under R version 4.3.2</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-✔ dplyr     1.1.4     ✔ readr     2.1.4
-✔ forcats   1.0.0     ✔ stringr   1.5.1
-✔ ggplot2   3.5.0     ✔ tibble    3.2.1
-✔ lubridate 1.9.3     ✔ tidyr     1.3.0
-✔ purrr     1.0.2     
-── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-✖ dplyr::filter() masks stats::filter()
-✖ dplyr::lag()    masks stats::lag()
-ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
-</div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rpkgs.datanovia.com/ggpubr/">ggpubr</a></span><span class="op">)</span></span>
 <span><span class="co">#install.packages("gganimate")</span></span>
 <span><span class="co">#install.packages("gifski")</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://gganimate.com">gganimate</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: package 'gganimate' was built under R version 4.3.2</code></pre>
-</div>
 </div>
 </section><section id="load-data" class="level2" data-number="3.2"><h2 data-number="3.2" class="anchored" data-anchor-id="load-data">
 <span class="header-section-number">3.2</span> Load data</h2>
 <p>read in excel</p>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ap</span><span class="op">&lt;-</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"raw-data/Example Alkaline Phosphatase Activity assay .xlsx"</span>, sheet<span class="op">=</span><span class="fl">2</span>, skip<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ap</span><span class="op">&lt;-</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"raw-data/Example Alkaline Phosphatase Activity assay .xlsx"</span>, sheet<span class="op">=</span><span class="fl">2</span>, skip<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://tibble.tidyverse.org/reference/view.html">view</a></span><span class="op">(</span><span class="va">ap</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>simplify the data with pivot_longer</p>
 <div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ap.pivot</span> <span class="op">&lt;-</span> </span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ap.pivot</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">ap</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">mean.abs</span>, <span class="op">-</span><span class="va">standard.deviation</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="op">-</span><span class="va">pNPP.conc</span>, names_to <span class="op">=</span> <span class="st">"rep"</span>, values_to <span class="op">=</span> <span class="st">"absorb"</span><span class="op">)</span></span>
@@ -295,19 +302,16 @@ Philosophy
 </div>
 <p>reorder columns, so it is more intuitive</p>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ap.pivot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/relocate.html">relocate</a></span><span class="op">(</span><span class="va">ap.pivot</span>, <span class="va">absorb</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ap.pivot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/relocate.html">relocate</a></span><span class="op">(</span><span class="va">ap.pivot</span>, <span class="va">absorb</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="plot-enzyme-data" class="level2" data-number="3.3"><h2 data-number="3.3" class="anchored" data-anchor-id="plot-enzyme-data">
 <span class="header-section-number">3.3</span> Plot enzyme data</h2>
 <div class="cell">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pNPP.plot</span> <span class="op">&lt;-</span> <span class="va">ap.pivot</span> <span class="op">|&gt;</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pNPP.plot</span> <span class="op">&lt;-</span> <span class="va">ap.pivot</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">absorb</span>, y<span class="op">=</span><span class="va">pNPP.conc</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method<span class="op">=</span><span class="st">"lm"</span><span class="op">)</span></span>
 <span><span class="va">pNPP.plot</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
-</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="workshop4_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
@@ -318,26 +322,18 @@ Philosophy
 <p>How close are the reps? What if we use <code>ggplot(aes(x=absorb, y=pNPP.conc,colour = rep))</code></p>
 <p>save the plot with ggsave</p>
 <div class="cell">
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"pNPP.plot.pdf"</span>,<span class="va">pNPP.plot</span><span class="op">)</span>  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Saving 7 x 5 in image
-`geom_smooth()` using formula = 'y ~ x'</code></pre>
-</div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"pNPP.plot.pdf"</span>,<span class="va">pNPP.plot</span><span class="op">)</span>  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="make-a-linear-model" class="level2" data-number="3.4"><h2 data-number="3.4" class="anchored" data-anchor-id="make-a-linear-model">
 <span class="header-section-number">3.4</span> Make a linear model</h2>
 <div class="cell">
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">linear_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">pNPP.conc</span> <span class="op">~</span> <span class="va">absorb</span> , data <span class="op">=</span> <span class="va">ap.pivot</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">linear_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">pNPP.conc</span> <span class="op">~</span> <span class="va">absorb</span> , data <span class="op">=</span> <span class="va">ap.pivot</span><span class="op">)</span></span>
 <span><span class="va">absorbance_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>absorb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Given some absorbence values, make a prediction of some pNPP concentrations</p>
 <div class="cell">
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">predicted.pnpp.concs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">linear_model</span>,<span class="va">absorbance_values</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">predicted.pnpp.concs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">linear_model</span>,<span class="va">absorbance_values</span><span class="op">)</span></span>
 <span><span class="va">predicted.pnpp.concs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>        1         2         3 
-0.2241678 0.4624258 0.7006838 </code></pre>
-</div>
 </div>
 </section></section><section id="exercises-part-2-exploring-mcs-movement" class="level1" data-number="4"><h1 data-number="4">
 <span class="header-section-number">4</span> Exercises (Part 2): Exploring MCS movement</h1>
