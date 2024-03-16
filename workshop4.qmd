@@ -14,6 +14,9 @@ format:
         
 editor: source
 ---
+::: callout-warning
+## This workshop is a work in prgress.
+:::
 
 
 # Learning objectives
@@ -30,14 +33,32 @@ editor: source
 
 Today, we will learn how to:
  
-- create a linear model, and use it to predict the a *y* value, given an *x* value
-- in our case we use absorbance *x* to predict alkaline phosphatase activity *y*
+- Use a linear model to predict some ***y*** values, given some ***x*** values
+- In our case we use absorbance (***x*** **values**) to predict alkaline phosphatase activity (***y*** **values**)
+- Make **animated plots**
+- Use multiple test correction
 
 ## Thinking like a data scientist
+
+It might seem like a lot of trouble to  use **R** to read in a small number of ***x*** and ***y*** values from an Excel sheet to a standard curve, and then estimate some new ***y*** values. We *could* probably do this in Excel.
+
+But what if we have 200 standard curves, and we want o automate the process? What if we have 50,000 ***x*** and ***y*** values and a non-linear model? For big data, **R is the only sensible way**. There are [other software tools for statitical analysis](https://www.inwt-statistics.com/blog/comparison-of-r-python-sas-spss-and-stata), but we don't teach them here.
+
 
 # Introduction
 
 ## The biology
+
+We saw in workshop 3 that clone A moves faster than clone B. This time we will use R to explore MCS cell movement in more depth. Use ***x*** and ***y*** coordinates from  *manually* tracked cells. We have 10 manually tracked cell lineages of clone A and 9 manually tracked cell lineages of clone B. Today, we will explore the ways these lineages move.
+
+![**Figure 1.** The **tracking ID (TID)** is a unique ID that the microscope assigned to each object (cell), as it tracks it through time. The **lineage ID (LID)** is a number assigned to the ‘family’ of cells that derived by cell division during the the experiment. When a cell divides, each daughter cell is given a new tracking ID, but they keep their lineage ID, because they are still part of the same family.](docs/figure1.jpg)
+
+::: callout-note
+## Same coding methods, different data
+The methods we use to examine cells moving on *x* and *x* coordinates would be used for anything moving in a 2 diemntional plane. Traffick, birds, slugs even.
+:::
+
+
 
 ## Research questions
 
@@ -49,6 +70,10 @@ In this workshop we bla bla
 ## Load libraries (install packages)
 
 ```{r}
+#| echo: true
+#| warning: false
+#| eval: true
+
 rm(list=ls())
 library(tidyverse)
 library(readxl)
@@ -64,6 +89,9 @@ library(gganimate)
 read in excel
 
 ```{r}
+#| echo: true
+#| warning: false
+#| eval: true
 ap<-read_excel("raw-data/Example Alkaline Phosphatase Activity assay .xlsx", sheet=2, skip=3)
 view(ap)
 ```
@@ -72,6 +100,9 @@ view(ap)
 simplify the data with pivot_longer
 
 ```{r}
+#| echo: true
+#| warning: false
+#| eval: true
 ap.pivot <- 
   ap |> 
   select(-mean.abs, -standard.deviation) |>
@@ -82,12 +113,19 @@ view(ap.pivot)
 reorder columns, so it is more intuitive 
 
 ```{r}
+#| echo: true
+#| warning: false
+#| eval: true
 ap.pivot <- relocate(ap.pivot, absorb)
 ```
 
 ## Plot enzyme data
 
 ```{r}
+#| echo: true
+#| warning: false
+#| eval: true
+
 pNPP.plot <- ap.pivot |>
   ggplot(aes(x=absorb, y=pNPP.conc))+
   geom_point()+
@@ -100,6 +138,10 @@ How close are the reps? What if we use `ggplot(aes(x=absorb, y=pNPP.conc,colour 
 
 save the plot with ggsave
 ```{r}
+#| echo: true
+#| warning: false
+#| eval: true
+
 ggsave("pNPP.plot.pdf",pNPP.plot)  
 ```
 
@@ -107,6 +149,10 @@ ggsave("pNPP.plot.pdf",pNPP.plot)
 ## Make a linear model
 
 ```{r}
+#| echo: true
+#| warning: false
+#| eval: true
+
 linear_model <- lm(pNPP.conc ~ absorb , data = ap.pivot)
 absorbance_values <- data.frame(absorb = c(1,2,3))
 ```
@@ -114,6 +160,10 @@ absorbance_values <- data.frame(absorb = c(1,2,3))
 Given some absorbence values, make a prediction of some pNPP concentrations
 
 ```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+
 predicted.pnpp.concs <- predict(linear_model,absorbance_values)
 predicted.pnpp.concs
 ```
@@ -122,7 +172,162 @@ predicted.pnpp.concs
 
 # Exercises (Part 2): Exploring MCS movement
 
-## Part 3
+## Loading data
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+
+#load data from a URL
+points<-read_csv(url("https://djeffares.github.io/BIO66I/points.data.2024-03-16.csv"),
+                 col_types = cols(LID = col_factor(),TID = col_factor(),pid = col_factor())
+)
+
+#check what we have
+glimpse(points)
+head(points)
+
+```
+
+
+## What is in the 'point' data?
+This data contains the positions of cells, tracked over time. Lineages are tracked. We have data for tracked cells for both clones (A and B). We have the following information, for many time points:
+
+- lineage ID (LID)
+- tracking ID (TID)
+- something (pid)
+- the location of the cell in *x* and *y* coordinates (x.position, y.position)
+- the time point (time)
+- movement metrics (track.length, euclidean.distance, velocity)
+- a new movement metric: howfar the cell moved between this time ppint, and thr last one (jump.distance)
+- clone (A/B)
+
+## Exploratory plots
+
+
+recap: how fast to they move
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+points |>
+  ggplot(aes(x=clone,y=log10(velocity)))+
+  geom_violin()+
+  stat_compare_means()
+```
+
+
+what directions do they move in?
+
+dhow all lineages
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+
+points |>
+  ggplot(aes(x=x.position,y=y.position,colour=clone))+
+  geom_point(size=1)+
+  facet_wrap(~LID)
+  #filter(clone == "A")|>
+```
+
+
+show one lineage, from one clone and colour by TID (or time)
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+
+points |>
+  filter(clone == "B" & LID==4)|>
+  ggplot(aes(x=x.position,y=y.position,colour=TID))+
+  geom_point(size=1)
+  #colour=time
+```
+
+## Rose plots
+
+Rose plot to summarise how **far** cells move.
+
+rose plot: adjust so the median of mean_x_mm is zero and mean_y_mm is zero
+ie: centralize all the values
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+points2<- points |> 
+  group_by(LID) |> 
+  mutate(med.x = mean(x.position, na.rm = TRUE))|>
+  mutate(adjusted.x =  x.position - med.x) |>
+  mutate(med.y = mean(y.position, na.rm = TRUE))|>
+  mutate(adjusted.y =  y.position - med.y)
+points2
+```
+
+make a rose plot  
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+points2 |>  
+  ggplot(aes(x=adjusted.x,y=adjusted.y,colour = time))+
+  geom_point(alpha=0.5, size=3)+
+  geom_hline(yintercept = 0)+
+  geom_vline(xintercept = 0)+
+  facet_wrap(~clone)
+```
+
+
+## Animate it!
+
+let's animate this
+
+create the static plot
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+static.plot <-points |>
+  filter(clone == "B", LID == 1) |>
+  ggplot(aes(x=x.position,y=y.position, colour=TID))+
+  geom_point(size=10, pch=1)
+static.plot
+```
+
+try alternatives
+
+- `filter(clone == "B")`
+- `facet_wrap(~LID)`
+- `geom_point(size=5, pch=1)`
+
+animate the plot
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+animated.plot <- static.plot +
+  transition_time(time) +
+  shadow_mark(past = T, future=F, alpha=0.5)
+
+#amimate it!
+animate(animated.plot, width =800, height = 800)
+
+#save as gif
+anim_save("clineB.ineage2gif", animated.plot)
+```
+
+## Do they follow each other
+
+TBA
 
 # Reflection
 

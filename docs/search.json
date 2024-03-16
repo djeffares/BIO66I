@@ -438,7 +438,7 @@
     "href": "workshop4.html#the-biology",
     "title": "BIO00066I Workshop 4",
     "section": "\n2.1 The biology",
-    "text": "2.1 The biology\nWe saw in workshop 3 that clone A moves faster than clone B. This time we will use R to explore MCS cell movement in more depth. Use x and y coordinates from manually tracked cells.\nWe have 10 manually tracked cell lineages of clone A and 9 manually tracked cell lineages of clone B.\n\n\nFigure 1. The tracking ID (TID) is a unique ID that the microscope assigned to each object (cell), as it tracks it through time. The lineage ID (LID) is a number assigned to the ‘family’ of cells that derived by cell division during the the experiment. When a cell divides, each daughter cell is given a new tracking ID, but they keep their lineage ID, because they are still part of the same family.\n\n#show all lineages in A points |&gt; ggplot(aes(x=x.position,y=y.position,colour=clone))+ geom_point(size=1)+ facet_wrap(~LID) #filter(clone == “A”)|&gt;\n#show one lineage, from one clone and colour by TID points |&gt; filter(clone == “B” & LID==4)|&gt; ggplot(aes(x=x.position,y=y.position,colour=TID))+ geom_point(size=1)"
+    "text": "2.1 The biology\nWe saw in workshop 3 that clone A moves faster than clone B. This time we will use R to explore MCS cell movement in more depth. Use x and y coordinates from manually tracked cells. We have 10 manually tracked cell lineages of clone A and 9 manually tracked cell lineages of clone B. Today, we will explore the ways these lineages move.\n\n\nFigure 1. The tracking ID (TID) is a unique ID that the microscope assigned to each object (cell), as it tracks it through time. The lineage ID (LID) is a number assigned to the ‘family’ of cells that derived by cell division during the the experiment. When a cell divides, each daughter cell is given a new tracking ID, but they keep their lineage ID, because they are still part of the same family.\n\n\n\n\n\n\n\nSame coding methods, different data\n\n\n\nThe methods we use to examine cells moving on x and x coordinates would be used for anything moving in a 2 diemntional plane. Traffick, birds, slugs even."
   },
   {
     "objectID": "workshop4.html#research-questions",
@@ -472,8 +472,8 @@
     "objectID": "workshop4.html#part-3",
     "href": "workshop4.html#part-3",
     "title": "BIO00066I Workshop 4",
-    "section": "\n4.1 Part 3",
-    "text": "4.1 Part 3"
+    "section": "\n4.2 Part 3",
+    "text": "4.2 Part 3"
   },
   {
     "objectID": "workshop4.html#consolodation-exercises",
@@ -537,5 +537,47 @@
     "title": "BIO00066I Workshop 4",
     "section": "\n1.2 Thinking like a data scientist",
     "text": "1.2 Thinking like a data scientist\nIt might seem like a lot of trouble to use R to read in a small number of x and y values from an Excel sheet to a standard curve, and then estimate some new y values. We could probably do this in Excel.\nBut what if we have 200 standard curves, and we want o automate the process? What if we have 50,000 x and y values and a non-linear model? For big data, R is the only sensible way. There are other software tools for statitical analysis, but we don’t teach them here."
+  },
+  {
+    "objectID": "workshop4.html#loading-data",
+    "href": "workshop4.html#loading-data",
+    "title": "BIO00066I Workshop 4",
+    "section": "\n4.1 Loading data",
+    "text": "4.1 Loading data\n\n#load data from a URL\npoints&lt;-read_csv(url(\"https://djeffares.github.io/BIO66I/points.data.2024-03-16.csv\"),\n                 col_types = cols(LID = col_factor(),TID = col_factor(),pid = col_factor())\n)\n\n#check what we have\nglimpse(points)\nhead(points)"
+  },
+  {
+    "objectID": "workshop4.html#what-is-in-the-point-data",
+    "href": "workshop4.html#what-is-in-the-point-data",
+    "title": "BIO00066I Workshop 4",
+    "section": "\n4.2 What is in the ‘point’ data?",
+    "text": "4.2 What is in the ‘point’ data?\nThis data contains the positions of cells, tracked over time. Lineages are tracked. We have data for tracked cells for both clones (A and B). We have the following information, for many time points:\n\nlineage ID (LID)\ntracking ID (TID)\nsomething (pid)\nthe location of the cell in x and y coordinates (x.position, y.position)\nthe time point (time)\nmovement metrics (track.length, euclidean.distance, velocity)\na new movement metric: howfar the cell moved between this time ppint, and thr last one (jump.distance)\nclone (A/B)"
+  },
+  {
+    "objectID": "workshop4.html#exploratory-plots",
+    "href": "workshop4.html#exploratory-plots",
+    "title": "BIO00066I Workshop 4",
+    "section": "\n4.3 Exploratory plots",
+    "text": "4.3 Exploratory plots\nrecap: how fast to they move\n\npoints |&gt;\n  ggplot(aes(x=clone,y=log10(velocity)))+\n  geom_violin()+\n  stat_compare_means()\n\nwhat directions do they move in?\ndhow all lineages\n\npoints |&gt;\n  ggplot(aes(x=x.position,y=y.position,colour=clone))+\n  geom_point(size=1)+\n  facet_wrap(~LID)\n  #filter(clone == \"A\")|&gt;\n\nshow one lineage, from one clone and colour by TID (or time)\n\npoints |&gt;\n  filter(clone == \"B\" & LID==4)|&gt;\n  ggplot(aes(x=x.position,y=y.position,colour=TID))+\n  geom_point(size=1)\n  #colour=time"
+  },
+  {
+    "objectID": "workshop4.html#rose-plots",
+    "href": "workshop4.html#rose-plots",
+    "title": "BIO00066I Workshop 4",
+    "section": "\n4.4 Rose plots",
+    "text": "4.4 Rose plots\nRose plot to summarise how far cells move.\nrose plot: adjust so the median of mean_x_mm is zero and mean_y_mm is zero ie: centralize all the values\n\npoints2&lt;- points |&gt; \n  group_by(LID) |&gt; \n  mutate(med.x = mean(x.position, na.rm = TRUE))|&gt;\n  mutate(adjusted.x =  x.position - med.x) |&gt;\n  mutate(med.y = mean(y.position, na.rm = TRUE))|&gt;\n  mutate(adjusted.y =  y.position - med.y)\npoints2\n\nmake a rose plot\n\npoints2 |&gt;  \n  ggplot(aes(x=adjusted.x,y=adjusted.y,colour = time))+\n  geom_point(alpha=0.5, size=3)+\n  geom_hline(yintercept = 0)+\n  geom_vline(xintercept = 0)+\n  facet_wrap(~clone)"
+  },
+  {
+    "objectID": "workshop4.html#animate-it",
+    "href": "workshop4.html#animate-it",
+    "title": "BIO00066I Workshop 4",
+    "section": "\n4.5 Animate it!",
+    "text": "4.5 Animate it!\nlet’s animate this\ncreate the static plot\n\nstatic.plot &lt;-points |&gt;\n  filter(clone == \"B\", LID == 1) |&gt;\n  ggplot(aes(x=x.position,y=y.position, colour=TID))+\n  geom_point(size=10, pch=1)\nstatic.plot\n\ntry alternatives\n\nfilter(clone == \"B\")\nfacet_wrap(~LID)\ngeom_point(size=5, pch=1)\n\nanimate the plot\n\nanimated.plot &lt;- static.plot +\n  transition_time(time) +\n  shadow_mark(past = T, future=F, alpha=0.5)\n\n#amimate it!\nanimate(animated.plot, width =800, height = 800)\n\n#save as gif\nanim_save(\"clineB.ineage2gif\", animated.plot)"
+  },
+  {
+    "objectID": "workshop4.html#do-they-follow-each-other",
+    "href": "workshop4.html#do-they-follow-each-other",
+    "title": "BIO00066I Workshop 4",
+    "section": "\n4.6 Do they follow each other",
+    "text": "4.6 Do they follow each other\nTBA"
   }
 ]
