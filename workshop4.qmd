@@ -30,7 +30,8 @@ editor: source
 
 Today, we will learn how to:
  
-- create a linear model, and use it to predict 
+- create a linear model, and use it to predict the a *y* value, given an *x* value
+- in our case we use absorbance *x* to predict alkaline phosphatase activity *y*
 
 ## Thinking like a data scientist
 
@@ -43,11 +44,83 @@ Today, we will learn how to:
 ## The data
 In this workshop we bla bla
 
-# Exercises
+# Exercises (Part 1): Standard curve
 
-## Part 1
+## Load libraries (install packages)
 
-## Part 2
+```{r}
+rm(list=ls())
+library(tidyverse)
+library(readxl)
+library(ggpubr)
+#install.packages("gganimate")
+#install.packages("gifski")
+library(gganimate)
+```
+
+
+## Load data
+
+read in excel
+
+```{r}
+ap<-read_excel("raw-data/Example Alkaline Phosphatase Activity assay .xlsx", sheet=2, skip=3)
+view(ap)
+```
+
+
+simplify the data with pivot_longer
+
+```{r}
+ap.pivot <- 
+  ap |> 
+  select(-mean.abs, -standard.deviation) |>
+  pivot_longer(-pNPP.conc, names_to = "rep", values_to = "absorb")
+view(ap.pivot)
+```
+
+reorder columns, so it is more intuitive 
+
+```{r}
+ap.pivot <- relocate(ap.pivot, absorb)
+```
+
+## Plot enzyme data
+
+```{r}
+pNPP.plot <- ap.pivot |>
+  ggplot(aes(x=absorb, y=pNPP.conc))+
+  geom_point()+
+  geom_smooth(method="lm")
+pNPP.plot
+```
+
+How close are the reps? What if we use `ggplot(aes(x=absorb, y=pNPP.conc,colour = rep))`
+
+
+save the plot with ggsave
+```{r}
+ggsave("pNPP.plot.pdf",pNPP.plot)  
+```
+
+
+## Make a linear model
+
+```{r}
+linear_model <- lm(pNPP.conc ~ absorb , data = ap.pivot)
+absorbance_values <- data.frame(absorb = c(1,2,3))
+```
+
+Given some absorbence values, make a prediction of some pNPP concentrations
+
+```{r}
+predicted.pnpp.concs <- predict(linear_model,absorbance_values)
+predicted.pnpp.concs
+```
+
+
+
+# Exercises (Part 2): Exploring MCS movement
 
 ## Part 3
 
