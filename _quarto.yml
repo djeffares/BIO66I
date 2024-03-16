@@ -12,6 +12,8 @@ website:
         text: "Workshop 2"
       - href: workshop3.qmd
         text: "Workshop 3"
+      - href: workshop4.qmd
+        text: "Workshop 4"
         
 format:
   html:
