@@ -327,8 +327,50 @@ to /Users/dj757/gd/modules/BIO66I
 
 because I got the BIO66I to be published, and its simpler to type!
 
+#### 2024-02-15 starting on workshop 3
+starting with: BIO00066I-workshop3-cell-movement-metrics.R
 
 
+#### Improving the analysis with the new dates data for w2
+
+See script: BIO00066I-new-w2-gated-data.R
+obtained all data from AB
+/Users/dj757/gd/modules/BIO66I/raw-data/2016-08-26_14-47-36_P*csv
+
+### Work for workshop 4
+
+from AB:
+Yes you're right that the two files are alb_B2_8bit-0.25 tracks.xlsx and alb_A1_8bit-0.25 tracks.xlsx
+
+The difference is the files you attached to the email. You've got the  alb_A1_8bit-0.25 points.xlsx attached to the email rather than alb_A1_8bit-0.25 tracks.xlsx. The points data is the raw data I obtained from cell tracking on imageJ. Whereas the tracks file is the output from python which analysed the point file to give metrics.
+
+
+##### new names for manual point and track data:
+alb_A1_8bit-0.25 points.xlsx
+alb_B2_8bit-0.25 points.xlsx
+
+alb_A1_8bit-0.25 tracks.xlsx
+alb_B2_8bit-0.25 tracks.xlsx
+
+From AB:
+
+I've renamed the files to match each other, added labels to the columns and put the correct units in.
+
+What I would like to do on R if we can for each clone is:
+- Sort the data so we have summaries for each individual cell of the following metrics (mean speed, total distance travelled, euclidean distance (shortest distance from start to finish/as crow flies), meandering index (total distance travelled/euclidean distance)
+- For A1 the measurements for the first cell I tracked (from lineage 1, cell 1) is the first 15 rows of the spreadsheet.
+Cell I15 is the total distance travelled,
+cell J15 is the euclidean distance
+the mean speed is the mean of cells M6 - M15
+
+### 2024-03-16
+### standard curve
+
+
+workind script: 
+
+file: raw-data/Example Alkaline Phosphatase Activity assay .xlsx
+added 2nd sheet that is more tidyverse
 
 
 

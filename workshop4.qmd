@@ -1,0 +1,17 @@
+---
+title: "BIO00066I Workshop 4"
+subtitle: "Cell Biology Data Analysis Workshop 4"
+
+author: Daniel Jeffares
+date: 2024-03-16
+format:
+    html:
+        code-link: true
+        toc: true
+        number-sections: true
+        toc-location: right
+        toc-depth: 2
+        
+editor: source
+---
+
