@@ -269,6 +269,9 @@ Philosophy
 <figure class="figure"><p><img src="docs/figure1.jpg" class="img-fluid figure-img"></p>
 <figcaption><strong>Figure 1.</strong> The <strong>tracking ID (TID)</strong> is a unique ID that the microscope assigned to each object (cell), as it tracks it through time. The <strong>lineage ID (LID)</strong> is a number assigned to the ‘family’ of cells that derived by cell division during the the experiment. When a cell divides, each daughter cell is given a new tracking ID, but they keep their lineage ID, because they are still part of the same family.</figcaption></figure>
 </div>
+<p>To help address our research question of whether morphology and migration can be used to predict MSC phenotype, we also need to investigate the phenotype (ability to differentiate) of the two clonal lines. In practical 4 we’ll explore the potency of the two clonal lines by looking at their capacity to undergo <em>osteogenesis</em> (differentiate into osteoblasts - bone cells) when they are given an inductive media.</p>
+<p>We can use an enzyme called <em>alkaline phosphatase</em> as a biomarker to quantify osteogenesis in the cells, as the activity of the enzyme increases in cells undergoing osteogenesis as osteoblasts use the enzyme when producing bone extracellular matrix. To measure the activity of the enzyme we mix the lysate (cellular contents) of the cells with the substrate for the enzyme, para-nitrophenyl phosphate (pNPP) and measure the rate of product formation over time. The product of the reaction is para-nitro phenol (pNP) and we can measure it <em>colorimetrically</em> as it absorbs light at a known wavelength.</p>
+<p>Creating a standard curve and estimating values from this curve is <em>Part 1</em> of our analysis today. <em>Part 2</em> is looking at cell movement data.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -279,16 +282,29 @@ Same coding methods, different data
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The methods we use to examine cells moving on <em>x</em> and <em>x</em> coordinates would be used for anything moving in a 2 diemntional plane. Traffick, birds, slugs even.</p>
+<p>The methods we use to examine cells moving on <em>x</em> and <em>x</em> coordinates would be used any location data that tracks objects objects in a two-dimensional plane over time; traffic, birds, slugs, people<em>. </em> with consent</p>
 </div>
 </div>
 </section><section id="research-questions" class="level2" data-number="2.2"><h2 data-number="2.2" class="anchored" data-anchor-id="research-questions">
 <span class="header-section-number">2.2</span> Research questions</h2>
-</section><section id="the-data" class="level2" data-number="2.3"><h2 data-number="2.3" class="anchored" data-anchor-id="the-data">
+<ul>
+<li>What is the osteogenic potential of clonal lines A and B (Part 1)</li>
+<li>Can we see differences in how clonal lines A and B move?</li>
+<li>How can we display this data visually?</li>
+<li>Do cells ‘follow’ each other in the petri dish?</li>
+</ul></section><section id="the-data" class="level2" data-number="2.3"><h2 data-number="2.3" class="anchored" data-anchor-id="the-data">
 <span class="header-section-number">2.3</span> The data</h2>
-<p>In this workshop we bla bla</p>
-</section></section><section id="exercises-part-1-standard-curve" class="level1" data-number="3"><h1 data-number="3">
+<section id="part-1-pnp-absorbance-values" class="level3" data-number="2.3.1"><h3 data-number="2.3.1" class="anchored" data-anchor-id="part-1-pnp-absorbance-values">
+<span class="header-section-number">2.3.1</span> Part 1: pNP absorbance values</h3>
+<p>Once you’ve completed Practical 4 you’ll have your own data to use to make the standard curve of pNP and absorbance values for each of the clonal line time points. You should use your own standard curve data from the practical as well as your unknown values as the readings for absorbance will vary based on the plate the samples are in and the plate reader used.</p>
+<p>To create the standard curve you have the absorbance readings for 8 concentrations of pNP in triplicate. To measure osteogenesis in the two clonal lines, samples of the cells were grown in an inductive media for 8 days. The cells were then lysed at different time points to measure the quantity of alkaline phosphatase and explore how it varies over time and between the two clonal lines. The clonal lines were analysed at Day 0, Day 4 and Day 8. At each time point you have data for both induced cells and non-induced cells (negative control), with the exception of Day 0 as the differentiation was induced at Day 1. There are four repeated measures for the data at each time point.</p>
+</section><section id="part-2-manually-tracked-cell-movement-point-data" class="level3" data-number="2.3.2"><h3 data-number="2.3.2" class="anchored" data-anchor-id="part-2-manually-tracked-cell-movement-point-data">
+<span class="header-section-number">2.3.2</span> Part 2: manually-tracked cell movement ‘point’ data</h3>
+<p>The Livecyte data that tracked cells automatically was unreliable. In <a href="https://djeffares.github.io/BIO66I/workshop3.html#manual-tracking-data">workshop 3</a> we looked at some manual tracking data. This contained information about track lengths, the <code>meandering.index</code>, <code>euclidean.distance</code> and so on. This time we look at manual dat in it’s raw form: <em><strong>x</strong> and </em><strong>y</strong>* coordinates of the cells, tracked over time.</p>
+<p>We can of course extract information from this about how far the cells travel, and howfast they travel (because we have distance and time measurements). But, we can do much more.</p>
+</section></section></section><section id="exercises-part-1-standard-curve" class="level1" data-number="3"><h1 data-number="3">
 <span class="header-section-number">3</span> Exercises (Part 1): Standard curve</h1>
+<p>To quantify the concentration of pNP and therefore the activity of the enzyme in unknown samples we’ll create a standard curve of known values of pNP and then interpolate the unknown pNP values in our sample from this.</p>
 <section id="load-libraries-install-packages" class="level2" data-number="3.1"><h2 data-number="3.1" class="anchored" data-anchor-id="load-libraries-install-packages">
 <span class="header-section-number">3.1</span> Load libraries (install packages)</h2>
 <div class="cell">
@@ -297,7 +313,6 @@ Same coding methods, different data
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rpkgs.datanovia.com/ggpubr/">ggpubr</a></span><span class="op">)</span></span>
 <span><span class="co">#install.packages("gganimate")</span></span>
-<span><span class="co">#install.packages("gifski")</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://gganimate.com">gganimate</a></span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="load-data" class="level2" data-number="3.2"><h2 data-number="3.2" class="anchored" data-anchor-id="load-data">

@@ -14,58 +14,82 @@ format:
         
 editor: source
 ---
+
 ::: callout-warning
 ## This workshop is a work in prgress.
 :::
-
 
 # Learning objectives
 
 ::: callout-important
 ## Philosophy
 
-- **Workshops are not a test.** 
-- Don't worry about making mistakes. 
-- The staff are here to help.
+-   **Workshops are not a test.**
+-   Don't worry about making mistakes.
+-   The staff are here to help.
 :::
 
 ## Technical skills
 
 Today, we will learn how to:
- 
-- Use a linear model to predict some ***y*** values, given some ***x*** values
-- In our case we use absorbance (***x*** **values**) to predict alkaline phosphatase activity (***y*** **values**)
-- Make **animated plots**
-- Use multiple test correction
+
+-   Use a linear model to predict some ***y*** values, given some ***x*** values
+-   In our case we use absorbance (***x*** **values**) to predict alkaline phosphatase activity (***y*** **values**)
+-   Make **animated plots**
+-   Use multiple test correction
 
 ## Thinking like a data scientist
 
-It might seem like a lot of trouble to  use **R** to read in a small number of ***x*** and ***y*** values from an Excel sheet to a standard curve, and then estimate some new ***y*** values. We *could* probably do this in Excel.
+It might seem like a lot of trouble to use **R** to read in a small number of ***x*** and ***y*** values from an Excel sheet to a standard curve, and then estimate some new ***y*** values. We *could* probably do this in Excel.
 
 But what if we have 200 standard curves, and we want o automate the process? What if we have 50,000 ***x*** and ***y*** values and a non-linear model? For big data, **R is the only sensible way**. There are [other software tools for statitical analysis](https://www.inwt-statistics.com/blog/comparison-of-r-python-sas-spss-and-stata), but we don't teach them here.
-
 
 # Introduction
 
 ## The biology
 
-We saw in workshop 3 that clone A moves faster than clone B. This time we will use R to explore MCS cell movement in more depth. Use ***x*** and ***y*** coordinates from  *manually* tracked cells. We have 10 manually tracked cell lineages of clone A and 9 manually tracked cell lineages of clone B. Today, we will explore the ways these lineages move.
+We saw in workshop 3 that clone A moves faster than clone B. This time we will use R to explore MCS cell movement in more depth. Use ***x*** and ***y*** coordinates from *manually* tracked cells. We have 10 manually tracked cell lineages of clone A and 9 manually tracked cell lineages of clone B. Today, we will explore the ways these lineages move.
 
 ![**Figure 1.** The **tracking ID (TID)** is a unique ID that the microscope assigned to each object (cell), as it tracks it through time. The **lineage ID (LID)** is a number assigned to the ‘family’ of cells that derived by cell division during the the experiment. When a cell divides, each daughter cell is given a new tracking ID, but they keep their lineage ID, because they are still part of the same family.](docs/figure1.jpg)
 
+To help address our research question of whether morphology and migration can be used to predict MSC phenotype, we also need to investigate the phenotype (ability to differentiate) of the two clonal lines. In practical 4 we'll explore the potency of the two clonal lines by looking at their capacity to undergo *osteogenesis* (differentiate into osteoblasts - bone cells) when they are given an inductive media.
+
+We can use an enzyme called *alkaline phosphatase* as a biomarker to quantify osteogenesis in the cells, as the activity of the enzyme increases in cells undergoing osteogenesis as osteoblasts use the enzyme when producing bone extracellular matrix. To measure the activity of the enzyme we mix the lysate (cellular contents) of the cells with the substrate for the enzyme, para-nitrophenyl phosphate (pNPP) and measure the rate of product formation over time. The product of the reaction is para-nitro phenol (pNP) and we can measure it *colorimetrically* as it absorbs light at a known wavelength.
+
+Creating a standard curve and estimating values from this curve is *Part 1* of our analysis today. *Part 2* is looking at cell movement data.
+
 ::: callout-note
 ## Same coding methods, different data
-The methods we use to examine cells moving on *x* and *x* coordinates would be used for anything moving in a 2 diemntional plane. Traffick, birds, slugs even.
+
+The methods we use to examine cells moving on *x* and *x* coordinates would be used any location data that tracks objects objects in a two-dimensional plane over time; traffic, birds, slugs, people*.
+* with consent
 :::
-
-
 
 ## Research questions
 
+-   What is the osteogenic potential of clonal lines A and B (Part 1)
+-   Can we see differences in how clonal lines A and B move?
+-   How can we display this data visually?
+-   Do cells 'follow' each other in the petri dish?
+
 ## The data
-In this workshop we bla bla
+
+### Part 1: pNP absorbance values
+
+Once you've completed Practical 4 you'll have your own data to use to make the standard curve of pNP and absorbance values for each of the clonal line time points. You should use your own standard curve data from the practical as well as your unknown values as the readings for absorbance will vary based on the plate the samples are in and the plate reader used.
+
+To create the standard curve you have the absorbance readings for 8 concentrations of pNP in triplicate. To measure osteogenesis in the two clonal lines, samples of the cells were grown in an inductive media for 8 days. The cells were then lysed at different time points to measure the quantity of alkaline phosphatase and explore how it varies over time and between the two clonal lines. The clonal lines were analysed at Day 0, Day 4 and Day 8. At each time point you have data for both induced cells and non-induced cells (negative control), with the exception of Day 0 as the differentiation was induced at Day 1. There are four repeated measures for the data at each time point.
+
+### Part 2: manually-tracked cell movement 'point' data
+ 
+The Livecyte data that tracked cells automatically was unreliable. In [workshop 3](https://djeffares.github.io/BIO66I/workshop3.html#manual-tracking-data) we looked at some manual tracking data. This contained information like `track.length`, the `meandering.index`, `euclidean.distance` and so on. This time we look at manual dat in it's raw form: ***x*** and ***y*** coordinates of the cells, tracked over time. 
+
+We can of course extract information from this about how far the cells travel, and howfast they travel (because we have distance and time measurements). But, we can do much more. This time we will be able to visualise the paths they take in culture dish. We may observe interesting patterns by studying this data.
+
 
 # Exercises (Part 1): Standard curve
+
+To quantify the concentration of pNP and therefore the activity of the enzyme in unknown samples we'll create a standard curve of known values of pNP and then interpolate the unknown pNP values in our sample from this.
 
 ## Load libraries (install packages)
 
@@ -79,23 +103,20 @@ library(tidyverse)
 library(readxl)
 library(ggpubr)
 #install.packages("gganimate")
-#install.packages("gifski")
 library(gganimate)
 ```
 
-
 ## Load data
 
-read in excel
+First, read in some ata from an Excel file.
 
 ```{r}
 #| echo: true
 #| warning: false
 #| eval: true
-ap<-read_excel("raw-data/Example Alkaline Phosphatase Activity assay .xlsx", sheet=2, skip=3)
+ap<-read_excel("raw-data/example_alkaline_phosphatase_activity_assay.xlsx", sheet=2, skip=3)
 view(ap)
 ```
-
 
 simplify the data with pivot_longer
 
@@ -110,7 +131,7 @@ ap.pivot <-
 view(ap.pivot)
 ```
 
-reorder columns, so it is more intuitive 
+reorder columns, so it is more intuitive
 
 ```{r}
 #| echo: true
@@ -135,8 +156,8 @@ pNPP.plot
 
 How close are the reps? What if we use `ggplot(aes(x=absorb, y=pNPP.conc,colour = rep))`
 
-
 save the plot with ggsave
+
 ```{r}
 #| echo: true
 #| warning: false
@@ -144,7 +165,6 @@ save the plot with ggsave
 
 ggsave("pNPP.plot.pdf",pNPP.plot)  
 ```
-
 
 ## Make a linear model
 
@@ -168,8 +188,6 @@ predicted.pnpp.concs <- predict(linear_model,absorbance_values)
 predicted.pnpp.concs
 ```
 
-
-
 # Exercises (Part 2): Exploring MCS movement
 
 ## Loading data
@@ -190,21 +208,20 @@ head(points)
 
 ```
 
-
 ## What is in the 'point' data?
+
 This data contains the positions of cells, tracked over time. Lineages are tracked. We have data for tracked cells for both clones (A and B). We have the following information, for many time points:
 
-- lineage ID (LID)
-- tracking ID (TID)
-- something (pid)
-- the location of the cell in *x* and *y* coordinates (x.position, y.position)
-- the time point (time)
-- movement metrics (track.length, euclidean.distance, velocity)
-- a new movement metric: howfar the cell moved between this time ppint, and thr last one (jump.distance)
-- clone (A/B)
+-   lineage ID (LID)
+-   tracking ID (TID)
+-   something (pid)
+-   the location of the cell in *x* and *y* coordinates (x.position, y.position)
+-   the time point (time)
+-   movement metrics (track.length, euclidean.distance, velocity)
+-   a new movement metric: howfar the cell moved between this time ppint, and thr last one (jump.distance)
+-   clone (A/B)
 
 ## Exploratory plots
-
 
 recap: how fast to they move
 
@@ -217,7 +234,6 @@ points |>
   geom_violin()+
   stat_compare_means()
 ```
-
 
 what directions do they move in?
 
@@ -234,7 +250,6 @@ points |>
   facet_wrap(~LID)
   #filter(clone == "A")|>
 ```
-
 
 show one lineage, from one clone and colour by TID (or time)
 
@@ -254,8 +269,7 @@ points |>
 
 Rose plot to summarise how **far** cells move.
 
-rose plot: adjust so the median of mean_x_mm is zero and mean_y_mm is zero
-ie: centralize all the values
+rose plot: adjust so the median of mean_x_mm is zero and mean_y_mm is zero ie: centralize all the values
 
 ```{r}
 #| echo: true
@@ -270,7 +284,7 @@ points2<- points |>
 points2
 ```
 
-make a rose plot  
+make a rose plot
 
 ```{r}
 #| echo: true
@@ -283,7 +297,6 @@ points2 |>
   geom_vline(xintercept = 0)+
   facet_wrap(~clone)
 ```
-
 
 ## Animate it!
 
@@ -304,9 +317,9 @@ static.plot
 
 try alternatives
 
-- `filter(clone == "B")`
-- `facet_wrap(~LID)`
-- `geom_point(size=5, pch=1)`
+-   `filter(clone == "B")`
+-   `facet_wrap(~LID)`
+-   `geom_point(size=5, pch=1)`
 
 animate the plot
 
