@@ -61,8 +61,7 @@ Creating a standard curve and estimating values from this curve is *Part 1* of o
 ::: callout-note
 ## Same coding methods, different data
 
-The methods we use to examine cells moving on *x* and *x* coordinates would be used any location data that tracks objects objects in a two-dimensional plane over time; traffic, birds, slugs, people*.
-* with consent
+The methods we use to examine cells moving on *x* and *x* coordinates would be used any location data that tracks objects objects in a two-dimensional plane over time; traffic, birds, slugs, people*.* with consent
 :::
 
 ## Research questions
@@ -81,11 +80,10 @@ Once you've completed Practical 4 you'll have your own data to use to make the s
 To create the standard curve you have the absorbance readings for 8 concentrations of pNP in triplicate. To measure osteogenesis in the two clonal lines, samples of the cells were grown in an inductive media for 8 days. The cells were then lysed at different time points to measure the quantity of alkaline phosphatase and explore how it varies over time and between the two clonal lines. The clonal lines were analysed at Day 0, Day 4 and Day 8. At each time point you have data for both induced cells and non-induced cells (negative control), with the exception of Day 0 as the differentiation was induced at Day 1. There are four repeated measures for the data at each time point.
 
 ### Part 2: manually-tracked cell movement 'point' data
- 
-The Livecyte data that tracked cells automatically was unreliable. In [workshop 3](https://djeffares.github.io/BIO66I/workshop3.html#manual-tracking-data) we looked at some manual tracking data. This contained information like `track.length`, the `meandering.index`, `euclidean.distance` and so on. This time we look at manual dat in it's raw form: ***x*** and ***y*** coordinates of the cells, tracked over time. 
 
-We can of course extract information from this about how far the cells travel, and howfast they travel (because we have distance and time measurements). But, we can do much more. This time we will be able to visualise the paths they take in culture dish. We may observe interesting patterns by studying this data.
+The Livecyte data that tracked cells automatically was unreliable. In [workshop 3](https://djeffares.github.io/BIO66I/workshop3.html#manual-tracking-data) we looked at some manual tracking data. This contained information like `track.length`, the `meandering.index`, `euclidean.distance` and so on. This time we look at manual data in it's raw form: ***x*** and ***y*** coordinates of the cells, tracked over time.
 
+We can of course extract information from this about how far the cells travel, and how fast they travel (because we have distance and time measurements). But, we can do much more. This time we will be able to visualise the paths they take in culture dish. We may observe interesting patterns by studying this data.
 
 # Exercises (Part 1): Standard curve
 
@@ -108,17 +106,21 @@ library(gganimate)
 
 ## Load data
 
-First, read in some ata from an Excel file.
+First, read in some ata from an Excel file. You can obtain [an example file from here](https://djeffares.github.io/BIO66I/example_alkaline_phosphatase_activity_assay.xlsx). Click to download, and then save the file in your **raw-data** directory. If you dno't have a **raw-data** directory, make one!
+
+Then read in the Excle file:
 
 ```{r}
 #| echo: true
 #| warning: false
 #| eval: true
 ap<-read_excel("raw-data/example_alkaline_phosphatase_activity_assay.xlsx", sheet=2, skip=3)
+
+#check what we have
 view(ap)
 ```
 
-simplify the data with pivot_longer
+Then simplify the data with `pivot_longer`:
 
 ```{r}
 #| echo: true
@@ -131,7 +133,7 @@ ap.pivot <-
 view(ap.pivot)
 ```
 
-reorder columns, so it is more intuitive
+Reorder the columns, so it is more intuitive for us using `relocate`:
 
 ```{r}
 #| echo: true
@@ -142,21 +144,24 @@ ap.pivot <- relocate(ap.pivot, absorb)
 
 ## Plot enzyme data
 
+Let's make a simple plot, adding a line that shows the linear model with the line `geom_smooth(method="lm")`. The `method="lm` means plotting a linear model.
+
 ```{r}
 #| echo: true
 #| warning: false
 #| eval: true
 
+#plot, saving thr plot in an object called 'pNPP.plot'
 pNPP.plot <- ap.pivot |>
   ggplot(aes(x=absorb, y=pNPP.conc))+
   geom_point()+
   geom_smooth(method="lm")
+
+#show the plot
 pNPP.plot
 ```
 
-How close are the reps? What if we use `ggplot(aes(x=absorb, y=pNPP.conc,colour = rep))`
-
-save the plot with ggsave
+Now save the plot:
 
 ```{r}
 #| echo: true
@@ -166,7 +171,13 @@ save the plot with ggsave
 ggsave("pNPP.plot.pdf",pNPP.plot)  
 ```
 
-## Make a linear model
+::: callout-note
+# Optional: How close are the replicates? 
+
+How similar to the linear models look if you use: `ggplot(aes(x=absorb, y=pNPP.conc,colour = rep))`
+:::
+
+## Make and use a linear model
 
 ```{r}
 #| echo: true
@@ -177,20 +188,29 @@ linear_model <- lm(pNPP.conc ~ absorb , data = ap.pivot)
 absorbance_values <- data.frame(absorb = c(1,2,3))
 ```
 
-Given some absorbence values, make a prediction of some pNPP concentrations
+Now we have the linear model, if we have some some absorbence values, we can make a prediction of some pNPP concentrations. Here is how do it, using the `predict` function:
 
 ```{r}
 #| echo: true
 #| warning: false
 #| eval: false
 
+#calculate predicted pNPP concentrationusing the linear model
 predicted.pnpp.concs <- predict(linear_model,absorbance_values)
+
+#show the values
 predicted.pnpp.concs
 ```
+
+
+---
+
 
 # Exercises (Part 2): Exploring MCS movement
 
 ## Loading data
+
+First, load the data from the website, and check what you have:
 
 ```{r}
 #| echo: true
@@ -223,7 +243,15 @@ This data contains the positions of cells, tracked over time. Lineages are track
 
 ## Exploratory plots
 
-recap: how fast to they move
+### Recap: how fast do they move
+
+You'll notice that this file has velocity, just like the last file we used in workshop 3. For a simple 'sanity check', we will tests again that the clones differ. 
+
+:::callout-caution
+**We know that clone A moves faster than clone B. So why do it again?**
+
+**Answer:** data hygiene. We want to be very sure our data is good.
+:::
 
 ```{r}
 #| echo: true
@@ -235,9 +263,11 @@ points |>
   stat_compare_means()
 ```
 
-what directions do they move in?
+### Plotting cell movement tracks
 
-dhow all lineages
+Now, let's examine the directions do the cells move in. A simple way to do this is to plot the *x* and *y* coordinates. We will use `facet_wrap` to plot one boz for each lineage ID `LID`. Remember, a lineage ID contains information for each cell, and all its daughter cell and so on. 
+
+To keep our image simple, we allow clone A and clone B to be on the same panels. But note that **clone A, lineage ID 1** has no relationship to **clone A, lineage ID 2** - they are merely the first lineage ID that Amanda tracked.
 
 ```{r}
 #| echo: true
@@ -248,8 +278,13 @@ points |>
   ggplot(aes(x=x.position,y=y.position,colour=clone))+
   geom_point(size=1)+
   facet_wrap(~LID)
-  #filter(clone == "A")|>
+
+#If we want to show just one clone add this line after 'points |>'
+#filter(clone == "A")|>
 ```
+
+We can see that they wriggle about quiet a lot. They do not move in straight lines.
+
 
 show one lineage, from one clone and colour by TID (or time)
 

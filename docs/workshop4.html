@@ -162,7 +162,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><a href="#load-libraries-install-packages" id="toc-load-libraries-install-packages" class="nav-link" data-scroll-target="#load-libraries-install-packages"><span class="header-section-number">3.1</span> Load libraries (install packages)</a></li>
   <li><a href="#load-data" id="toc-load-data" class="nav-link" data-scroll-target="#load-data"><span class="header-section-number">3.2</span> Load data</a></li>
   <li><a href="#plot-enzyme-data" id="toc-plot-enzyme-data" class="nav-link" data-scroll-target="#plot-enzyme-data"><span class="header-section-number">3.3</span> Plot enzyme data</a></li>
-  <li><a href="#make-a-linear-model" id="toc-make-a-linear-model" class="nav-link" data-scroll-target="#make-a-linear-model"><span class="header-section-number">3.4</span> Make a linear model</a></li>
+  <li><a href="#make-and-use-a-linear-model" id="toc-make-and-use-a-linear-model" class="nav-link" data-scroll-target="#make-and-use-a-linear-model"><span class="header-section-number">3.4</span> Make and use a linear model</a></li>
   </ul>
 </li>
   <li>
@@ -282,7 +282,7 @@ Same coding methods, different data
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The methods we use to examine cells moving on <em>x</em> and <em>x</em> coordinates would be used any location data that tracks objects objects in a two-dimensional plane over time; traffic, birds, slugs, people<em>. </em> with consent</p>
+<p>The methods we use to examine cells moving on <em>x</em> and <em>x</em> coordinates would be used any location data that tracks objects objects in a two-dimensional plane over time; traffic, birds, slugs, people<em>.</em> with consent</p>
 </div>
 </div>
 </section><section id="research-questions" class="level2" data-number="2.2"><h2 data-number="2.2" class="anchored" data-anchor-id="research-questions">
@@ -300,8 +300,8 @@ Same coding methods, different data
 <p>To create the standard curve you have the absorbance readings for 8 concentrations of pNP in triplicate. To measure osteogenesis in the two clonal lines, samples of the cells were grown in an inductive media for 8 days. The cells were then lysed at different time points to measure the quantity of alkaline phosphatase and explore how it varies over time and between the two clonal lines. The clonal lines were analysed at Day 0, Day 4 and Day 8. At each time point you have data for both induced cells and non-induced cells (negative control), with the exception of Day 0 as the differentiation was induced at Day 1. There are four repeated measures for the data at each time point.</p>
 </section><section id="part-2-manually-tracked-cell-movement-point-data" class="level3" data-number="2.3.2"><h3 data-number="2.3.2" class="anchored" data-anchor-id="part-2-manually-tracked-cell-movement-point-data">
 <span class="header-section-number">2.3.2</span> Part 2: manually-tracked cell movement ‘point’ data</h3>
-<p>The Livecyte data that tracked cells automatically was unreliable. In <a href="https://djeffares.github.io/BIO66I/workshop3.html#manual-tracking-data">workshop 3</a> we looked at some manual tracking data. This contained information about track lengths, the <code>meandering.index</code>, <code>euclidean.distance</code> and so on. This time we look at manual dat in it’s raw form: <em><strong>x</strong> and </em><strong>y</strong>* coordinates of the cells, tracked over time.</p>
-<p>We can of course extract information from this about how far the cells travel, and howfast they travel (because we have distance and time measurements). But, we can do much more.</p>
+<p>The Livecyte data that tracked cells automatically was unreliable. In <a href="https://djeffares.github.io/BIO66I/workshop3.html#manual-tracking-data">workshop 3</a> we looked at some manual tracking data. This contained information like <code>track.length</code>, the <code>meandering.index</code>, <code>euclidean.distance</code> and so on. This time we look at manual data in it’s raw form: <strong><em>x</em></strong> and <strong><em>y</em></strong> coordinates of the cells, tracked over time.</p>
+<p>We can of course extract information from this about how far the cells travel, and how fast they travel (because we have distance and time measurements). But, we can do much more. This time we will be able to visualise the paths they take in culture dish. We may observe interesting patterns by studying this data.</p>
 </section></section></section><section id="exercises-part-1-standard-curve" class="level1" data-number="3"><h1 data-number="3">
 <span class="header-section-number">3</span> Exercises (Part 1): Standard curve</h1>
 <p>To quantify the concentration of pNP and therefore the activity of the enzyme in unknown samples we’ll create a standard curve of known values of pNP and then interpolate the unknown pNP values in our sample from this.</p>
@@ -317,12 +317,15 @@ Same coding methods, different data
 </div>
 </section><section id="load-data" class="level2" data-number="3.2"><h2 data-number="3.2" class="anchored" data-anchor-id="load-data">
 <span class="header-section-number">3.2</span> Load data</h2>
-<p>read in excel</p>
+<p>First, read in some ata from an Excel file. You can obtain <a href="https://djeffares.github.io/BIO66I/example_alkaline_phosphatase_activity_assay.xlsx">an example file from here</a>. Click to download, and then save the file in your <strong>raw-data</strong> directory. If you dno’t have a <strong>raw-data</strong> directory, make one!</p>
+<p>Then read in the Excle file:</p>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ap</span><span class="op">&lt;-</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"raw-data/Example Alkaline Phosphatase Activity assay .xlsx"</span>, sheet<span class="op">=</span><span class="fl">2</span>, skip<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ap</span><span class="op">&lt;-</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"raw-data/example_alkaline_phosphatase_activity_assay.xlsx"</span>, sheet<span class="op">=</span><span class="fl">2</span>, skip<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#check what we have</span></span>
 <span><span class="fu"><a href="https://tibble.tidyverse.org/reference/view.html">view</a></span><span class="op">(</span><span class="va">ap</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>simplify the data with pivot_longer</p>
+<p>Then simplify the data with <code>pivot_longer</code>:</p>
 <div class="cell">
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ap.pivot</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">ap</span> <span class="op">|&gt;</span> </span>
@@ -330,17 +333,21 @@ Same coding methods, different data
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="op">-</span><span class="va">pNPP.conc</span>, names_to <span class="op">=</span> <span class="st">"rep"</span>, values_to <span class="op">=</span> <span class="st">"absorb"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://tibble.tidyverse.org/reference/view.html">view</a></span><span class="op">(</span><span class="va">ap.pivot</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>reorder columns, so it is more intuitive</p>
+<p>Reorder the columns, so it is more intuitive for us using <code>relocate</code>:</p>
 <div class="cell">
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ap.pivot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/relocate.html">relocate</a></span><span class="op">(</span><span class="va">ap.pivot</span>, <span class="va">absorb</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section><section id="plot-enzyme-data" class="level2" data-number="3.3"><h2 data-number="3.3" class="anchored" data-anchor-id="plot-enzyme-data">
 <span class="header-section-number">3.3</span> Plot enzyme data</h2>
+<p>Let’s make a simple plot, adding a line that shows the linear model with the line <code>geom_smooth(method="lm")</code>. The <code>method="lm</code> means plotting a linear model.</p>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pNPP.plot</span> <span class="op">&lt;-</span> <span class="va">ap.pivot</span> <span class="op">|&gt;</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#plot, saving thr plot in an object called 'pNPP.plot'</span></span>
+<span><span class="va">pNPP.plot</span> <span class="op">&lt;-</span> <span class="va">ap.pivot</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">absorb</span>, y<span class="op">=</span><span class="va">pNPP.conc</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method<span class="op">=</span><span class="st">"lm"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#show the plot</span></span>
 <span><span class="va">pNPP.plot</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
@@ -349,26 +356,42 @@ Same coding methods, different data
 </div>
 </div>
 </div>
-<p>How close are the reps? What if we use <code>ggplot(aes(x=absorb, y=pNPP.conc,colour = rep))</code></p>
-<p>save the plot with ggsave</p>
+<p>Now save the plot:</p>
 <div class="cell">
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"pNPP.plot.pdf"</span>,<span class="va">pNPP.plot</span><span class="op">)</span>  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="make-a-linear-model" class="level2" data-number="3.4"><h2 data-number="3.4" class="anchored" data-anchor-id="make-a-linear-model">
-<span class="header-section-number">3.4</span> Make a linear model</h2>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Optional: How close are the replicates?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>How similar to the linear models look if you use: <code>ggplot(aes(x=absorb, y=pNPP.conc,colour = rep))</code></p>
+</div>
+</div>
+</section><section id="make-and-use-a-linear-model" class="level2" data-number="3.4"><h2 data-number="3.4" class="anchored" data-anchor-id="make-and-use-a-linear-model">
+<span class="header-section-number">3.4</span> Make and use a linear model</h2>
 <div class="cell">
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">linear_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">pNPP.conc</span> <span class="op">~</span> <span class="va">absorb</span> , data <span class="op">=</span> <span class="va">ap.pivot</span><span class="op">)</span></span>
 <span><span class="va">absorbance_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>absorb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Given some absorbence values, make a prediction of some pNPP concentrations</p>
+<p>Now we have the linear model, if we have some some absorbence values, we can make a prediction of some pNPP concentrations. Here is how do it, using the <code>predict</code> function:</p>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">predicted.pnpp.concs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">linear_model</span>,<span class="va">absorbance_values</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#calculate predicted pNPP concentrationusing the linear model</span></span>
+<span><span class="va">predicted.pnpp.concs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">linear_model</span>,<span class="va">absorbance_values</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#show the values</span></span>
 <span><span class="va">predicted.pnpp.concs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section></section><section id="exercises-part-2-exploring-mcs-movement" class="level1" data-number="4"><h1 data-number="4">
+<hr></section></section><section id="exercises-part-2-exploring-mcs-movement" class="level1" data-number="4"><h1 data-number="4">
 <span class="header-section-number">4</span> Exercises (Part 2): Exploring MCS movement</h1>
 <section id="loading-data" class="level2" data-number="4.1"><h2 data-number="4.1" class="anchored" data-anchor-id="loading-data">
 <span class="header-section-number">4.1</span> Loading data</h2>
+<p>First, load the data from the website, and check what you have:</p>
 <div class="cell">
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#load data from a URL</span></span>
 <span><span class="va">points</span><span class="op">&lt;-</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/connections.html">url</a></span><span class="op">(</span><span class="st">"https://djeffares.github.io/BIO66I/points.data.2024-03-16.csv"</span><span class="op">)</span>,</span>
@@ -393,22 +416,43 @@ Same coding methods, different data
 <li>clone (A/B)</li>
 </ul></section><section id="exploratory-plots" class="level2" data-number="4.3"><h2 data-number="4.3" class="anchored" data-anchor-id="exploratory-plots">
 <span class="header-section-number">4.3</span> Exploratory plots</h2>
-<p>recap: how fast to they move</p>
+<section id="recap-how-fast-do-they-move" class="level3" data-number="4.3.1"><h3 data-number="4.3.1" class="anchored" data-anchor-id="recap-how-fast-do-they-move">
+<span class="header-section-number">4.3.1</span> Recap: how fast do they move</h3>
+<p>You’ll notice that this file has velocity, just like the last file we used in workshop 3. For a simple ‘sanity check’, we will tests again that the clones differ.</p>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Caution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>We know that clone A moves faster than clone B. So why do it again?</strong></p>
+<p><strong>Answer:</strong> data hygiene. We want to be very sure our data is good.</p>
+</div>
+</div>
 <div class="cell">
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">points</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">clone</span>,y<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log10</a></span><span class="op">(</span><span class="va">velocity</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/stat_compare_means.html">stat_compare_means</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>what directions do they move in?</p>
-<p>dhow all lineages</p>
+</section><section id="plotting-cell-movement-tracks" class="level3" data-number="4.3.2"><h3 data-number="4.3.2" class="anchored" data-anchor-id="plotting-cell-movement-tracks">
+<span class="header-section-number">4.3.2</span> Plotting cell movement tracks</h3>
+<p>Now, let’s examine the directions do the cells move in. A simple way to do this is to plot the <em>x</em> and <em>y</em> coordinates. We will use <code>facet_wrap</code> to plot one boz for each lineage ID <code>LID</code>. Remember, a lineage ID contains information for each cell, and all its daughter cell and so on.</p>
+<p>To keep our image simple, we allow clone A and clone B to be on the same panels. But note that <strong>clone A, lineage ID 1</strong> has no relationship to <strong>clone A, lineage ID 2</strong> - they are merely the first lineage ID that Amanda tracked.</p>
 <div class="cell">
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">points</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">x.position</span>,y<span class="op">=</span><span class="va">y.position</span>,colour<span class="op">=</span><span class="va">clone</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">LID</span><span class="op">)</span></span>
-<span>  <span class="co">#filter(clone == "A")|&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span></span>
+<span><span class="co">#If we want to show just one clone add this line after 'points |&gt;'</span></span>
+<span><span class="co">#filter(clone == "A")|&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>We can see that they wriggle about quiet a lot. They do not move in straight lines.</p>
 <p>show one lineage, from one clone and colour by TID (or time)</p>
 <div class="cell">
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">points</span> <span class="op">|&gt;</span></span>
@@ -417,7 +461,7 @@ Same coding methods, different data
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>size<span class="op">=</span><span class="fl">1</span><span class="op">)</span></span>
 <span>  <span class="co">#colour=time</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="rose-plots" class="level2" data-number="4.4"><h2 data-number="4.4" class="anchored" data-anchor-id="rose-plots">
+</section></section><section id="rose-plots" class="level2" data-number="4.4"><h2 data-number="4.4" class="anchored" data-anchor-id="rose-plots">
 <span class="header-section-number">4.4</span> Rose plots</h2>
 <p>Rose plot to summarise how <strong>far</strong> cells move.</p>
 <p>rose plot: adjust so the median of mean_x_mm is zero and mean_y_mm is zero ie: centralize all the values</p>
