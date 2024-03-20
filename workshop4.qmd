@@ -109,7 +109,7 @@ library(gganimate)
 
 First, read in some ata from an Excel file. You can obtain [an example file from here](https://djeffares.github.io/BIO66I/example_alkaline_phosphatase_activity_assay.xlsx). Click to download, and then save the file in your **raw-data** directory. If you dno't have a **raw-data** directory, make one!
 
-Then read in the Excle file:
+Then read in the Excel file:
 
 ```{r}
 #| echo: true
@@ -235,12 +235,14 @@ This data contains the positions of cells, tracked over time. Lineages are track
 
 -   lineage ID (LID)
 -   tracking ID (TID)
--   something (pid)
+-   data point id* (pid)
 -   the location of the cell in *x* and *y* coordinates (x.position, y.position)
 -   the time point (time)
 -   movement metrics (track.length, euclidean.distance, velocity)
 -   a new movement metric: howfar the cell moved between this time ppint, and thr last one (jump.distance)
 -   clone (A/B)
+
+NB: **pid** describes what data point the row of data corresponds to for a cell with a specific LID and TID. For example, LID 1 TID 1 PID 1 would correspond to the first data point (it's x and Y coordinates etc) for a cell with TID 1 from lineage 1.
 
 ## Exploratory plots
 
@@ -374,9 +376,35 @@ animate(animated.plot, width =800, height = 800)
 anim_save("clineB.ineage2gif", animated.plot)
 ```
 
-## Do they follow each other
+## Revision
 
-TBA
+This section will summarise what we have learned in the [BABS core workshop](https://3mmarand.github.io/R4BABS/r4babs4/week-1/workshop.html) and cell biology workshops; [workshop 2](https://djeffares.github.io/BIO66I/workshop2.html), [workshop 3](https://djeffares.github.io/BIO66I/workshop3.html) and [workshop 4](https://djeffares.github.io/BIO66I/workshop4.html) (this one).
+
+:::callout-important
+# It is the understanding that matters
+
+To be a skilled data analyst with R, you need to master some technical skills, including
+
+- loading libraries and installing packages
+- importing data
+- filtering rows to obtain subset of the data (using `filter`)
+- selecting columns to keep data simple (using `select`)
+- creating plots
+:::
+
+:::callout-important
+# There are also some data-handling principles 
+
+These are:
+- keep files and scripts organised
+- name variables carefully
+- comment your code
+:::
+
+We will now summarise what we have learned.
+
+### [Data Analysis 1: Core](https://3mmarand.github.io/R4BABS/r4babs4/week-1/workshop.html) 
+
 
 # Reflection
 
