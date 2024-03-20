@@ -16,7 +16,8 @@ editor: source
 ---
 
 ::: callout-warning
-## This workshop is a work in prgress.
+## This workshop is a work in progress.
+At the moment, is it incomplete, and will contain errors.
 :::
 
 # Learning objectives
