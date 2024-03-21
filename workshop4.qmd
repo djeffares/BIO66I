@@ -371,15 +371,19 @@ Make a static plot:
 static.plot <-points |>
   filter(clone == "B", LID == 1) |>
   ggplot(aes(x=x.position,y=y.position, colour=TID))+
-  geom_point(size=10, pch=1)
+  geom_point(size=10, pch=1,lwd=2)
 static.plot
 ```
 
-Here, you might like to try these alternatives:
 
--   `filter(clone == "B")`
--   `facet_wrap(~LID)`
--   `geom_point(size=5, pch=1)`
+**Here we only look at one clone  and one lineage ID** in the line \
+`filter(clone == "B", LID == 1) |>`\
+
+You can (and should) alter the code to look at other clone and lineage IDs. You might also like to try these alternatives:
+
+- `colour=time`
+- `facet_wrap(~LID)`
+- `geom_point(size=5, pch=1)`
 
 ### Animate: step 2
 
