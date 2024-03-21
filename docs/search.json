@@ -479,15 +479,15 @@
     "objectID": "workshop4.html#consolodation-exercises",
     "href": "workshop4.html#consolodation-exercises",
     "title": "BIO00066I Workshop 4",
-    "section": "\n6.1 Consolodation exercises",
-    "text": "6.1 Consolodation exercises\nTo consolidate, follow up on aspects of the previous workshops that you are unsure about. Try some different plots. Break the code, then try and fix it."
+    "section": "\n7.1 Consolodation exercises",
+    "text": "7.1 Consolodation exercises\nTo consolidate, follow up on aspects of the previous workshops that you are unsure about. Try some different plots. Break the code, then try and fix it."
   },
   {
     "objectID": "workshop4.html#planning-for-your-report",
     "href": "workshop4.html#planning-for-your-report",
     "title": "BIO00066I Workshop 4",
-    "section": "\n6.2 Planning for your report",
-    "text": "6.2 Planning for your report\nThe RStudio Project should:\nCreate a logical folder structure for your analysis. The top folder should be named with your exam number, for example Y12345678, do not include your name in the submission. Your submission should include the script you used for your work, any accessory functions and the data itself. Your script should be well-commented, well-organised and follow good practice in use of spacing, indentation and variable naming. It should include all the code required to reproduce data import and formatting as well as the summary information, analyses and figures in your report."
+    "section": "\n7.2 Planning for your report",
+    "text": "7.2 Planning for your report\nThe RStudio Project should:\nCreate a logical folder structure for your analysis. The top folder should be named with your exam number, for example Y12345678, do not include your name in the submission. Your submission should include the script you used for your work, any accessory functions and the data itself. Your script should be well-commented, well-organised and follow good practice in use of spacing, indentation and variable naming. It should include all the code required to reproduce data import and formatting as well as the summary information, analyses and figures in your report."
   },
   {
     "objectID": "workshop4.html#technical-skills",
@@ -515,7 +515,7 @@
     "href": "workshop4.html#load-data",
     "title": "BIO00066I Workshop 4",
     "section": "\n3.2 Load data",
-    "text": "3.2 Load data\nFirst, read in some ata from an Excel file. You can obtain an example file from here. Click to download, and then save the file in your raw-data directory. If you dno’t have a raw-data directory, make one!\nThen read in the Excel file:\n\nap&lt;-read_excel(\"raw-data/example_alkaline_phosphatase_activity_assay.xlsx\", sheet=2, skip=3)\n\n#check what we have\nview(ap)\n\nThen simplify the data with pivot_longer:\n\nap.pivot &lt;- \n  ap |&gt; \n  select(-mean.abs, -standard.deviation) |&gt;\n  pivot_longer(-pNP.conc, names_to = \"rep\", values_to = \"absorb\")\nview(ap.pivot)\n\nReorder the columns, so it is more intuitive for us using relocate:\n\nap.pivot &lt;- relocate(ap.pivot, absorb)"
+    "text": "3.2 Load data\nFirst, read in some ata from an Excel file. You can obtain an example file from here. Click to download, and then save the file in your raw-data directory. If you dno’t have a raw-data directory, make one!\nThen read in the Excel file. Two important things to note about reading Excel files:\n\nwe use sheet=1 to specify that we want the first sheet (or tab)\nwe use skip=3 to specify that we want to skip the first three lines (because they are comments, not data)\n\n\nap&lt;-read_excel(\"raw-data/example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx\", sheet=1, skip=3)\n\n#check what we have\nview(ap)\n\nThen simplify the data with pivot_longer:\n\nap.pivot &lt;- \n  ap |&gt; \n  select(-mean.abs, -standard.deviation) |&gt;\n  pivot_longer(-pNP.conc, names_to = \"rep\", values_to = \"absorb\")\nview(ap.pivot)\n\nReorder the columns, so it is more intuitive for us using relocate:\n\nap.pivot &lt;- relocate(ap.pivot, absorb)"
   },
   {
     "objectID": "workshop4.html#plot-enzyme-data",
@@ -542,22 +542,22 @@
     "objectID": "workshop4.html#loading-data",
     "href": "workshop4.html#loading-data",
     "title": "BIO00066I Workshop 4",
-    "section": "\n4.1 Loading data",
-    "text": "4.1 Loading data\nFirst, load the data from the website, and check what you have:\n\n#load data from a URL\npoints&lt;-read_csv(url(\"https://djeffares.github.io/BIO66I/points.data.2024-03-16.csv\"),\n                 col_types = cols(LID = col_factor(),TID = col_factor(),pid = col_factor())\n)\n\n#check what we have\nglimpse(points)\nhead(points)"
+    "section": "\n5.1 Loading data",
+    "text": "5.1 Loading data\nFirst, load the data from the website, and check what you have:\n\n#load data from a URL\npoints&lt;-read_csv(url(\"https://djeffares.github.io/BIO66I/points.data.2024-03-16.csv\"),\n                 col_types = cols(LID = col_factor(),TID = col_factor(),pid = col_factor())\n)\n\n#check what we have\nglimpse(points)\nhead(points)"
   },
   {
     "objectID": "workshop4.html#what-is-in-the-point-data",
     "href": "workshop4.html#what-is-in-the-point-data",
     "title": "BIO00066I Workshop 4",
-    "section": "\n4.2 What is in the ‘point’ data?",
-    "text": "4.2 What is in the ‘point’ data?\nThis data contains the positions of cells, tracked over time. Lineages are tracked. We have data for tracked cells for both clones (A and B). We have the following information, for many time points:\n\nlineage ID (LID)\ntracking ID (TID)\ndata point id* (pid)\nthe location of the cell in x and y coordinates (x.position, y.position)\nthe time point (time)\nmovement metrics (track.length, euclidean.distance, velocity)\na new movement metric: howfar the cell moved between this time ppint, and thr last one (jump.distance)\nclone (A/B)\n\nNB: pid describes what data point the row of data corresponds to for a cell with a specific LID and TID. For example, LID 1 TID 1 PID 1 would correspond to the first data point (it’s x and Y coordinates etc) for a cell with TID 1 from lineage 1."
+    "section": "\n5.2 What is in the ‘point’ data?",
+    "text": "5.2 What is in the ‘point’ data?\nThis data contains the positions of cells, tracked over time. Lineages are tracked. We have data for tracked cells for both clones (A and B). We have the following information, for many time points:\n\nlineage ID (LID)\ntracking ID (TID)\ndata point id* (pid)\nthe location of the cell in x and y coordinates (x.position, y.position)\nthe time point (time)\nmovement metrics (track.length, euclidean.distance, velocity)\na new movement metric: howfar the cell moved between this time ppint, and thr last one (jump.distance)\nclone (A/B)\n\nNB: pid describes what data point the row of data corresponds to for a cell with a specific LID and TID. For example, LID 1 TID 1 PID 1 would correspond to the first data point (it’s x and Y coordinates etc) for a cell with TID 1 from lineage 1."
   },
   {
     "objectID": "workshop4.html#exploratory-plots",
     "href": "workshop4.html#exploratory-plots",
     "title": "BIO00066I Workshop 4",
-    "section": "\n4.3 Exploratory plots",
-    "text": "4.3 Exploratory plots\n\n4.3.1 Recap: how fast do they move\nYou’ll notice that this file has velocity, just like the last file we used in workshop 3. For a simple ‘sanity check’, we will tests again that the clones differ.\n\n\n\n\n\n\nCaution\n\n\n\nWe know that clone A moves faster than clone B. So why do it again?\nAnswer: data hygiene. We want to be very sure our data is good.\n\n\n\npoints |&gt;\n  ggplot(aes(x=clone,y=log10(velocity)))+\n  geom_violin()+\n  stat_compare_means()\n\n\n\n\n\n\n\nWhat does this do?\n\n\n\nTo find out what any function does, type ?function in the RStudio Console. For example to find out what glimpse does:\n\n?glimpse\n\n\n\n\n4.3.2 Plotting cell movement tracks\nNow, let’s examine the directions do the cells move in. A simple way to do this is to plot the x and y coordinates. We will use facet_wrap to plot one boz for each lineage ID LID. Remember, a lineage ID contains information for each cell, and all its daughter cell and so on.\nTo keep our image simple, we allow clone A and clone B to be on the same panels. But note that clone A, lineage ID 1 has no relationship to clone A, lineage ID 2 - they are merely the first lineage ID that Amanda tracked.\n\npoints |&gt;\n  ggplot(aes(x=x.position,y=y.position,colour=clone))+\n  geom_point(size=1)+\n  facet_wrap(~LID)\n\n#If we want to show just one clone add this line after 'points |&gt;'\n#filter(clone == \"A\")|&gt;\n\nWe can see that they wriggle about a lot. They do not move in straight lines. To show one lineage, from one clone and colour by TID (or time), we can do:\n\npoints |&gt;\n  filter(clone == \"B\" & LID==4)|&gt;\n  ggplot(aes(x=x.position,y=y.position,colour=TID))+\n  geom_point(size=1)"
+    "section": "\n5.3 Exploratory plots",
+    "text": "5.3 Exploratory plots\n\n5.3.1 Recap: how fast do they move\nYou’ll notice that this file has velocity, just like the last file we used in workshop 3. For a simple ‘sanity check’, we will tests again that the clones differ.\n\n\n\n\n\n\nCaution\n\n\n\nWe know that clone A moves faster than clone B. So why do it again?\nAnswer: data hygiene. We want to be very sure our data is good.\n\n\n\npoints |&gt;\n  ggplot(aes(x=clone,y=log10(velocity)))+\n  geom_violin()+\n  stat_compare_means()\n\n\n\n\n\n\n\nWhat does this do?\n\n\n\nTo find out what any function does, type ?function in the RStudio Console. For example to find out what glimpse does:\n\n?glimpse\n\n\n\n\n5.3.2 Plotting cell movement tracks\nNow, let’s examine the directions do the cells move in. A simple way to do this is to plot the x and y coordinates. We will use facet_wrap to plot one boz for each lineage ID LID. Remember, a lineage ID contains information for each cell, and all its daughter cell and so on.\nTo keep our image simple, we allow clone A and clone B to be on the same panels. But note that clone A, lineage ID 1 has no relationship to clone A, lineage ID 2 - they are merely the first lineage ID that Amanda tracked.\n\npoints |&gt;\n  ggplot(aes(x=x.position,y=y.position,colour=clone))+\n  geom_point(size=1)+\n  facet_wrap(~LID)\n\n#If we want to show just one clone add this line after 'points |&gt;'\n#filter(clone == \"A\")|&gt;\n\nWe can see that they wriggle about a lot. They do not move in straight lines. To show one lineage, from one clone and colour by TID (or time), we can do:\n\npoints |&gt;\n  filter(clone == \"B\" & LID==4)|&gt;\n  ggplot(aes(x=x.position,y=y.position,colour=TID))+\n  geom_point(size=1)"
   },
   {
     "objectID": "workshop4.html#rose-plots",
@@ -570,8 +570,8 @@
     "objectID": "workshop4.html#animate-it",
     "href": "workshop4.html#animate-it",
     "title": "BIO00066I Workshop 4",
-    "section": "\n4.5 Animate it!",
-    "text": "4.5 Animate it!\nggplot2 can achieve almost any plot you can image (and probably some you cant imagine!). To create very visually appealing graphics can help enormously to explain complex data. Animated plots are much more intuitive for explaining data with a time element.\nHere is now to make an amimated plot with gganimate:\n\n4.5.1 Animate: step 1.\nMake a static plot:\n\nstatic.plot &lt;-points |&gt;\n  filter(clone == \"B\", LID == 1) |&gt;\n  ggplot(aes(x=x.position,y=y.position, colour=TID))+\n  geom_point(size=10, pch=1,lwd=2)\nstatic.plot\n\nHere we only look at one clone and one lineage ID in the linefilter(clone == \"B\", LID == 1) |&gt;\nYou can (and should) alter the code to look at other clone and lineage IDs. You might also like to try these alternatives:\n\ncolour=time\nfacet_wrap(~LID)\ngeom_point(size=5, pch=1)\n\n4.5.2 Animate: step 2\nAnimate the plot:\n\n#set up the animation code\nanimated.plot &lt;- static.plot +\n  transition_time(time) +\n  shadow_mark(past = T, future=F, alpha=0.5)\n\n#check the animation worked\nanimate(animated.plot, width =800, height = 800)\n\n\n4.5.3 Animate: step 3\nSave the animation as a GIF:\n\n#save the animation as a gif\n#make sure you use a sensible file name\nanim_save(\"cloneB.ineage2gif\", animated.plot)\n\nSee this website to learn more about gganimate.\nThat is all for this workshop today. If you have time do look at the revision summary below."
+    "section": "\n5.5 Animate it!",
+    "text": "5.5 Animate it!\nggplot2 can achieve almost any plot you can image (and probably some you cant imagine!). To create very visually appealing graphics can help enormously to explain complex data. Animated plots are much more intuitive for explaining data with a time element.\nHere is now to make an amimated plot with gganimate:\n\n5.5.1 Animate: step 1.\nMake a static plot:\n\nstatic.plot &lt;-points |&gt;\n  filter(clone == \"B\", LID == 1) |&gt;\n  ggplot(aes(x=x.position,y=y.position, colour=TID))+\n  geom_point(size=10, pch=1,lwd=2)\nstatic.plot\n\nHere we only look at one clone and one lineage ID in the linefilter(clone == \"B\", LID == 1) |&gt;\nYou can (and should) alter the code to look at other clone and lineage IDs. You might also like to try these alternatives:\n\ncolour=time\nfacet_wrap(~LID)\ngeom_point(size=5, pch=1)\n\n5.5.2 Animate: step 2\nAnimate the plot:\n\n#set up the animation code\nanimated.plot &lt;- static.plot +\n  transition_time(time) +\n  shadow_mark(past = T, future=F, alpha=0.5)\n\n#check the animation worked\nanimate(animated.plot, width =800, height = 800)\n\n\n5.5.3 Animate: step 3\nSave the animation as a GIF:\n\n#save the animation as a gif\n#make sure you use a sensible file name\nanim_save(\"cloneB.ineage2gif\", animated.plot)\n\nSee this website to learn more about gganimate.\nThat is all for this workshop today. If you have time do look at the revision summary below."
   },
   {
     "objectID": "workshop4.html#do-they-follow-each-other",
@@ -585,7 +585,7 @@
     "href": "workshop4.html#make-and-use-a-linear-model",
     "title": "BIO00066I Workshop 4",
     "section": "\n3.4 Make and use a linear model",
-    "text": "3.4 Make and use a linear model\n\nlinear_model &lt;- lm(pNP.conc ~ absorb , data = ap.pivot)\nabsorbance_values &lt;- data.frame(absorb = c(1,2,3))\n\nNow we have the linear model, if we have some some absorbence values, we can make a prediction of some pNP concentrations. Here is how do it, using the predict function:\n\n#calculate predicted pNP concentrationusing the linear model\npredicted.pNP.concs &lt;- predict(linear_model,absorbance_values)\n\n#show the values\npredicted.pNP.concs"
+    "text": "3.4 Make and use a linear model\n\nlinear_model &lt;- lm(pNP.conc ~ absorb , data = ap.pivot)\n\nNow we have the linear model, if we have some some pNP absorbence values, we can make a prediction of the pNPP enzyme concentrations. We have put some mock pNP values in the excel file example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx, in sheet two. You’ll need to adjust the code below to correct sheet=0, skip=0.\n\nmock&lt;-read_excel(\"raw-data/example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx\", sheet=0, skip=0)\n\n#check what we have\nview(mock)\n\nNow we calculate the average for each of the three explicates using mutate. Note that mutate is a very useful function for creating new columns using existing ones. It can also join text columns. We can also use select after the mutation to remove the replicate columns.\n\nmock &lt;- mock |&gt; \n  rowwise() %&gt;% \n  mutate(absorb=mean(c(absorb.rep1,absorb.rep2,absorb.rep3))) |&gt; \n  select(-absorb.rep1, -absorb.rep2, -absorb.rep3)\n\nWe named our mean absorbance absorb because we specified the absorb variable in the code linear_model &lt;- lm(pNP.conc ~ absorb , data = ap.pivot) above. So our linear model is ‘looking for’ an absorb variable to use."
   },
   {
     "objectID": "workshop4.html#revision",
@@ -598,29 +598,29 @@
     "objectID": "workshop4.html#data-analysis-1-core",
     "href": "workshop4.html#data-analysis-1-core",
     "title": "BIO00066I Workshop 4",
-    "section": "\n5.1 Data Analysis 1: Core\n",
-    "text": "5.1 Data Analysis 1: Core\n\nIn this workshop, we learned:\n\nHow to achieve reproducibility\nSetting up an RStudio Project\nLoading packages\nThe importance of looking at, and knowing, your data\nCreating plots with ggplot to help with knowing your data\nQuality control\n\n\n\n\n\n\n\nIt is the undertanding that matters\n\n\n\nUnderstanding takes time. Be sure you understand all these concepts well."
+    "section": "\n6.1 Data Analysis 1: Core\n",
+    "text": "6.1 Data Analysis 1: Core\n\nIn this workshop, we learned:\n\nHow to achieve reproducibility\nSetting up an RStudio Project\nLoading packages\nThe importance of looking at, and knowing, your data\nCreating plots with ggplot to help with knowing your data\nQuality control\n\n\n\n\n\n\n\nIt is the undertanding that matters\n\n\n\nUnderstanding takes time. Be sure you understand all these concepts well."
   },
   {
     "objectID": "workshop4.html#workshop-2-cell-biology",
     "href": "workshop4.html#workshop-2-cell-biology",
     "title": "BIO00066I Workshop 4",
-    "section": "\n5.2 Workshop 2: Cell Biology\n",
-    "text": "5.2 Workshop 2: Cell Biology\n\nIn this workshop, we learned about:\n\nLoading data from websites with read_tsv and read_csv.\nExploring data with view, names, ncol, ncol, nrow, summary, and glimpse\n\nSummarising large data sets with dplyr\n\nMaking plots to compare two or more categories with geom_boxplot, geom_violin, and geom_jitter\n\nThe differences between P-values and plotting small vs large data\n\n\n\n\n\n\n\nWhat does this do?\n\n\n\nTo find out what any function does, type ?function in the RStudio Console. For example to find out what glimpse does:\n\n?glimpse"
+    "section": "\n6.2 Workshop 2: Cell Biology\n",
+    "text": "6.2 Workshop 2: Cell Biology\n\nIn this workshop, we learned about:\n\nLoading data from websites with read_tsv and read_csv.\nExploring data with view, names, ncol, ncol, nrow, summary, and glimpse\n\nSummarising large data sets with dplyr\n\nMaking plots to compare two or more categories with geom_boxplot, geom_violin, and geom_jitter\n\nThe differences between P-values and plotting small vs large data\n\n\n\n\n\n\n\nWhat does this do?\n\n\n\nTo find out what any function does, type ?function in the RStudio Console. For example to find out what glimpse does:\n\n?glimpse"
   },
   {
     "objectID": "workshop4.html#workshop-3-cell-biology",
     "href": "workshop4.html#workshop-3-cell-biology",
     "title": "BIO00066I Workshop 4",
-    "section": "\n5.3 Workshop 3: Cell Biology\n",
-    "text": "5.3 Workshop 3: Cell Biology\n\nIn this workshop, we learned about:\n\nUsing summary to describe a large data frame\nAdjusting plot with a log scale (often important for biological data)\nUsing facet_wrap to create multiple panels for different replicate and so on\n‘Reshaping’ data tables with pivot_longer\n\nCorrelations between metrics in data sets (this is very common in biological data)\nCreating a correlation heat map"
+    "section": "\n6.3 Workshop 3: Cell Biology\n",
+    "text": "6.3 Workshop 3: Cell Biology\n\nIn this workshop, we learned about:\n\nUsing summary to describe a large data frame\nAdjusting plot with a log scale (often important for biological data)\nUsing facet_wrap to create multiple panels for different replicate and so on\n‘Reshaping’ data tables with pivot_longer\n\nCorrelations between metrics in data sets (this is very common in biological data)\nCreating a correlation heat map"
   },
   {
     "objectID": "workshop4.html#workshop-4-cell-biology-this-workshop",
     "href": "workshop4.html#workshop-4-cell-biology-this-workshop",
     "title": "BIO00066I Workshop 4",
-    "section": "\n5.4 Workshop 4: Cell Biology (this workshop)\n",
-    "text": "5.4 Workshop 4: Cell Biology (this workshop)\n\nWe learned:\n\nHow to make and use a linear model to infer values from a standard curve\nHow to plot objects on two-dimensional planes\nHow to use facet_wrap (again)\nHow to animate plots!"
+    "section": "\n6.4 Workshop 4: Cell Biology (this workshop)\n",
+    "text": "6.4 Workshop 4: Cell Biology (this workshop)\n\nWe learned:\n\nHow to make and use a linear model to infer values from a standard curve\nHow to plot objects on two-dimensional planes\nHow to use facet_wrap (again)\nHow to animate plots!"
   },
   {
     "objectID": "workshop4.html#scatter-plots-to-show-cell-movemtn-range-intuitively",
@@ -633,7 +633,14 @@
     "objectID": "workshop4.html#scatter-plots-to-show-cell-movement-range-intuitively",
     "href": "workshop4.html#scatter-plots-to-show-cell-movement-range-intuitively",
     "title": "BIO00066I Workshop 4",
-    "section": "\n4.4 Scatter plots to show cell movement range intuitively",
-    "text": "4.4 Scatter plots to show cell movement range intuitively\nIf we want to view how far many different cells have moved, we will need to adjust their point locations, so the median of their x.positions and x.positions are zero. Effectively setting all their start positions to x=0,y=0 on a grid.\nWe can use some simple math and the mutate function to achieve this:\n\n#use mutate to make new columns\npoints2&lt;- points |&gt; \n  group_by(LID) |&gt; \n  mutate(med.x = mean(x.position, na.rm = TRUE))|&gt;\n  mutate(adjusted.x =  x.position - med.x) |&gt;\n  mutate(med.y = mean(y.position, na.rm = TRUE))|&gt;\n  mutate(adjusted.y =  y.position - med.y)\n\n#check our new data\npoints2\n\nPlot the ‘centralised’ (x=0,y=0) cell positions. We use facet_wrap to show each clone on a different panel.\n\npoints2 |&gt;  \n  ggplot(aes(x=adjusted.x,y=adjusted.y,colour = time))+\n  geom_point(alpha=0.5, size=3)+\n  geom_hline(yintercept = 0)+\n  geom_vline(xintercept = 0)+\n  facet_wrap(~clone)"
+    "section": "\n5.4 Scatter plots to show cell movement range intuitively",
+    "text": "5.4 Scatter plots to show cell movement range intuitively\nIf we want to view how far many different cells have moved, we will need to adjust their point locations, so the median of their x.positions and x.positions are zero. Effectively setting all their start positions to x=0,y=0 on a grid.\nWe can use some simple math and the mutate function to achieve this:\n\n#use mutate to make new columns\npoints2&lt;- points |&gt; \n  group_by(LID) |&gt; \n  mutate(med.x = mean(x.position, na.rm = TRUE))|&gt;\n  mutate(adjusted.x =  x.position - med.x) |&gt;\n  mutate(med.y = mean(y.position, na.rm = TRUE))|&gt;\n  mutate(adjusted.y =  y.position - med.y)\n\n#check our new data\npoints2\n\nPlot the ‘centralised’ (x=0,y=0) cell positions. We use facet_wrap to show each clone on a different panel.\n\npoints2 |&gt;  \n  ggplot(aes(x=adjusted.x,y=adjusted.y,colour = time))+\n  geom_point(alpha=0.5, size=3)+\n  geom_hline(yintercept = 0)+\n  geom_vline(xintercept = 0)+\n  facet_wrap(~clone)"
+  },
+  {
+    "objectID": "workshop4.html#end-of-part-1.",
+    "href": "workshop4.html#end-of-part-1.",
+    "title": "BIO00066I Workshop 4",
+    "section": "\n4.1 End of Part 1.",
+    "text": "4.1 End of Part 1.\nLater, we will update this page to include some analysis."
   }
 ]

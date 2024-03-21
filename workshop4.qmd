@@ -112,15 +112,19 @@ library(gganimate)
 
 ## Load data
 
-First, read in some ata from an Excel file. You can obtain [an example file from here](https://djeffares.github.io/BIO66I/example_alkaline_phosphatase_activity_assay.xlsx). Click to download, and then save the file in your **raw-data** directory. If you dno't have a **raw-data** directory, make one!
+First, read in some ata from an Excel file. You can obtain [an example file from here](https://djeffares.github.io/BIO66I/example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx). Click to download, and then save the file in your **raw-data** directory. If you dno't have a **raw-data** directory, make one!
 
-Then read in the Excel file:
+Then read in the Excel file. Two important things to note about reading Excel files:
+
+- we use `sheet=1` to specify that we want the first sheet (or tab)
+- we use `skip=3` to specify that we want to skip the first three lines (because they are comments, not data)
+
 
 ```{r}
 #| echo: true
 #| warning: false
 #| eval: true
-ap<-read_excel("raw-data/example_alkaline_phosphatase_activity_assay.xlsx", sheet=2, skip=3)
+ap<-read_excel("raw-data/example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx", sheet=1, skip=3)
 
 #check what we have
 view(ap)
@@ -135,7 +139,7 @@ Then simplify the data with `pivot_longer`:
 ap.pivot <- 
   ap |> 
   select(-mean.abs, -standard.deviation) |>
-  pivot_longer(-pNPP.conc, names_to = "rep", values_to = "absorb")
+  pivot_longer(-pNP.conc, names_to = "rep", values_to = "absorb")
 view(ap.pivot)
 ```
 
@@ -157,14 +161,14 @@ Let's make a simple plot, adding a line that shows the linear model with the lin
 #| warning: false
 #| eval: true
 
-#plot, saving thr plot in an object called 'pNPP.plot'
-pNPP.plot <- ap.pivot |>
-  ggplot(aes(x=absorb, y=pNPP.conc))+
+#plot, saving thr plot in an object called 'pNP.plot'
+pNP.plot <- ap.pivot |>
+  ggplot(aes(x=absorb, y=pNP.conc))+
   geom_point()+
   geom_smooth(method="lm")
 
 #show the plot
-pNPP.plot
+pNP.plot
 ```
 
 Now save the plot:
@@ -174,13 +178,13 @@ Now save the plot:
 #| warning: false
 #| eval: true
 
-ggsave("pNPP.plot.pdf",pNPP.plot)  
+ggsave("pNP.plot.pdf",pNP.plot)  
 ```
 
 ::: callout-note
 # Optional: How close are the replicates?
 
-How similar to the linear models look if you use: `ggplot(aes(x=absorb, y=pNPP.conc,colour = rep))`
+How similar to the linear models look if you use: `ggplot(aes(x=absorb, y=pNP.conc,colour = rep))`
 :::
 
 ## Make and use a linear model
@@ -190,23 +194,72 @@ How similar to the linear models look if you use: `ggplot(aes(x=absorb, y=pNPP.c
 #| warning: false
 #| eval: true
 
-linear_model <- lm(pNPP.conc ~ absorb , data = ap.pivot)
-absorbance_values <- data.frame(absorb = c(1,2,3))
+linear_model <- lm(pNP.conc ~ absorb , data = ap.pivot)
 ```
 
-Now we have the linear model, if we have some some absorbence values, we can make a prediction of some pNPP concentrations. Here is how do it, using the `predict` function:
+Now we have the linear model, if we have some some pNP absorbence values, we can make a prediction of the pNPP enzyme concentrations. We have put some mock pNP values in the excel file `example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx`, in sheet two. You'll need to adjust the code below to correct `sheet=0, skip=0`.
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+mock<-read_excel("raw-data/example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx", sheet=0, skip=0)
+
+#check what we have
+view(mock)
+```
+
+
+```{r}
+#| echo: false
+#| warning: false
+#| eval: true
+mock<-read_excel("raw-data/example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx", sheet=2, skip=1)
+```
+
+Now we calculate the average for each of the three explicates using `mutate`. Note that `mutate` is a very useful function for creating new columns using existing ones. It can also join text columns. We can also use `select` *after* the mutation to remove the replicate columns.
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: true
+
+mock <- mock |> 
+  rowwise() %>% 
+  mutate(absorb=mean(c(absorb.rep1,absorb.rep2,absorb.rep3))) |> 
+  select(-absorb.rep1, -absorb.rep2, -absorb.rep3)
+```
+
+We named our mean absorbance `absorb`  because we specified the `absorb` variable in the code `linear_model <- lm(pNP.conc ~ absorb , data = ap.pivot)` above. So our linear model is 'looking for' an absorb variable to use.
+
+
+# Predict values based on a linear model
+
+Here is how do it, using the `predict` function:
 
 ```{r}
 #| echo: true
 #| warning: false
 #| eval: false
 
-#calculate predicted pNPP concentrationusing the linear model
-predicted.pnpp.concs <- predict(linear_model,absorbance_values)
+#calculate predicted pNP concentration using the linear model
+predictions.from.lm <- predict(linear_model,mock)
 
-#show the values
-predicted.pnpp.concs
+#Add these predictions from the linear model (predictions.from.lm)
+#As a new column
+mock$predicted.pNP.concs = predicted.pNP.concs
+
+#check what we have
+view(mock)
+
+#And save all our data (give your Rda file a sensible name!)
+save.image("chocolate-fish.Rda")
 ```
+
+
+## End of Part 1.
+
+Later, we will update this page to include some analysis.
 
 ------------------------------------------------------------------------
 
