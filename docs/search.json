@@ -431,7 +431,7 @@
     "href": "workshop4.html",
     "title": "BIO00066I Workshop 4",
     "section": "",
-    "text": "This workshop is a work in progress.\n\n\n\nAt the moment, is it incomplete, and will contain errors."
+    "text": "Philosophy\n\n\n\n\nWorkshops are not a test.\nDon’t worry about making mistakes.\nThe staff are here to help.\n\n\n\n\nToday, we will learn how to:\n\nUse a linear model to predict some y values, given some x values\nIn our case we use absorbance (x values) to predict alkaline phosphatase activity (y values)\nMake animated plots with gganimate\n\n\nIt might seem like a lot of trouble to use R to read in a small number of x and y values from an Excel sheet to a standard curve, and then estimate some new y values. We could probably do this in Excel.\nBut what if we have 200 standard curves, and we want to automate the process? What if we have 50,000 x and y values and a non-linear model? For big data, R (or some similar software) is the only sensible way. NB: There are similar software for statistical analysis, but we don’t teach them here. R is currently the state of the art for analysis of biological data. And it’s free."
   },
   {
     "objectID": "workshop4.html#the-biology",
@@ -493,8 +493,8 @@
     "objectID": "workshop4.html#technical-skills",
     "href": "workshop4.html#technical-skills",
     "title": "BIO00066I Workshop 4",
-    "section": "\n1.1 Technical skills",
-    "text": "1.1 Technical skills\nToday, we will learn how to:\n\nUse a linear model to predict some y values, given some x values\nIn our case we use absorbance (x values) to predict alkaline phosphatase activity (y values)\nMake animated plots\n\nUse multiple test correction"
+    "section": "",
+    "text": "Today, we will learn how to:\n\nUse a linear model to predict some y values, given some x values\nIn our case we use absorbance (x values) to predict alkaline phosphatase activity (y values)\nMake animated plots with gganimate"
   },
   {
     "objectID": "workshop4.html#part-1-standard-curve",
@@ -535,8 +535,8 @@
     "objectID": "workshop4.html#thinking-like-a-data-scientist",
     "href": "workshop4.html#thinking-like-a-data-scientist",
     "title": "BIO00066I Workshop 4",
-    "section": "\n1.2 Thinking like a data scientist",
-    "text": "1.2 Thinking like a data scientist\nIt might seem like a lot of trouble to use R to read in a small number of x and y values from an Excel sheet to a standard curve, and then estimate some new y values. We could probably do this in Excel.\nBut what if we have 200 standard curves, and we want o automate the process? What if we have 50,000 x and y values and a non-linear model? For big data, R is the only sensible way. There are other software tools for statitical analysis, but we don’t teach them here."
+    "section": "",
+    "text": "It might seem like a lot of trouble to use R to read in a small number of x and y values from an Excel sheet to a standard curve, and then estimate some new y values. We could probably do this in Excel.\nBut what if we have 200 standard curves, and we want to automate the process? What if we have 50,000 x and y values and a non-linear model? For big data, R (or some similar software) is the only sensible way. NB: There are similar software for statistical analysis, but we don’t teach them here. R is currently the state of the art for analysis of biological data. And it’s free."
   },
   {
     "objectID": "workshop4.html#loading-data",
@@ -557,7 +557,7 @@
     "href": "workshop4.html#exploratory-plots",
     "title": "BIO00066I Workshop 4",
     "section": "\n4.3 Exploratory plots",
-    "text": "4.3 Exploratory plots\n\n4.3.1 Recap: how fast do they move\nYou’ll notice that this file has velocity, just like the last file we used in workshop 3. For a simple ‘sanity check’, we will tests again that the clones differ.\n\n\n\n\n\n\nCaution\n\n\n\nWe know that clone A moves faster than clone B. So why do it again?\nAnswer: data hygiene. We want to be very sure our data is good.\n\n\n\npoints |&gt;\n  ggplot(aes(x=clone,y=log10(velocity)))+\n  geom_violin()+\n  stat_compare_means()\n\n\n\n\n\n\n\nWhat does this do?\n\n\n\nTo find out what any function does, type ?function in the RStudio Console. For example to find out what glimpse does:\n\n?glimpse\n\n\n\n\n4.3.2 Plotting cell movement tracks\nNow, let’s examine the directions do the cells move in. A simple way to do this is to plot the x and y coordinates. We will use facet_wrap to plot one boz for each lineage ID LID. Remember, a lineage ID contains information for each cell, and all its daughter cell and so on.\nTo keep our image simple, we allow clone A and clone B to be on the same panels. But note that clone A, lineage ID 1 has no relationship to clone A, lineage ID 2 - they are merely the first lineage ID that Amanda tracked.\n\npoints |&gt;\n  ggplot(aes(x=x.position,y=y.position,colour=clone))+\n  geom_point(size=1)+\n  facet_wrap(~LID)\n\n#If we want to show just one clone add this line after 'points |&gt;'\n#filter(clone == \"A\")|&gt;\n\nWe can see that they wriggle about quiet a lot. They do not move in straight lines.\nshow one lineage, from one clone and colour by TID (or time)\n\npoints |&gt;\n  filter(clone == \"B\" & LID==4)|&gt;\n  ggplot(aes(x=x.position,y=y.position,colour=TID))+\n  geom_point(size=1)\n  #colour=time"
+    "text": "4.3 Exploratory plots\n\n4.3.1 Recap: how fast do they move\nYou’ll notice that this file has velocity, just like the last file we used in workshop 3. For a simple ‘sanity check’, we will tests again that the clones differ.\n\n\n\n\n\n\nCaution\n\n\n\nWe know that clone A moves faster than clone B. So why do it again?\nAnswer: data hygiene. We want to be very sure our data is good.\n\n\n\npoints |&gt;\n  ggplot(aes(x=clone,y=log10(velocity)))+\n  geom_violin()+\n  stat_compare_means()\n\n\n\n\n\n\n\nWhat does this do?\n\n\n\nTo find out what any function does, type ?function in the RStudio Console. For example to find out what glimpse does:\n\n?glimpse\n\n\n\n\n4.3.2 Plotting cell movement tracks\nNow, let’s examine the directions do the cells move in. A simple way to do this is to plot the x and y coordinates. We will use facet_wrap to plot one boz for each lineage ID LID. Remember, a lineage ID contains information for each cell, and all its daughter cell and so on.\nTo keep our image simple, we allow clone A and clone B to be on the same panels. But note that clone A, lineage ID 1 has no relationship to clone A, lineage ID 2 - they are merely the first lineage ID that Amanda tracked.\n\npoints |&gt;\n  ggplot(aes(x=x.position,y=y.position,colour=clone))+\n  geom_point(size=1)+\n  facet_wrap(~LID)\n\n#If we want to show just one clone add this line after 'points |&gt;'\n#filter(clone == \"A\")|&gt;\n\nWe can see that they wriggle about a lot. They do not move in straight lines. To show one lineage, from one clone and colour by TID (or time), we can do:\n\npoints |&gt;\n  filter(clone == \"B\" & LID==4)|&gt;\n  ggplot(aes(x=x.position,y=y.position,colour=TID))+\n  geom_point(size=1)"
   },
   {
     "objectID": "workshop4.html#rose-plots",
@@ -571,7 +571,7 @@
     "href": "workshop4.html#animate-it",
     "title": "BIO00066I Workshop 4",
     "section": "\n4.5 Animate it!",
-    "text": "4.5 Animate it!\nlet’s animate this\ncreate the static plot\n\nstatic.plot &lt;-points |&gt;\n  filter(clone == \"B\", LID == 1) |&gt;\n  ggplot(aes(x=x.position,y=y.position, colour=TID))+\n  geom_point(size=10, pch=1)\nstatic.plot\n\ntry alternatives\n\nfilter(clone == \"B\")\nfacet_wrap(~LID)\ngeom_point(size=5, pch=1)\n\nanimate the plot\n\nanimated.plot &lt;- static.plot +\n  transition_time(time) +\n  shadow_mark(past = T, future=F, alpha=0.5)\n\n#amimate it!\nanimate(animated.plot, width =800, height = 800)\n\n#save as gif\nanim_save(\"clineB.ineage2gif\", animated.plot)"
+    "text": "4.5 Animate it!\nggplot2 can achieve almost any plot you can image (and probably some you cant imagine!). To create very visually appealing graphics can help enormously to explain complex data. Animated plots are much more intuitive for explaining data with a time element.\nHere is now to make an amimated plot with gganimate:\n\n4.5.1 Animate: step 1.\nMake a static plot:\n\nstatic.plot &lt;-points |&gt;\n  filter(clone == \"B\", LID == 1) |&gt;\n  ggplot(aes(x=x.position,y=y.position, colour=TID))+\n  geom_point(size=10, pch=1)\nstatic.plot\n\nHere, you might like to try these alternatives:\n\nfilter(clone == \"B\")\nfacet_wrap(~LID)\ngeom_point(size=5, pch=1)\n\n4.5.2 Animate: step 2\nAnimate the plot:\n\n#set up the animation code\nanimated.plot &lt;- static.plot +\n  transition_time(time) +\n  shadow_mark(past = T, future=F, alpha=0.5)\n\n#check the animation worked\nanimate(animated.plot, width =800, height = 800)\n\n\n4.5.3 Animate: step 3\nSave the animation as a GIF:\n\n#save the animation as a gif\n#make sure you use a sensible file name\nanim_save(\"cloneB.ineage2gif\", animated.plot)\n\nSee this website to learn more about gganimate.\nThat is all for this workshop today. If you have time do look at the revision summary below."
   },
   {
     "objectID": "workshop4.html#do-they-follow-each-other",
@@ -621,5 +621,19 @@
     "title": "BIO00066I Workshop 4",
     "section": "\n5.4 Workshop 4: Cell Biology (this workshop)\n",
     "text": "5.4 Workshop 4: Cell Biology (this workshop)\n\nWe learned:\n\nHow to make and use a linear model to infer values from a standard curve\nHow to plot objects on two-dimensional planes\nHow to use facet_wrap (again)\nHow to animate plots!"
+  },
+  {
+    "objectID": "workshop4.html#scatter-plots-to-show-cell-movemtn-range-intuitively",
+    "href": "workshop4.html#scatter-plots-to-show-cell-movemtn-range-intuitively",
+    "title": "BIO00066I Workshop 4",
+    "section": "\n4.4 Scatter plots to show cell movemtn range intuitively",
+    "text": "4.4 Scatter plots to show cell movemtn range intuitively\nIf we want to view how far many different cells have moved, we will need to adjust their point locations, so the median of their x.positions and x.positions are zero. Effectively setting all their start positions to x=0,y=0 on a grid.\nWe can use some simple math and the mutate function to achieve this:\n\n#use mutate to make new columns\npoints2&lt;- points |&gt; \n  group_by(LID) |&gt; \n  mutate(med.x = mean(x.position, na.rm = TRUE))|&gt;\n  mutate(adjusted.x =  x.position - med.x) |&gt;\n  mutate(med.y = mean(y.position, na.rm = TRUE))|&gt;\n  mutate(adjusted.y =  y.position - med.y)\n\n#check our new data\npoints2\n\nPlot the ‘centralised’ (x=0,y=0) cell positions. We use facet_wrap to show each clone on a different panel.\n\npoints2 |&gt;  \n  ggplot(aes(x=adjusted.x,y=adjusted.y,colour = time))+\n  geom_point(alpha=0.5, size=3)+\n  geom_hline(yintercept = 0)+\n  geom_vline(xintercept = 0)+\n  facet_wrap(~clone)"
+  },
+  {
+    "objectID": "workshop4.html#scatter-plots-to-show-cell-movement-range-intuitively",
+    "href": "workshop4.html#scatter-plots-to-show-cell-movement-range-intuitively",
+    "title": "BIO00066I Workshop 4",
+    "section": "\n4.4 Scatter plots to show cell movement range intuitively",
+    "text": "4.4 Scatter plots to show cell movement range intuitively\nIf we want to view how far many different cells have moved, we will need to adjust their point locations, so the median of their x.positions and x.positions are zero. Effectively setting all their start positions to x=0,y=0 on a grid.\nWe can use some simple math and the mutate function to achieve this:\n\n#use mutate to make new columns\npoints2&lt;- points |&gt; \n  group_by(LID) |&gt; \n  mutate(med.x = mean(x.position, na.rm = TRUE))|&gt;\n  mutate(adjusted.x =  x.position - med.x) |&gt;\n  mutate(med.y = mean(y.position, na.rm = TRUE))|&gt;\n  mutate(adjusted.y =  y.position - med.y)\n\n#check our new data\npoints2\n\nPlot the ‘centralised’ (x=0,y=0) cell positions. We use facet_wrap to show each clone on a different panel.\n\npoints2 |&gt;  \n  ggplot(aes(x=adjusted.x,y=adjusted.y,colour = time))+\n  geom_point(alpha=0.5, size=3)+\n  geom_hline(yintercept = 0)+\n  geom_vline(xintercept = 0)+\n  facet_wrap(~clone)"
   }
 ]

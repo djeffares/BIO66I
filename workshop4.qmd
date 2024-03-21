@@ -15,11 +15,6 @@ format:
 editor: source
 ---
 
-::: callout-warning
-## This workshop is a work in progress.
-At the moment, is it incomplete, and will contain errors.
-:::
-
 # Learning objectives
 
 ::: callout-important
@@ -36,14 +31,13 @@ Today, we will learn how to:
 
 -   Use a linear model to predict some ***y*** values, given some ***x*** values
 -   In our case we use absorbance (***x*** **values**) to predict alkaline phosphatase activity (***y*** **values**)
--   Make **animated plots**
--   Use multiple test correction
+-   Make **animated plots** with `gganimate`
 
 ## Thinking like a data scientist
 
 It might seem like a lot of trouble to use **R** to read in a small number of ***x*** and ***y*** values from an Excel sheet to a standard curve, and then estimate some new ***y*** values. We *could* probably do this in Excel.
 
-But what if we have 200 standard curves, and we want o automate the process? What if we have 50,000 ***x*** and ***y*** values and a non-linear model? For big data, **R is the only sensible way**. There are [other software tools for statitical analysis](https://www.inwt-statistics.com/blog/comparison-of-r-python-sas-spss-and-stata), but we don't teach them here.
+But what if we have 200 standard curves, and we want to automate the process? What if we have 50,000 ***x*** and ***y*** values and a non-linear model? For big data, **R (or some similar software) is the only sensible way**. NB: There are [similar software for statistical analysis](https://www.inwt-statistics.com/blog/comparison-of-r-python-sas-spss-and-stata), but we don't teach them here. R is currently the state of the art for analysis of biological data. And it's *free*.
 
 # Introduction
 
@@ -116,7 +110,6 @@ library(ggpubr)
 library(gganimate)
 ```
 
-
 ## Load data
 
 First, read in some ata from an Excel file. You can obtain [an example file from here](https://djeffares.github.io/BIO66I/example_alkaline_phosphatase_activity_assay.xlsx). Click to download, and then save the file in your **raw-data** directory. If you dno't have a **raw-data** directory, make one!
@@ -185,7 +178,7 @@ ggsave("pNPP.plot.pdf",pNPP.plot)
 ```
 
 ::: callout-note
-# Optional: How close are the replicates? 
+# Optional: How close are the replicates?
 
 How similar to the linear models look if you use: `ggplot(aes(x=absorb, y=pNPP.conc,colour = rep))`
 :::
@@ -215,9 +208,7 @@ predicted.pnpp.concs <- predict(linear_model,absorbance_values)
 predicted.pnpp.concs
 ```
 
-
----
-
+------------------------------------------------------------------------
 
 # Exercises (Part 2): Exploring MCS movement
 
@@ -247,7 +238,7 @@ This data contains the positions of cells, tracked over time. Lineages are track
 
 -   lineage ID (LID)
 -   tracking ID (TID)
--   data point id* (pid)
+-   data point id\* (pid)
 -   the location of the cell in *x* and *y* coordinates (x.position, y.position)
 -   the time point (time)
 -   movement metrics (track.length, euclidean.distance, velocity)
@@ -260,9 +251,9 @@ NB: **pid** describes what data point the row of data corresponds to for a cell 
 
 ### Recap: how fast do they move
 
-You'll notice that this file has velocity, just like the last file we used in workshop 3. For a simple 'sanity check', we will tests again that the clones differ. 
+You'll notice that this file has velocity, just like the last file we used in workshop 3. For a simple 'sanity check', we will tests again that the clones differ.
 
-:::callout-caution
+::: callout-caution
 **We know that clone A moves faster than clone B. So why do it again?**
 
 **Answer:** data hygiene. We want to be very sure our data is good.
@@ -278,10 +269,11 @@ points |>
   stat_compare_means()
 ```
 
-
-:::callout-tip
+::: callout-tip
 # What does this do?
+
 To find out what any function does, type `?function` in the RStudio Console. For example to find out what `glimpse` does:
+
 ```{r}
 #| echo: true
 #| warning: false
@@ -291,10 +283,9 @@ To find out what any function does, type `?function` in the RStudio Console. For
 ```
 :::
 
-
 ### Plotting cell movement tracks
 
-Now, let's examine the directions do the cells move in. A simple way to do this is to plot the *x* and *y* coordinates. We will use `facet_wrap` to plot one boz for each lineage ID `LID`. Remember, a lineage ID contains information for each cell, and all its daughter cell and so on. 
+Now, let's examine the directions do the cells move in. A simple way to do this is to plot the *x* and *y* coordinates. We will use `facet_wrap` to plot one boz for each lineage ID `LID`. Remember, a lineage ID contains information for each cell, and all its daughter cell and so on.
 
 To keep our image simple, we allow clone A and clone B to be on the same panels. But note that **clone A, lineage ID 1** has no relationship to **clone A, lineage ID 2** - they are merely the first lineage ID that Amanda tracked.
 
@@ -312,10 +303,7 @@ points |>
 #filter(clone == "A")|>
 ```
 
-We can see that they wriggle about quiet a lot. They do not move in straight lines.
-
-
-show one lineage, from one clone and colour by TID (or time)
+We can see that they wriggle about a lot. They do not move in straight lines. To show one lineage, from one clone and colour by TID (or time), we can do:
 
 ```{r}
 #| echo: true
@@ -326,29 +314,33 @@ points |>
   filter(clone == "B" & LID==4)|>
   ggplot(aes(x=x.position,y=y.position,colour=TID))+
   geom_point(size=1)
-  #colour=time
+
 ```
 
-## Rose plots
+## Scatter plots to show cell movement range intuitively
 
-Rose plot to summarise how **far** cells move.
+If we want to view how far many different cells have moved, we will need to adjust their point locations, so the **median** of their `x.position`s and `x.position`s are zero. Effectively setting all their start positions to x=0,y=0 on a grid.
 
-rose plot: adjust so the median of mean_x_mm is zero and mean_y_mm is zero ie: centralize all the values
+We can use some simple math and the `mutate` function to achieve this:
 
 ```{r}
 #| echo: true
 #| warning: false
 #| eval: false
+
+#use mutate to make new columns
 points2<- points |> 
   group_by(LID) |> 
   mutate(med.x = mean(x.position, na.rm = TRUE))|>
   mutate(adjusted.x =  x.position - med.x) |>
   mutate(med.y = mean(y.position, na.rm = TRUE))|>
   mutate(adjusted.y =  y.position - med.y)
+
+#check our new data
 points2
 ```
 
-make a rose plot
+Plot the 'centralised' (x=0,y=0) cell positions. We use `facet_wrap` to show each clone on a different panel.
 
 ```{r}
 #| echo: true
@@ -364,9 +356,13 @@ points2 |>
 
 ## Animate it!
 
-let's animate this
+`ggplot2` can achieve *almost* any plot you can image (and probably some you cant imagine!). To create very visually appealing graphics can help enormously to explain complex data. Animated plots are much more intuitive for explaining data with a *time* element.
 
-create the static plot
+Here is now to make an amimated plot with `gganimate`:
+
+### Animate: step 1.
+
+Make a static plot:
 
 ```{r}
 #| echo: true
@@ -379,28 +375,47 @@ static.plot <-points |>
 static.plot
 ```
 
-try alternatives
+Here, you might like to try these alternatives:
 
 -   `filter(clone == "B")`
 -   `facet_wrap(~LID)`
 -   `geom_point(size=5, pch=1)`
 
-animate the plot
+### Animate: step 2
+
+Animate the plot:
 
 ```{r}
 #| echo: true
 #| warning: false
 #| eval: false
+
+#set up the animation code
 animated.plot <- static.plot +
   transition_time(time) +
   shadow_mark(past = T, future=F, alpha=0.5)
 
-#amimate it!
+#check the animation worked
 animate(animated.plot, width =800, height = 800)
-
-#save as gif
-anim_save("clineB.ineage2gif", animated.plot)
 ```
+
+### Animate: step 3
+
+Save the animation as a GIF:
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+
+#save the animation as a gif
+#make sure you use a sensible file name
+anim_save("cloneB.ineage2gif", animated.plot)
+```
+
+[See this website](https://gganimate.com/index.html) to learn more about `gganimate`.
+
+That is all for this workshop today. If you have time do look at the revision summary below.
 
 # Revision
 
@@ -408,63 +423,65 @@ This section will summarise what we have learned in the [BABS core workshop](htt
 
 **If you don't recall, or are unsure about, any of these topics - look at them again.** Two principles of data science are worth recalling now:
 
-:::callout-important
+::: callout-important
 # 1. Technical skills are important
 
 To be a skilled data analyst, you need to master some technical skills. **This is worth putting time and effort into**, because there is a demand for skilled data analysts, both within and outside of science. [This website is an example](https://uk.indeed.com/q-data-analyst-l-york-jobs.html).
 
 In this module you have learned these technical skills:
 
-- loading libraries and installing packages
-- importing data
-- filtering rows to obtain subset of the data (using `filter`)
-- selecting columns to keep data simple (using `select`)
-- creating plots
+-   loading libraries and installing packages
+-   importing data
+-   filtering rows to obtain subset of the data (using `filter`)
+-   selecting columns to keep data simple (using `select`)
+-   creating plots
 :::
 
-:::callout-important
+::: callout-important
 # 2. Data-handling principles are also important
 
 These are:
 
-- keep files and scripts organised
-- name variables carefully
-- comment your code
-- make your analysis clear and reproducible
+-   keep files and scripts organised
+-   name variables carefully
+-   comment your code
+-   make your analysis clear and reproducible
 :::
 
 We will now summarise and review what we have learned in each workshop.
 
-## [Data Analysis 1: Core](https://3mmarand.github.io/R4BABS/r4babs4/week-1/workshop.html) 
+## [Data Analysis 1: Core](https://3mmarand.github.io/R4BABS/r4babs4/week-1/workshop.html)
 
 In this workshop, we learned:
 
-- How to achieve reproducibility
-- Setting up an RStudio Project
-- Loading packages
-- The importance of looking at, and knowing, your data
-- Creating plots with `ggplot` to help with knowing your data
-- Quality control
+-   How to achieve reproducibility
+-   Setting up an RStudio Project
+-   Loading packages
+-   The importance of looking at, and knowing, your data
+-   Creating plots with `ggplot` to help with knowing your data
+-   Quality control
 
-:::callout-important
+::: callout-important
 # It is the undertanding that matters
+
 Understanding takes time. Be sure you understand all these concepts well.
 :::
 
-## [Workshop 2: Cell Biology](https://djeffares.github.io/BIO66I/workshop2.html) 
+## [Workshop 2: Cell Biology](https://djeffares.github.io/BIO66I/workshop2.html)
 
 In this workshop, we learned about:
 
-- Loading data from websites with `read_tsv` and `read_csv`. 
-- Exploring data with `view`, `names`, `ncol`, `ncol`, `nrow`, `summary`, and `glimpse`
-- Summarising large data sets with `dplyr`
-- Making plots to compare two or more categories with `geom_boxplot`, `geom_violin`, and `geom_jitter`
-- The differences between P-values and plotting small vs large data
+-   Loading data from websites with `read_tsv` and `read_csv`.
+-   Exploring data with `view`, `names`, `ncol`, `ncol`, `nrow`, `summary`, and `glimpse`
+-   Summarising large data sets with `dplyr`
+-   Making plots to compare two or more categories with `geom_boxplot`, `geom_violin`, and `geom_jitter`
+-   The differences between P-values and plotting small vs large data
 
-
-:::callout-tip
+::: callout-tip
 # What does this do?
+
 To find out what any function does, type `?function` in the RStudio Console. For example to find out what `glimpse` does:
+
 ```{r}
 #| echo: true
 #| warning: false
@@ -478,42 +495,38 @@ To find out what any function does, type `?function` in the RStudio Console. For
 
 In this workshop, we learned about:
 
-- Using `summary` to describe a large data frame
-- Adjusting plot with a log scale (often important for biological data)
-- Using `facet_wrap` to create multiple panels for different replicate and so on
-- 'Reshaping' data tables with `pivot_longer`
-- Correlations between metrics in  data sets (this is very common in biological data)
-- Creating a correlation heat map
+-   Using `summary` to describe a large data frame
+-   Adjusting plot with a log scale (often important for biological data)
+-   Using `facet_wrap` to create multiple panels for different replicate and so on
+-   'Reshaping' data tables with `pivot_longer`
+-   Correlations between metrics in data sets (this is very common in biological data)
+-   Creating a correlation heat map
 
 ## [Workshop 4: Cell Biology (this workshop)](https://djeffares.github.io/BIO66I/workshop4.html)
 
 We learned:
 
-- How to make and use a linear model to infer values from a standard curve
-- How to plot objects on two-dimensional planes
-- How to use `facet_wrap` (again)
-- How to animate plots! 
-
+-   How to make and use a linear model to infer values from a standard curve
+-   How to plot objects on two-dimensional planes
+-   How to use `facet_wrap` (again)
+-   How to animate plots!
 
 # Reflection
 
 Ask yourself, and discuss with your classmates:
 
-- What is your favourite way to quickly get to know a data set?
-- Why do we make plots?
-- Is a statistical test always reliable? What if our data set is very small? (or very large?)
-- What is the value of both laboratory work *and* data analysis?
-- Would **you** prefer to do laboratory work, data analysis, or both?
+-   What is your favourite way to quickly get to know a data set?
+-   Why do we make plots?
+-   Is a statistical test always reliable? What if our data set is very small? (or very large?)
+-   What is the value of both laboratory work *and* data analysis?
+-   Would **you** prefer to do laboratory work, data analysis, or both?
 
 ## Consolodation exercises
 
-To consolidate, follow up on aspects of the previous workshops that you are unsure about. Try some different plots. Break the code, then try and fix it. 
+To consolidate, follow up on aspects of the previous workshops that you are unsure about. Try some different plots. Break the code, then try and fix it.
 
 ## Planning for your report
 
 The RStudio Project should:
 
-Create a logical folder structure for your analysis. The top folder should be named with your exam number, for example Y12345678, do not include your name in the submission. Your submission should include the script you used for your work, any accessory functions and the data itself.  Your script should be well-commented, well-organised and follow good practice in use of spacing, indentation and variable naming. It should include all the code required to reproduce data import and formatting as well as the summary information, analyses and figures in your report.
-
-
-
+Create a logical folder structure for your analysis. The top folder should be named with your exam number, for example Y12345678, do not include your name in the submission. Your submission should include the script you used for your work, any accessory functions and the data itself. Your script should be well-commented, well-organised and follow good practice in use of spacing, indentation and variable naming. It should include all the code required to reproduce data import and formatting as well as the summary information, analyses and figures in your report.
