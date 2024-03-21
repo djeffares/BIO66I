@@ -327,7 +327,7 @@ Same coding methods, different data
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ap.pivot</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="va">ap</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">mean.abs</span>, <span class="op">-</span><span class="va">standard.deviation</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="op">-</span><span class="va">pNPP.conc</span>, names_to <span class="op">=</span> <span class="st">"rep"</span>, values_to <span class="op">=</span> <span class="st">"absorb"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="op">-</span><span class="va">pNP.conc</span>, names_to <span class="op">=</span> <span class="st">"rep"</span>, values_to <span class="op">=</span> <span class="st">"absorb"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://tibble.tidyverse.org/reference/view.html">view</a></span><span class="op">(</span><span class="va">ap.pivot</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Reorder the columns, so it is more intuitive for us using <code>relocate</code>:</p>
@@ -338,14 +338,14 @@ Same coding methods, different data
 <span class="header-section-number">3.3</span> Plot enzyme data</h2>
 <p>Let’s make a simple plot, adding a line that shows the linear model with the line <code>geom_smooth(method="lm")</code>. The <code>method="lm</code> means plotting a linear model.</p>
 <div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#plot, saving thr plot in an object called 'pNPP.plot'</span></span>
-<span><span class="va">pNPP.plot</span> <span class="op">&lt;-</span> <span class="va">ap.pivot</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">absorb</span>, y<span class="op">=</span><span class="va">pNPP.conc</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#plot, saving thr plot in an object called 'pNP.plot'</span></span>
+<span><span class="va">pNP.plot</span> <span class="op">&lt;-</span> <span class="va">ap.pivot</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">absorb</span>, y<span class="op">=</span><span class="va">pNP.conc</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method<span class="op">=</span><span class="st">"lm"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">#show the plot</span></span>
-<span><span class="va">pNPP.plot</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">pNP.plot</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="workshop4_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
@@ -355,7 +355,7 @@ Same coding methods, different data
 </div>
 <p>Now save the plot:</p>
 <div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"pNPP.plot.pdf"</span>,<span class="va">pNPP.plot</span><span class="op">)</span>  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"pNP.plot.pdf"</span>,<span class="va">pNP.plot</span><span class="op">)</span>  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -367,22 +367,22 @@ Optional: How close are the replicates?
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>How similar to the linear models look if you use: <code>ggplot(aes(x=absorb, y=pNPP.conc,colour = rep))</code></p>
+<p>How similar to the linear models look if you use: <code>ggplot(aes(x=absorb, y=pNP.conc,colour = rep))</code></p>
 </div>
 </div>
 </section><section id="make-and-use-a-linear-model" class="level2" data-number="3.4"><h2 data-number="3.4" class="anchored" data-anchor-id="make-and-use-a-linear-model">
 <span class="header-section-number">3.4</span> Make and use a linear model</h2>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">linear_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">pNPP.conc</span> <span class="op">~</span> <span class="va">absorb</span> , data <span class="op">=</span> <span class="va">ap.pivot</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">linear_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">pNP.conc</span> <span class="op">~</span> <span class="va">absorb</span> , data <span class="op">=</span> <span class="va">ap.pivot</span><span class="op">)</span></span>
 <span><span class="va">absorbance_values</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>absorb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>,<span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Now we have the linear model, if we have some some absorbence values, we can make a prediction of some pNPP concentrations. Here is how do it, using the <code>predict</code> function:</p>
+<p>Now we have the linear model, if we have some some absorbence values, we can make a prediction of some pNP concentrations. Here is how do it, using the <code>predict</code> function:</p>
 <div class="cell">
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#calculate predicted pNPP concentrationusing the linear model</span></span>
-<span><span class="va">predicted.pnpp.concs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">linear_model</span>,<span class="va">absorbance_values</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#calculate predicted pNP concentrationusing the linear model</span></span>
+<span><span class="va">predicted.pNP.concs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">linear_model</span>,<span class="va">absorbance_values</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">#show the values</span></span>
-<span><span class="va">predicted.pnpp.concs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">predicted.pNP.concs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <hr></section></section><section id="exercises-part-2-exploring-mcs-movement" class="level1" data-number="4"><h1 data-number="4">
 <span class="header-section-number">4</span> Exercises (Part 2): Exploring MCS movement</h1>
