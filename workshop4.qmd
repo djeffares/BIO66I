@@ -92,18 +92,30 @@ To quantify the concentration of pNP and therefore the activity of the enzyme in
 
 ## Load libraries (install packages)
 
+First, install the `gganimate` package. We will use this to creating moving plots later. You only need to do this once.
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+
+#install a new package
+install.packages("gganimate")
+```
+
+Then load all the libraries we'll need today.
+
 ```{r}
 #| echo: true
 #| warning: false
 #| eval: true
 
-rm(list=ls())
 library(tidyverse)
 library(readxl)
 library(ggpubr)
-#install.packages("gganimate")
 library(gganimate)
 ```
+
 
 ## Load data
 
@@ -381,9 +393,11 @@ anim_save("clineB.ineage2gif", animated.plot)
 This section will summarise what we have learned in the [BABS core workshop](https://3mmarand.github.io/R4BABS/r4babs4/week-1/workshop.html) and cell biology workshops; [workshop 2](https://djeffares.github.io/BIO66I/workshop2.html), [workshop 3](https://djeffares.github.io/BIO66I/workshop3.html) and [workshop 4](https://djeffares.github.io/BIO66I/workshop4.html) (this one).
 
 :::callout-important
-# It is the understanding that matters
+# Technical skills are important
 
-To be a skilled data analyst with R, you need to master some technical skills, including
+To be a skilled data analyst, you need to master some technical skills. **This is worth putting time and effort into**, because there is a demand for skilled data analysts, both within and outside of science. [This website is an example](https://uk.indeed.com/q-data-analyst-l-york-jobs.html).
+
+In this module you have learned these technical skills:
 
 - loading libraries and installing packages
 - importing data
@@ -393,17 +407,59 @@ To be a skilled data analyst with R, you need to master some technical skills, i
 :::
 
 :::callout-important
-# There are also some data-handling principles 
+# Data-handling principles are also important
 
 These are:
+
 - keep files and scripts organised
 - name variables carefully
 - comment your code
+- make your analysis clear and reproducible
 :::
 
-We will now summarise what we have learned.
+We will now summarise and review what we have learned in each workshop.
 
 ### [Data Analysis 1: Core](https://3mmarand.github.io/R4BABS/r4babs4/week-1/workshop.html) 
+
+- How to achieve reproducibility
+- Setting up an RStudio Project
+- Loading packages
+- The importance of looking at, and knowing, your data
+- Creating plots with `ggplot` to help with knowing your data
+- Quality control
+
+:::callout-important
+# It is the undertanding that matters
+Understanding takes time. Be sure you understand all these concepts well.
+:::
+
+### [Workshop 2: Cell Biology](https://djeffares.github.io/BIO66I/workshop2.html) 
+
+- Loading data from websites with `read_tsv` and `read_csv`. 
+- Exploring data with `view`, `names`, `ncol`, `ncol`, `nrow`, `summary`, and `glimpse`
+- Summarising large data sets with `dplyr`
+- Making plots to compare two or more categories with `geom_boxplot`, `geom_violin`, and `geom_jitter`
+- The differences between P-values and plotting small vs large data
+
+
+:::callout-tip
+# What does this do?
+To find out what any function does, type `?function` in the RStudio Console. For example to find out what `glimpse` does:
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+
+?glimpse
+```
+:::
+
+### [Workshop 3: Cell Biology](https://djeffares.github.io/BIO66I/workshop3.html)
+
+- using `summary` to describe a large data frame
+- adjusting plot with a log scale (often important for biological data)
+
+
 
 
 # Reflection
