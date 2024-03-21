@@ -278,6 +278,20 @@ points |>
   stat_compare_means()
 ```
 
+
+:::callout-tip
+# What does this do?
+To find out what any function does, type `?function` in the RStudio Console. For example to find out what `glimpse` does:
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+
+?glimpse
+```
+:::
+
+
 ### Plotting cell movement tracks
 
 Now, let's examine the directions do the cells move in. A simple way to do this is to plot the *x* and *y* coordinates. We will use `facet_wrap` to plot one boz for each lineage ID `LID`. Remember, a lineage ID contains information for each cell, and all its daughter cell and so on. 
@@ -388,12 +402,14 @@ animate(animated.plot, width =800, height = 800)
 anim_save("clineB.ineage2gif", animated.plot)
 ```
 
-## Revision
+# Revision
 
 This section will summarise what we have learned in the [BABS core workshop](https://3mmarand.github.io/R4BABS/r4babs4/week-1/workshop.html) and cell biology workshops; [workshop 2](https://djeffares.github.io/BIO66I/workshop2.html), [workshop 3](https://djeffares.github.io/BIO66I/workshop3.html) and [workshop 4](https://djeffares.github.io/BIO66I/workshop4.html) (this one).
 
+**If you don't recall, or are unsure about, any of these topics - look at them again.** Two principles of data science are worth recalling now:
+
 :::callout-important
-# Technical skills are important
+# 1. Technical skills are important
 
 To be a skilled data analyst, you need to master some technical skills. **This is worth putting time and effort into**, because there is a demand for skilled data analysts, both within and outside of science. [This website is an example](https://uk.indeed.com/q-data-analyst-l-york-jobs.html).
 
@@ -407,7 +423,7 @@ In this module you have learned these technical skills:
 :::
 
 :::callout-important
-# Data-handling principles are also important
+# 2. Data-handling principles are also important
 
 These are:
 
@@ -419,7 +435,9 @@ These are:
 
 We will now summarise and review what we have learned in each workshop.
 
-### [Data Analysis 1: Core](https://3mmarand.github.io/R4BABS/r4babs4/week-1/workshop.html) 
+## [Data Analysis 1: Core](https://3mmarand.github.io/R4BABS/r4babs4/week-1/workshop.html) 
+
+In this workshop, we learned:
 
 - How to achieve reproducibility
 - Setting up an RStudio Project
@@ -433,7 +451,9 @@ We will now summarise and review what we have learned in each workshop.
 Understanding takes time. Be sure you understand all these concepts well.
 :::
 
-### [Workshop 2: Cell Biology](https://djeffares.github.io/BIO66I/workshop2.html) 
+## [Workshop 2: Cell Biology](https://djeffares.github.io/BIO66I/workshop2.html) 
+
+In this workshop, we learned about:
 
 - Loading data from websites with `read_tsv` and `read_csv`. 
 - Exploring data with `view`, `names`, `ncol`, `ncol`, `nrow`, `summary`, and `glimpse`
@@ -454,20 +474,46 @@ To find out what any function does, type `?function` in the RStudio Console. For
 ```
 :::
 
-### [Workshop 3: Cell Biology](https://djeffares.github.io/BIO66I/workshop3.html)
+## [Workshop 3: Cell Biology](https://djeffares.github.io/BIO66I/workshop3.html)
 
-- using `summary` to describe a large data frame
-- adjusting plot with a log scale (often important for biological data)
+In this workshop, we learned about:
 
+- Using `summary` to describe a large data frame
+- Adjusting plot with a log scale (often important for biological data)
+- Using `facet_wrap` to create multiple panels for different replicate and so on
+- 'Reshaping' data tables with `pivot_longer`
+- Correlations between metrics in  data sets (this is very common in biological data)
+- Creating a correlation heat map
 
+## [Workshop 4: Cell Biology (this workshop)](https://djeffares.github.io/BIO66I/workshop4.html)
+
+We learned:
+
+- How to make and use a linear model to infer values from a standard curve
+- How to plot objects on two-dimensional planes
+- How to use `facet_wrap` (again)
+- How to animate plots! 
 
 
 # Reflection
 
-# After the workshop
+Ask yourself, and discuss with your classmates:
+
+- What is your favourite way to quickly get to know a data set?
+- Why do we make plots?
+- Is a statistical test always reliable? What if our data set is very small? (or very large?)
+- What is the value of both laboratory work *and* data analysis?
+- Would **you** prefer to do laboratory work, data analysis, or both?
 
 ## Consolodation exercises
 
-Optional
+To consolidate, follow up on aspects of the previous workshops that you are unsure about. Try some different plots. Break the code, then try and fix it. 
 
 ## Planning for your report
+
+The RStudio Project should:
+
+Create a logical folder structure for your analysis. The top folder should be named with your exam number, for example Y12345678, do not include your name in the submission. Your submission should include the script you used for your work, any accessory functions and the data itself.  Your script should be well-commented, well-organised and follow good practice in use of spacing, indentation and variable naming. It should include all the code required to reproduce data import and formatting as well as the summary information, analyses and figures in your report.
+
+
+

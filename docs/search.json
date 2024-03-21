@@ -480,14 +480,14 @@
     "href": "workshop4.html#consolodation-exercises",
     "title": "BIO00066I Workshop 4",
     "section": "\n6.1 Consolodation exercises",
-    "text": "6.1 Consolodation exercises\nOptional"
+    "text": "6.1 Consolodation exercises\nTo consolidate, follow up on aspects of the previous workshops that you are unsure about. Try some different plots. Break the code, then try and fix it."
   },
   {
     "objectID": "workshop4.html#planning-for-your-report",
     "href": "workshop4.html#planning-for-your-report",
     "title": "BIO00066I Workshop 4",
     "section": "\n6.2 Planning for your report",
-    "text": "6.2 Planning for your report"
+    "text": "6.2 Planning for your report\nThe RStudio Project should:\nCreate a logical folder structure for your analysis. The top folder should be named with your exam number, for example Y12345678, do not include your name in the submission. Your submission should include the script you used for your work, any accessory functions and the data itself. Your script should be well-commented, well-organised and follow good practice in use of spacing, indentation and variable naming. It should include all the code required to reproduce data import and formatting as well as the summary information, analyses and figures in your report."
   },
   {
     "objectID": "workshop4.html#technical-skills",
@@ -557,7 +557,7 @@
     "href": "workshop4.html#exploratory-plots",
     "title": "BIO00066I Workshop 4",
     "section": "\n4.3 Exploratory plots",
-    "text": "4.3 Exploratory plots\n\n4.3.1 Recap: how fast do they move\nYou’ll notice that this file has velocity, just like the last file we used in workshop 3. For a simple ‘sanity check’, we will tests again that the clones differ.\n\n\n\n\n\n\nCaution\n\n\n\nWe know that clone A moves faster than clone B. So why do it again?\nAnswer: data hygiene. We want to be very sure our data is good.\n\n\n\npoints |&gt;\n  ggplot(aes(x=clone,y=log10(velocity)))+\n  geom_violin()+\n  stat_compare_means()\n\n\n4.3.2 Plotting cell movement tracks\nNow, let’s examine the directions do the cells move in. A simple way to do this is to plot the x and y coordinates. We will use facet_wrap to plot one boz for each lineage ID LID. Remember, a lineage ID contains information for each cell, and all its daughter cell and so on.\nTo keep our image simple, we allow clone A and clone B to be on the same panels. But note that clone A, lineage ID 1 has no relationship to clone A, lineage ID 2 - they are merely the first lineage ID that Amanda tracked.\n\npoints |&gt;\n  ggplot(aes(x=x.position,y=y.position,colour=clone))+\n  geom_point(size=1)+\n  facet_wrap(~LID)\n\n#If we want to show just one clone add this line after 'points |&gt;'\n#filter(clone == \"A\")|&gt;\n\nWe can see that they wriggle about quiet a lot. They do not move in straight lines.\nshow one lineage, from one clone and colour by TID (or time)\n\npoints |&gt;\n  filter(clone == \"B\" & LID==4)|&gt;\n  ggplot(aes(x=x.position,y=y.position,colour=TID))+\n  geom_point(size=1)\n  #colour=time"
+    "text": "4.3 Exploratory plots\n\n4.3.1 Recap: how fast do they move\nYou’ll notice that this file has velocity, just like the last file we used in workshop 3. For a simple ‘sanity check’, we will tests again that the clones differ.\n\n\n\n\n\n\nCaution\n\n\n\nWe know that clone A moves faster than clone B. So why do it again?\nAnswer: data hygiene. We want to be very sure our data is good.\n\n\n\npoints |&gt;\n  ggplot(aes(x=clone,y=log10(velocity)))+\n  geom_violin()+\n  stat_compare_means()\n\n\n\n\n\n\n\nWhat does this do?\n\n\n\nTo find out what any function does, type ?function in the RStudio Console. For example to find out what glimpse does:\n\n?glimpse\n\n\n\n\n4.3.2 Plotting cell movement tracks\nNow, let’s examine the directions do the cells move in. A simple way to do this is to plot the x and y coordinates. We will use facet_wrap to plot one boz for each lineage ID LID. Remember, a lineage ID contains information for each cell, and all its daughter cell and so on.\nTo keep our image simple, we allow clone A and clone B to be on the same panels. But note that clone A, lineage ID 1 has no relationship to clone A, lineage ID 2 - they are merely the first lineage ID that Amanda tracked.\n\npoints |&gt;\n  ggplot(aes(x=x.position,y=y.position,colour=clone))+\n  geom_point(size=1)+\n  facet_wrap(~LID)\n\n#If we want to show just one clone add this line after 'points |&gt;'\n#filter(clone == \"A\")|&gt;\n\nWe can see that they wriggle about quiet a lot. They do not move in straight lines.\nshow one lineage, from one clone and colour by TID (or time)\n\npoints |&gt;\n  filter(clone == \"B\" & LID==4)|&gt;\n  ggplot(aes(x=x.position,y=y.position,colour=TID))+\n  geom_point(size=1)\n  #colour=time"
   },
   {
     "objectID": "workshop4.html#rose-plots",
@@ -593,5 +593,33 @@
     "title": "BIO00066I Workshop 4",
     "section": "\n4.6 Revision",
     "text": "4.6 Revision\nThis section will summarise what we have learned in the BABS core workshop and cell biology workshops; workshop 2, workshop 3 and workshop 4 (this one).\n\n\n\n\n\n\nTechnical skills are important\n\n\n\nTo be a skilled data analyst, you need to master some technical skills. This is worth putting time and effort into, because there is a demand for skilled data analysts, both within and outside of science. This website is an example.\nIn this module you have learned these technical skills:\n\nloading libraries and installing packages\nimporting data\nfiltering rows to obtain subset of the data (using filter)\nselecting columns to keep data simple (using select)\ncreating plots\n\n\n\n\n\n\n\n\n\nData-handling principles are also important\n\n\n\nThese are:\n\nkeep files and scripts organised\nname variables carefully\ncomment your code\nmake your analysis clear and reproducible\n\n\n\nWe will now summarise and review what we have learned in each workshop.\n\n4.6.1 Data Analysis 1: Core\n\n\nHow to achieve reproducibility\nSetting up an RStudio Project\nLoading packages\nThe importance of looking at, and knowing, your data\nCreating plots with ggplot to help with knowing your data\nQuality control\n\n\n\n\n\n\n\nIt is the undertanding that matters\n\n\n\nUnderstanding takes time. Be sure you understand all these concepts well.\n\n\n\n4.6.2 Workshop 2: Cell Biology\n\n\nLoading data from websites with read_tsv and read_csv.\nExploring data with view, names, ncol, ncol, nrow, summary, and glimpse\n\nSummarising large data sets with dplyr\n\nMaking plots to compare two or more categories with geom_boxplot, geom_violin, and geom_jitter\n\nThe differences between P-values and plotting small vs large data\n\n\n\n\n\n\n\nWhat does this do?\n\n\n\nTo find out what any function does, type ?function in the RStudio Console. For example to find out what glimpse does:\n\n?glimpse\n\n\n\n\n4.6.3 Workshop 3: Cell Biology\n\n\nusing summary to describe a large data frame\nadjusting plot with a log scale (often important for biological data)"
+  },
+  {
+    "objectID": "workshop4.html#data-analysis-1-core",
+    "href": "workshop4.html#data-analysis-1-core",
+    "title": "BIO00066I Workshop 4",
+    "section": "\n5.1 Data Analysis 1: Core\n",
+    "text": "5.1 Data Analysis 1: Core\n\nIn this workshop, we learned:\n\nHow to achieve reproducibility\nSetting up an RStudio Project\nLoading packages\nThe importance of looking at, and knowing, your data\nCreating plots with ggplot to help with knowing your data\nQuality control\n\n\n\n\n\n\n\nIt is the undertanding that matters\n\n\n\nUnderstanding takes time. Be sure you understand all these concepts well."
+  },
+  {
+    "objectID": "workshop4.html#workshop-2-cell-biology",
+    "href": "workshop4.html#workshop-2-cell-biology",
+    "title": "BIO00066I Workshop 4",
+    "section": "\n5.2 Workshop 2: Cell Biology\n",
+    "text": "5.2 Workshop 2: Cell Biology\n\nIn this workshop, we learned about:\n\nLoading data from websites with read_tsv and read_csv.\nExploring data with view, names, ncol, ncol, nrow, summary, and glimpse\n\nSummarising large data sets with dplyr\n\nMaking plots to compare two or more categories with geom_boxplot, geom_violin, and geom_jitter\n\nThe differences between P-values and plotting small vs large data\n\n\n\n\n\n\n\nWhat does this do?\n\n\n\nTo find out what any function does, type ?function in the RStudio Console. For example to find out what glimpse does:\n\n?glimpse"
+  },
+  {
+    "objectID": "workshop4.html#workshop-3-cell-biology",
+    "href": "workshop4.html#workshop-3-cell-biology",
+    "title": "BIO00066I Workshop 4",
+    "section": "\n5.3 Workshop 3: Cell Biology\n",
+    "text": "5.3 Workshop 3: Cell Biology\n\nIn this workshop, we learned about:\n\nUsing summary to describe a large data frame\nAdjusting plot with a log scale (often important for biological data)\nUsing facet_wrap to create multiple panels for different replicate and so on\n‘Reshaping’ data tables with pivot_longer\n\nCorrelations between metrics in data sets (this is very common in biological data)\nCreating a correlation heat map"
+  },
+  {
+    "objectID": "workshop4.html#workshop-4-cell-biology-this-workshop",
+    "href": "workshop4.html#workshop-4-cell-biology-this-workshop",
+    "title": "BIO00066I Workshop 4",
+    "section": "\n5.4 Workshop 4: Cell Biology (this workshop)\n",
+    "text": "5.4 Workshop 4: Cell Biology (this workshop)\n\nWe learned:\n\nHow to make and use a linear model to infer values from a standard curve\nHow to plot objects on two-dimensional planes\nHow to use facet_wrap (again)\nHow to animate plots!"
   }
 ]
