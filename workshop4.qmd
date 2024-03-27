@@ -239,13 +239,14 @@ Here is how do it, using the `predict` function:
 ```{r}
 #| echo: true
 #| warning: false
-#| eval: false
+#| eval: true
 
 #calculate predicted pNP concentration using the linear model
 predictions.from.lm <- predict(linear_model,mock)
+
 #Add these predictions from the linear model (predictions.from.lm)
 #As a new column
-mock$predicted.pNP.concs = predicted.pNP.concs
+mock$predicted.pNP.concs = predictions.from.lm
 
 #check what we have
 view(mock)
@@ -262,7 +263,7 @@ First, we need to ensure that the `day`, `clone` and `differentiated` columns ar
 ```{R}
 #| echo: true
 #| warning: false
-#| eval: false
+#| eval: true
 
 mock$day <-as.factor(mock$day)
 mock$clone <-as.factor(mock$clone)
@@ -274,7 +275,7 @@ Then we can make a plot:
 ```{R}
 #| echo: true
 #| warning: false
-#| eval: false
+#| eval: true
 
 #make the plot
 ggplot(data=mock, aes(x=day, y=predicted.pNP.concs,fill=clone:differentiated)) +
@@ -282,6 +283,7 @@ ggplot(data=mock, aes(x=day, y=predicted.pNP.concs,fill=clone:differentiated)) +
 
 ```
 
+**Note** that this dummy data may look *very* different from your real data.
 
 ## End of Part 1.
 
