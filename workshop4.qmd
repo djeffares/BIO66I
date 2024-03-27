@@ -112,7 +112,7 @@ library(gganimate)
 
 ## Load data
 
-First, read in some ata from an Excel file. You can obtain [an example file from here](https://djeffares.github.io/BIO66I/example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx). Click to download, and then save the file in your **raw-data** directory. If you dno't have a **raw-data** directory, make one!
+First, read in some ata from an Excel file. You can obtain [an example file from here](https://djeffares.github.io/BIO66I/example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx). Click to download, and then save the file in your **raw-data** directory. If you don't have a **raw-data** directory, make one!
 
 Then read in the Excel file. Two important things to note about reading Excel files:
 
@@ -223,11 +223,10 @@ Now we calculate the average for each of the three explicates using `mutate`. No
 #| echo: true
 #| warning: false
 #| eval: true
-
 mock <- mock |> 
-  rowwise() %>% 
-  mutate(absorb=mean(c(absorb.rep1,absorb.rep2,absorb.rep3))) |> 
-  select(-absorb.rep1, -absorb.rep2, -absorb.rep3)
+  rowwise() |> 
+  mutate(absorb=mean(c(absorb.rep1,absorb.rep2,absorb.rep3),na.rm=T)) 
+
 ```
 
 We named our mean absorbance `absorb`  because we specified the `absorb` variable in the code `linear_model <- lm(pNP.conc ~ absorb , data = ap.pivot)` above. So our linear model is 'looking for' an absorb variable to use.
@@ -244,7 +243,6 @@ Here is how do it, using the `predict` function:
 
 #calculate predicted pNP concentration using the linear model
 predictions.from.lm <- predict(linear_model,mock)
-
 #Add these predictions from the linear model (predictions.from.lm)
 #As a new column
 mock$predicted.pNP.concs = predicted.pNP.concs
@@ -256,10 +254,37 @@ view(mock)
 save.image("chocolate-fish.Rda")
 ```
 
+## making a bar plot of predicted pNP concetrations
+
+First, we need to ensure that the `day`, `clone` and `differentiated` columns are set as **factors*. This is important because we want to treat these columns as **categories**, not **numeric values**:
+
+
+```{R}
+#| echo: true
+#| warning: false
+#| eval: false
+
+mock$day <-as.factor(mock$day)
+mock$clone <-as.factor(mock$clone)
+mock$differentiated <-as.factor(mock$differentiated)
+```
+
+Then we can make a plot:
+
+```{R}
+#| echo: true
+#| warning: false
+#| eval: false
+
+#make the plot
+ggplot(data=mock, aes(x=day, y=predicted.pNP.concs,fill=clone:differentiated)) +
+  geom_bar(stat="identity", position=position_dodge())
+
+```
+
 
 ## End of Part 1.
 
-Later, we will update this page to include some analysis.
 
 ------------------------------------------------------------------------
 

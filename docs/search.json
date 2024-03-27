@@ -515,7 +515,7 @@
     "href": "workshop4.html#load-data",
     "title": "BIO00066I Workshop 4",
     "section": "\n3.2 Load data",
-    "text": "3.2 Load data\nFirst, read in some ata from an Excel file. You can obtain an example file from here. Click to download, and then save the file in your raw-data directory. If you dno’t have a raw-data directory, make one!\nThen read in the Excel file. Two important things to note about reading Excel files:\n\nwe use sheet=1 to specify that we want the first sheet (or tab)\nwe use skip=3 to specify that we want to skip the first three lines (because they are comments, not data)\n\n\nap&lt;-read_excel(\"raw-data/example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx\", sheet=1, skip=3)\n\n#check what we have\nview(ap)\n\nThen simplify the data with pivot_longer:\n\nap.pivot &lt;- \n  ap |&gt; \n  select(-mean.abs, -standard.deviation) |&gt;\n  pivot_longer(-pNP.conc, names_to = \"rep\", values_to = \"absorb\")\nview(ap.pivot)\n\nReorder the columns, so it is more intuitive for us using relocate:\n\nap.pivot &lt;- relocate(ap.pivot, absorb)"
+    "text": "3.2 Load data\nFirst, read in some ata from an Excel file. You can obtain an example file from here. Click to download, and then save the file in your raw-data directory. If you don’t have a raw-data directory, make one!\nThen read in the Excel file. Two important things to note about reading Excel files:\n\nwe use sheet=1 to specify that we want the first sheet (or tab)\nwe use skip=3 to specify that we want to skip the first three lines (because they are comments, not data)\n\n\nap&lt;-read_excel(\"raw-data/example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx\", sheet=1, skip=3)\n\n#check what we have\nview(ap)\n\nThen simplify the data with pivot_longer:\n\nap.pivot &lt;- \n  ap |&gt; \n  select(-mean.abs, -standard.deviation) |&gt;\n  pivot_longer(-pNP.conc, names_to = \"rep\", values_to = \"absorb\")\nview(ap.pivot)\n\nReorder the columns, so it is more intuitive for us using relocate:\n\nap.pivot &lt;- relocate(ap.pivot, absorb)"
   },
   {
     "objectID": "workshop4.html#plot-enzyme-data",
@@ -585,7 +585,7 @@
     "href": "workshop4.html#make-and-use-a-linear-model",
     "title": "BIO00066I Workshop 4",
     "section": "\n3.4 Make and use a linear model",
-    "text": "3.4 Make and use a linear model\n\nlinear_model &lt;- lm(pNP.conc ~ absorb , data = ap.pivot)\n\nNow we have the linear model, if we have some some pNP absorbence values, we can make a prediction of the pNPP enzyme concentrations. We have put some mock pNP values in the excel file example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx, in sheet two. You’ll need to adjust the code below to correct sheet=0, skip=0.\n\nmock&lt;-read_excel(\"raw-data/example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx\", sheet=0, skip=0)\n\n#check what we have\nview(mock)\n\nNow we calculate the average for each of the three explicates using mutate. Note that mutate is a very useful function for creating new columns using existing ones. It can also join text columns. We can also use select after the mutation to remove the replicate columns.\n\nmock &lt;- mock |&gt; \n  rowwise() %&gt;% \n  mutate(absorb=mean(c(absorb.rep1,absorb.rep2,absorb.rep3))) |&gt; \n  select(-absorb.rep1, -absorb.rep2, -absorb.rep3)\n\nWe named our mean absorbance absorb because we specified the absorb variable in the code linear_model &lt;- lm(pNP.conc ~ absorb , data = ap.pivot) above. So our linear model is ‘looking for’ an absorb variable to use."
+    "text": "3.4 Make and use a linear model\n\nlinear_model &lt;- lm(pNP.conc ~ absorb , data = ap.pivot)\n\nNow we have the linear model, if we have some some pNP absorbence values, we can make a prediction of the pNPP enzyme concentrations. We have put some mock pNP values in the excel file example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx, in sheet two. You’ll need to adjust the code below to correct sheet=0, skip=0.\n\nmock&lt;-read_excel(\"raw-data/example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx\", sheet=0, skip=0)\n\n#check what we have\nview(mock)\n\nNow we calculate the average for each of the three explicates using mutate. Note that mutate is a very useful function for creating new columns using existing ones. It can also join text columns. We can also use select after the mutation to remove the replicate columns.\n\nmock &lt;- mock |&gt; \n  rowwise() |&gt; \n  mutate(absorb=mean(c(absorb.rep1,absorb.rep2,absorb.rep3),na.rm=T)) \n\nWe named our mean absorbance absorb because we specified the absorb variable in the code linear_model &lt;- lm(pNP.conc ~ absorb , data = ap.pivot) above. So our linear model is ‘looking for’ an absorb variable to use."
   },
   {
     "objectID": "workshop4.html#revision",
@@ -640,7 +640,14 @@
     "objectID": "workshop4.html#end-of-part-1.",
     "href": "workshop4.html#end-of-part-1.",
     "title": "BIO00066I Workshop 4",
-    "section": "\n4.1 End of Part 1.",
-    "text": "4.1 End of Part 1.\nLater, we will update this page to include some analysis."
+    "section": "\n4.2 End of Part 1.",
+    "text": "4.2 End of Part 1."
+  },
+  {
+    "objectID": "workshop4.html#making-a-bar-plot-of-predicted-pnp-concetrations",
+    "href": "workshop4.html#making-a-bar-plot-of-predicted-pnp-concetrations",
+    "title": "BIO00066I Workshop 4",
+    "section": "\n4.1 making a bar plot of predicted pNP concetrations",
+    "text": "4.1 making a bar plot of predicted pNP concetrations\nFirst, we need to ensure that the day, clone and differentiated columns are set as **factors*. This is important because we want to treat these columns as categories, not numeric values:\n\nmock$day &lt;-as.factor(mock$day)\nmock$clone &lt;-as.factor(mock$clone)\nmock$differentiated &lt;-as.factor(mock$differentiated)\n\nThen we hace calculate the mean\n\nmock &lt;- mock |&gt; \n  rowwise() |&gt; \n  mutate(absorb=mean(c(absorb.rep1,absorb.rep2,absorb.rep3)))\n\nggplot(data=mock, aes(x=day, y=predicted.pNP.concs,fill=clone:differentiated)) +\n  geom_bar(stat=\"identity\", position=position_dodge())"
   }
 ]
