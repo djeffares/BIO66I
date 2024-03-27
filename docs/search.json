@@ -648,6 +648,6 @@
     "href": "workshop4.html#making-a-bar-plot-of-predicted-pnp-concetrations",
     "title": "BIO00066I Workshop 4",
     "section": "\n4.1 making a bar plot of predicted pNP concetrations",
-    "text": "4.1 making a bar plot of predicted pNP concetrations\nFirst, we need to ensure that the day, clone and differentiated columns are set as **factors*. This is important because we want to treat these columns as categories, not numeric values:\n\nmock$day &lt;-as.factor(mock$day)\nmock$clone &lt;-as.factor(mock$clone)\nmock$differentiated &lt;-as.factor(mock$differentiated)\n\nThen we hace calculate the mean\n\nmock &lt;- mock |&gt; \n  rowwise() |&gt; \n  mutate(absorb=mean(c(absorb.rep1,absorb.rep2,absorb.rep3)))\n\nggplot(data=mock, aes(x=day, y=predicted.pNP.concs,fill=clone:differentiated)) +\n  geom_bar(stat=\"identity\", position=position_dodge())"
+    "text": "4.1 making a bar plot of predicted pNP concetrations\nFirst, we need to ensure that the day, clone and differentiated columns are set as **factors*. This is important because we want to treat these columns as categories, not numeric values:\n\nmock$day &lt;-as.factor(mock$day)\nmock$clone &lt;-as.factor(mock$clone)\nmock$differentiated &lt;-as.factor(mock$differentiated)\n\nThen we can make a plot:\n\n#make the plot\nggplot(data=mock, aes(x=day, y=predicted.pNP.concs,fill=clone:differentiated)) +\n  geom_bar(stat=\"identity\", position=position_dodge())"
   }
 ]
