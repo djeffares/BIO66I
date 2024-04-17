@@ -620,17 +620,17 @@ Create a logical folder structure for your analysis. The top folder should be na
 
 In practical 4, you collected absorbance readings for concentrations of pNP in triplicate, to provide an indication of the two clones to undergo osteogenesis. pNP concentrations were measured in day 0,4 and 8, and at each time point you have data for both induced cells and non-induced cells (negative control), with the exception of day 0 as the differentiation was induced at day 1.
 
-To find out which the conditions affect the pNP, we can carry out a three-way ANOVA is used to compare the effects of three **grouping variables** (day, clone and induction condition) on the one **response variable** pNP concentration.
+To find out which the conditions affect the pNP, we can carry out a three-way ANOVA is used to compare the effects of three **grouping variables** (day, clone and induction condition) on the one **response variable** (pNP concentration).
 
-The methods below show you how to do this. We first start by assuming that the grouping variables do not interact (ie: combinations of two factors don't cause different outcomes to each factor alone), in what is called an **additive model (or multiplicative) model**.
+The methods below show you how to do this. We first start by assuming that the grouping variables do not interact (ie: combinations of two factors don't cause different outcomes to each factor alone), in what is called an **additive model**. 
+
+But the three grouping variables may have interacting effects, and not be independent. So then we then examine a non-additive (or multiplicative) model. You'll see more clearly what this means as you do the analysis.
 
 :::callout-note
 # An example of a multiplicative model
 Two people (A and B) walk back to their hotel, in a city they don't know well. Last time, when they both had their phones, it took 30 minutes. When person A lost their phone, so it took 35 minutes (ie: +5 minutes). When **both** A and B lost their phones, it took 60 minutes. This much longer we would expect the lost-phones problem was simply an **additive** effect of two phone being lost (30 + 5 + 5). The problems were multiplicative rather than merely additive.
 :::
 
-
-But the three grouping variables may have interacting effects, and not be independent. So then we then examine a non additive model. You'll see more clearly what this means as you do the analysis.
 
 ## Read data and reformat with `pivot_longer`
 
@@ -757,7 +757,7 @@ aov.result.mult  <- aov(absorb ~ day * clone * induced, data = ap.pivot)
 summary(aov.result.mult)
 ```
 
-**Interpretation:** Where the p-values `Pr(>F)` are < 0.05, we have a significant effect of this factor on the pNP level (and therefore osteogenesis). The multiplicative tests all single factors, all pairwise factors (eg: `day:clone`) and th interaction of all three factors(`day:clone:induced`).
+**Interpretation:** The multiplicative model all single factors, all pairwise factors (eg: `day:clone`) and the interaction of all three factors(`day:clone:induced`). Where the p-values `Pr(>F)` are < 0.05, we have a significant effect of this factor (or factors) on the pNP level (and therefore osteogenesis). 
 
 
 # The End

@@ -748,8 +748,9 @@ What does this do?
 </section></section><section id="supplementary-analysis-three-way-anova" class="level1" data-number="8"><h1 data-number="8">
 <span class="header-section-number">8</span> Supplementary analysis: three-way ANOVA</h1>
 <p>In practical 4, you collected absorbance readings for concentrations of pNP in triplicate, to provide an indication of the two clones to undergo osteogenesis. pNP concentrations were measured in day 0,4 and 8, and at each time point you have data for both induced cells and non-induced cells (negative control), with the exception of day 0 as the differentiation was induced at day 1.</p>
-<p>To find out which the conditions affect the pNP, we can carry out a three-way ANOVA is used to compare the effects of three <strong>grouping variables</strong> (day, clone and induction condition) on the one <strong>response variable</strong> pNP concentration.</p>
-<p>The methods below show you how to do this. We first start by assuming that the grouping variables do not interact (ie: combinations of two factors don’t cause different outcomes to each factor alone), in what is called an <strong>additive model (or multiplicative) model</strong>.</p>
+<p>To find out which the conditions affect the pNP, we can carry out a three-way ANOVA is used to compare the effects of three <strong>grouping variables</strong> (day, clone and induction condition) on the one <strong>response variable</strong> (pNP concentration).</p>
+<p>The methods below show you how to do this. We first start by assuming that the grouping variables do not interact (ie: combinations of two factors don’t cause different outcomes to each factor alone), in what is called an <strong>additive model</strong>.</p>
+<p>But the three grouping variables may have interacting effects, and not be independent. So then we then examine a non-additive (or multiplicative) model. You’ll see more clearly what this means as you do the analysis.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -763,7 +764,6 @@ An example of a multiplicative model
 <p>Two people (A and B) walk back to their hotel, in a city they don’t know well. Last time, when they both had their phones, it took 30 minutes. When person A lost their phone, so it took 35 minutes (ie: +5 minutes). When <strong>both</strong> A and B lost their phones, it took 60 minutes. This much longer we would expect the lost-phones problem was simply an <strong>additive</strong> effect of two phone being lost (30 + 5 + 5). The problems were multiplicative rather than merely additive.</p>
 </div>
 </div>
-<p>But the three grouping variables may have interacting effects, and not be independent. So then we then examine a non additive model. You’ll see more clearly what this means as you do the analysis.</p>
 <section id="read-data-and-reformat-with-pivot_longer" class="level2" data-number="8.1"><h2 data-number="8.1" class="anchored" data-anchor-id="read-data-and-reformat-with-pivot_longer">
 <span class="header-section-number">8.1</span> Read data and reformat with <code>pivot_longer</code>
 </h2>
@@ -843,7 +843,7 @@ Interpretation
 <span><span class="co">#to view the results</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">aov.result.mult</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Interpretation:</strong> Where the p-values <code>Pr(&gt;F)</code> are &lt; 0.05, we have a significant effect of this factor on the pNP level (and therefore osteogenesis). The multiplicative tests all single factors, all pairwise factors (eg: <code>day:clone</code>) and th interaction of all three factors(<code>day:clone:induced</code>).</p>
+<p><strong>Interpretation:</strong> The multiplicative model all single factors, all pairwise factors (eg: <code>day:clone</code>) and the interaction of all three factors(<code>day:clone:induced</code>). Where the p-values <code>Pr(&gt;F)</code> are &lt; 0.05, we have a significant effect of this factor (or factors) on the pNP level (and therefore osteogenesis).</p>
 </section></section><section id="the-end" class="level1" data-number="9"><h1 data-number="9">
 <span class="header-section-number">9</span> The End</h1>
 <div class="callout callout-style-default callout-tip callout-titled">
