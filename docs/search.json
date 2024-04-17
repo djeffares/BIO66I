@@ -647,7 +647,49 @@
     "objectID": "workshop4.html#making-a-bar-plot-of-predicted-pnp-concetrations",
     "href": "workshop4.html#making-a-bar-plot-of-predicted-pnp-concetrations",
     "title": "BIO00066I Workshop 4",
-    "section": "\n4.1 making a bar plot of predicted pNP concetrations",
-    "text": "4.1 making a bar plot of predicted pNP concetrations\nFirst, we need to ensure that the day, clone and differentiated columns are set as **factors*. This is important because we want to treat these columns as categories, not numeric values:\n\nmock$day &lt;-as.factor(mock$day)\nmock$clone &lt;-as.factor(mock$clone)\nmock$differentiated &lt;-as.factor(mock$differentiated)\n\nThen we can make a plot:\n\n#make the plot\nggplot(data=mock, aes(x=day, y=predicted.pNP.concs,fill=clone:differentiated)) +\n  geom_bar(stat=\"identity\", position=position_dodge())\n\n\n\n\n\n\n\nNote that this dummy data may look very different from your real data."
+    "section": "\n4.1 Making a bar plot of predicted pNP concetrations",
+    "text": "4.1 Making a bar plot of predicted pNP concetrations\nFirst, we need to ensure that the day, clone and differentiated columns are set as **factors*. This is important because we want to treat these columns as categories, not numeric values:\n\nmock$day &lt;-as.factor(mock$day)\nmock$clone &lt;-as.factor(mock$clone)\nmock$differentiated &lt;-as.factor(mock$differentiated)\n\nThen we can make a plot:\n\n#make the plot\nggplot(data=mock, aes(x=day, y=predicted.pNP.concs,fill=clone:differentiated)) +\n  geom_bar(stat=\"identity\", position=position_dodge())\n\n\n\n\n\n\n\nNote that this dummy data may look very different from your real data."
+  },
+  {
+    "objectID": "workshop4.html#supplemnetary-analysis-three-way-anova",
+    "href": "workshop4.html#supplemnetary-analysis-three-way-anova",
+    "title": "BIO00066I Workshop 4",
+    "section": "\n7.3 Supplemnetary analysis three-way ANOVA",
+    "text": "7.3 Supplemnetary analysis three-way ANOVA"
+  },
+  {
+    "objectID": "workshop4.html#read-data-and-reformat-with-pivot_longer",
+    "href": "workshop4.html#read-data-and-reformat-with-pivot_longer",
+    "title": "BIO00066I Workshop 4",
+    "section": "\n8.1 Read data and reformat with pivot_longer\n",
+    "text": "8.1 Read data and reformat with pivot_longer\n\nWe’ll assume you have the tidyverse and readxl libraries load already. If not load these now.\nFirst, we load the data. Your data file might have a different name. This code will work without adjustment of your file has the same rows and columns as this example file. We’ll also rename a column, so it’s more intuitive.\n\n#load the data\nap&lt;-read_excel(\"raw-data/alkaline-phosphatase-activity-assay-real-data.xlsx\",sheet=2)\n\n#rename the 'differentiated' column 'induced', which describes it better\nnames(ap)[3]&lt;-'induced'\n\nThen we need to set some columns to be factors:\n\n#set day, clone and induced columns to be factors\nap$day &lt;-as.factor(ap$day)\nap$clone &lt;-as.factor(ap$clone)\nap$induced &lt;-as.factor(ap$induced)\n\n#this is what we have:\nhead(ap)\n\nNow we use pivot_longer to reformat the data, so we can use all the repeats. The cols=!c(day,clone,differentiated) part indicates that the day,clone,differentiated columns are not to be lengthened in to the ‘absorb’ column. So it is onlyabsorptionrep1,absorptionrep2 and absorptionrep3 that are put into the ‘absorb’ column.\n\nap.pivot&lt;-ap |&gt; \n  pivot_longer(cols=!c(day,clone,induced), names_to = \"rep\", values_to = \"absorb\")\n\n#this is what we have now\nhead(ap.pivot)"
+  },
+  {
+    "objectID": "workshop4.html#make-some-plots",
+    "href": "workshop4.html#make-some-plots",
+    "title": "BIO00066I Workshop 4",
+    "section": "\n8.2 Make some plots",
+    "text": "8.2 Make some plots\nIf we look at the absorbance by day, we can see that absorbance goes up each day. Here we are ignoring the media (induced).\n\nggplot(ap.pivot, aes(x = clone, y = absorb, color = day))+\n  geom_boxplot()+\n  theme_classic()\n\nThen we can use facet_wrap to examine the data by day and by media. We can see that clone A has much higher values in the differentiation media.\n\nggplot(ap.pivot, aes(x = clone, y = absorb, color = day))+\n  geom_boxplot()+\n  theme_classic()+\n  facet_wrap(~induced)"
+  },
+  {
+    "objectID": "workshop4.html#anova-additive-model",
+    "href": "workshop4.html#anova-additive-model",
+    "title": "BIO00066I Workshop 4",
+    "section": "\n8.3 ANOVA (additive model)",
+    "text": "8.3 ANOVA (additive model)\nTo find out if there is evidence that the absorbance value affected by day, clone or media using an ANOVA, we can use the the R function aov().\n\n#we save the result in an object called aov.result.additive\naov.result.add &lt;- aov(absorb ~ day + clone + induced, data = ap.pivot)\n\nTo view the results, we do:\n\nsummary(aov.result.add)\n\n\n\n\n\n\n\nInterpretation\n\n\n\nWhen p-values are &lt; 0.05, this means we have a significant effect from this factor.  Do day, clone, and the induction media all have a significant effects?"
+  },
+  {
+    "objectID": "workshop4.html#anova-additive-model-1",
+    "href": "workshop4.html#anova-additive-model-1",
+    "title": "BIO00066I Workshop 4",
+    "section": "\n8.4 ANOVA (additive model)",
+    "text": "8.4 ANOVA (additive model)\nNow then examine a multiplicative (non additive) model. Here we examine whether interactions between the factors affect the pNP levels. To test this, we simple replace the plus symbol (+) with an asterisk (*) in our code:\n\n#run the ANOVA\naov.result.mult  &lt;- aov(absorb ~ day * clone * induced, data = ap.pivot)\n\n#to view the results\nsummary(aov.result.mult)\n\nInterpretation: Where the p-values Pr(&gt;F) are &lt; 0.05, we have a significant effect of this factor on the pNP level (and therefore osteogenesis). The multiplicative tests all single factors, all pairwise factors (eg: day:clone) and th interaction of all three factors(day:clone:induced)."
+  },
+  {
+    "objectID": "workshop4.html#anova-multiplicative-model",
+    "href": "workshop4.html#anova-multiplicative-model",
+    "title": "BIO00066I Workshop 4",
+    "section": "\n8.4 ANOVA (multiplicative model)",
+    "text": "8.4 ANOVA (multiplicative model)\nNow then examine a multiplicative (non additive) model. Here we examine whether interactions between the factors affect the pNP levels. To test this, we simple replace the plus symbol (+) with an asterisk (*) in our code:\n\n#run the ANOVA\naov.result.mult  &lt;- aov(absorb ~ day * clone * induced, data = ap.pivot)\n\n#to view the results\nsummary(aov.result.mult)\n\nInterpretation: Where the p-values Pr(&gt;F) are &lt; 0.05, we have a significant effect of this factor on the pNP level (and therefore osteogenesis). The multiplicative tests all single factors, all pairwise factors (eg: day:clone) and th interaction of all three factors(day:clone:induced)."
   }
 ]

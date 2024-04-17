@@ -168,7 +168,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li>
 <a href="#predict-values-based-on-a-linear-model" id="toc-predict-values-based-on-a-linear-model" class="nav-link" data-scroll-target="#predict-values-based-on-a-linear-model"><span class="header-section-number">4</span> Predict values based on a linear model</a>
   <ul class="collapse">
-<li><a href="#making-a-bar-plot-of-predicted-pnp-concetrations" id="toc-making-a-bar-plot-of-predicted-pnp-concetrations" class="nav-link" data-scroll-target="#making-a-bar-plot-of-predicted-pnp-concetrations"><span class="header-section-number">4.1</span> making a bar plot of predicted pNP concetrations</a></li>
+<li><a href="#making-a-bar-plot-of-predicted-pnp-concetrations" id="toc-making-a-bar-plot-of-predicted-pnp-concetrations" class="nav-link" data-scroll-target="#making-a-bar-plot-of-predicted-pnp-concetrations"><span class="header-section-number">4.1</span> Making a bar plot of predicted pNP concetrations</a></li>
   <li><a href="#end-of-part-1." id="toc-end-of-part-1." class="nav-link" data-scroll-target="#end-of-part-1."><span class="header-section-number">4.2</span> End of Part 1.</a></li>
   </ul>
 </li>
@@ -198,6 +198,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#planning-for-your-report" id="toc-planning-for-your-report" class="nav-link" data-scroll-target="#planning-for-your-report"><span class="header-section-number">7.2</span> Planning for your report</a></li>
   </ul>
 </li>
+  <li>
+<a href="#supplementary-analysis-three-way-anova" id="toc-supplementary-analysis-three-way-anova" class="nav-link" data-scroll-target="#supplementary-analysis-three-way-anova"><span class="header-section-number">8</span> Supplementary analysis: three-way ANOVA</a>
+  <ul class="collapse">
+<li><a href="#read-data-and-reformat-with-pivot_longer" id="toc-read-data-and-reformat-with-pivot_longer" class="nav-link" data-scroll-target="#read-data-and-reformat-with-pivot_longer"><span class="header-section-number">8.1</span> Read data and reformat with <code>pivot_longer</code></a></li>
+  <li><a href="#make-some-plots" id="toc-make-some-plots" class="nav-link" data-scroll-target="#make-some-plots"><span class="header-section-number">8.2</span> Make some plots</a></li>
+  <li><a href="#anova-additive-model" id="toc-anova-additive-model" class="nav-link" data-scroll-target="#anova-additive-model"><span class="header-section-number">8.3</span> ANOVA (additive model)</a></li>
+  <li><a href="#anova-multiplicative-model" id="toc-anova-multiplicative-model" class="nav-link" data-scroll-target="#anova-multiplicative-model"><span class="header-section-number">8.4</span> ANOVA (multiplicative model)</a></li>
+  </ul>
+</li>
+  <li><a href="#the-end" id="toc-the-end" class="nav-link" data-scroll-target="#the-end"><span class="header-section-number">9</span> The End</a></li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -418,7 +428,7 @@ Optional: How close are the replicates?
 <span><span class="fu"><a href="https://rdrr.io/r/base/save.html">save.image</a></span><span class="op">(</span><span class="st">"chocolate-fish.Rda"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="making-a-bar-plot-of-predicted-pnp-concetrations" class="level2" data-number="4.1"><h2 data-number="4.1" class="anchored" data-anchor-id="making-a-bar-plot-of-predicted-pnp-concetrations">
-<span class="header-section-number">4.1</span> making a bar plot of predicted pNP concetrations</h2>
+<span class="header-section-number">4.1</span> Making a bar plot of predicted pNP concetrations</h2>
 <p>First, we need to ensure that the <code>day</code>, <code>clone</code> and <code>differentiated</code> columns are set as **factors*. This is important because we want to treat these columns as <strong>categories</strong>, not <strong>numeric values</strong>:</p>
 <div class="cell">
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mock</span><span class="op">$</span><span class="va">day</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">mock</span><span class="op">$</span><span class="va">day</span><span class="op">)</span></span>
@@ -735,9 +745,123 @@ What does this do?
 <span class="header-section-number">7.2</span> Planning for your report</h2>
 <p>The RStudio Project should:</p>
 <p>Create a logical folder structure for your analysis. The top folder should be named with your exam number, for example Y12345678, do not include your name in the submission. Your submission should include the script you used for your work, any accessory functions and the data itself. Your script should be well-commented, well-organised and follow good practice in use of spacing, indentation and variable naming. It should include all the code required to reproduce data import and formatting as well as the summary information, analyses and figures in your report.</p>
+</section></section><section id="supplementary-analysis-three-way-anova" class="level1" data-number="8"><h1 data-number="8">
+<span class="header-section-number">8</span> Supplementary analysis: three-way ANOVA</h1>
+<p>In practical 4, you collected absorbance readings for concentrations of pNP in triplicate, to provide an indication of the two clones to undergo osteogenesis. pNP concentrations were measured in day 0,4 and 8, and at each time point you have data for both induced cells and non-induced cells (negative control), with the exception of day 0 as the differentiation was induced at day 1.</p>
+<p>To find out which the conditions affect the pNP, we can carry out a three-way ANOVA is used to compare the effects of three <strong>grouping variables</strong> (day, clone and induction condition) on the one <strong>response variable</strong> pNP concentration.</p>
+<p>The methods below show you how to do this. We first start by assuming that the grouping variables do not interact (ie: combinations of two factors don’t cause different outcomes to each factor alone), in what is called an <strong>additive model (or multiplicative) model</strong>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+An example of a multiplicative model
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Two people (A and B) walk back to their hotel, in a city they don’t know well. Last time, when they both had their phones, it took 30 minutes. When person A lost their phone, so it took 35 minutes (ie: +5 minutes). When <strong>both</strong> A and B lost their phones, it took 60 minutes. This much longer we would expect the lost-phones problem was simply an <strong>additive</strong> effect of two phone being lost (30 + 5 + 5). The problems were multiplicative rather than merely additive.</p>
+</div>
+</div>
+<p>But the three grouping variables may have interacting effects, and not be independent. So then we then examine a non additive model. You’ll see more clearly what this means as you do the analysis.</p>
+<section id="read-data-and-reformat-with-pivot_longer" class="level2" data-number="8.1"><h2 data-number="8.1" class="anchored" data-anchor-id="read-data-and-reformat-with-pivot_longer">
+<span class="header-section-number">8.1</span> Read data and reformat with <code>pivot_longer</code>
+</h2>
+<p>We’ll assume you have the <code>tidyverse</code> and <code>readxl</code> libraries load already. If not load these now.</p>
+<p>First, we load the data. Your data file might have a different name. This code will work without adjustment of your file has the same rows and columns as <a href="https://djeffares.github.io/BIO66I/example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx">this example file</a>. We’ll also rename a column, so it’s more intuitive.</p>
+<div class="cell">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#load the data</span></span>
+<span><span class="va">ap</span><span class="op">&lt;-</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"raw-data/alkaline-phosphatase-activity-assay-real-data.xlsx"</span>,sheet<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#rename the 'differentiated' column 'induced', which describes it better</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">ap</span><span class="op">)</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span><span class="op">&lt;-</span><span class="st">'induced'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then we need to set some columns to be factors:</p>
+<div class="cell">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#set day, clone and induced columns to be factors</span></span>
+<span><span class="va">ap</span><span class="op">$</span><span class="va">day</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">ap</span><span class="op">$</span><span class="va">day</span><span class="op">)</span></span>
+<span><span class="va">ap</span><span class="op">$</span><span class="va">clone</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">ap</span><span class="op">$</span><span class="va">clone</span><span class="op">)</span></span>
+<span><span class="va">ap</span><span class="op">$</span><span class="va">induced</span> <span class="op">&lt;-</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">ap</span><span class="op">$</span><span class="va">induced</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#this is what we have:</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ap</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we use <code>pivot_longer</code> to reformat the data, so we can use all the repeats. The <code>cols=!c(day,clone,differentiated)</code> part indicates that the day,clone,differentiated columns are not to be lengthened in to the ‘absorb’ column. So it is <code>onlyabsorptionrep1</code>,<code>absorptionrep2</code> and <code>absorptionrep3</code> that are put into the ‘absorb’ column.</p>
+<div class="cell">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ap.pivot</span><span class="op">&lt;-</span><span class="va">ap</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span>cols<span class="op">=</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">day</span>,<span class="va">clone</span>,<span class="va">induced</span><span class="op">)</span>, names_to <span class="op">=</span> <span class="st">"rep"</span>, values_to <span class="op">=</span> <span class="st">"absorb"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#this is what we have now</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">ap.pivot</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="make-some-plots" class="level2" data-number="8.2"><h2 data-number="8.2" class="anchored" data-anchor-id="make-some-plots">
+<span class="header-section-number">8.2</span> Make some plots</h2>
+<p>If we look at the absorbance by day, we can see that absorbance goes up each day. Here we are ignoring the media (<code>induced</code>).</p>
+<div class="cell">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">ap.pivot</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">clone</span>, y <span class="op">=</span> <span class="va">absorb</span>, color <span class="op">=</span> <span class="va">day</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Then we can use <code>facet_wrap</code> to examine the data by day <em>and</em> by media. We can see that clone A has much higher values in the differentiation media.</p>
+<div class="cell">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">ap.pivot</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">clone</span>, y <span class="op">=</span> <span class="va">absorb</span>, color <span class="op">=</span> <span class="va">day</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">induced</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="anova-additive-model" class="level2" data-number="8.3"><h2 data-number="8.3" class="anchored" data-anchor-id="anova-additive-model">
+<span class="header-section-number">8.3</span> ANOVA (additive model)</h2>
+<p>To find out if there is evidence that the absorbance value affected by day, clone or media using an ANOVA, we can use the the R function <code><a href="https://rdrr.io/r/stats/aov.html">aov()</a></code>.</p>
+<div class="cell">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#we save the result in an object called aov.result.additive</span></span>
+<span><span class="va">aov.result.add</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aov.html">aov</a></span><span class="op">(</span><span class="va">absorb</span> <span class="op">~</span> <span class="va">day</span> <span class="op">+</span> <span class="va">clone</span> <span class="op">+</span> <span class="va">induced</span>, data <span class="op">=</span> <span class="va">ap.pivot</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>To view the results, we do:</p>
+<div class="cell">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">aov.result.add</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Interpretation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When p-values are &lt; 0.05, this means we have a significant effect from this factor.&nbsp; Do day, clone, and the induction media all have a significant effects?</p>
+</div>
+</div>
+</section><section id="anova-multiplicative-model" class="level2" data-number="8.4"><h2 data-number="8.4" class="anchored" data-anchor-id="anova-multiplicative-model">
+<span class="header-section-number">8.4</span> ANOVA (multiplicative model)</h2>
+<p>Now then examine a multiplicative (non additive) model. Here we examine whether interactions between the factors affect the pNP levels. To test this, we simple replace the plus symbol (+) with an asterisk (*) in our code:</p>
+<div class="cell">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#run the ANOVA</span></span>
+<span><span class="va">aov.result.mult</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aov.html">aov</a></span><span class="op">(</span><span class="va">absorb</span> <span class="op">~</span> <span class="va">day</span> <span class="op">*</span> <span class="va">clone</span> <span class="op">*</span> <span class="va">induced</span>, data <span class="op">=</span> <span class="va">ap.pivot</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">#to view the results</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">aov.result.mult</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Interpretation:</strong> Where the p-values <code>Pr(&gt;F)</code> are &lt; 0.05, we have a significant effect of this factor on the pNP level (and therefore osteogenesis). The multiplicative tests all single factors, all pairwise factors (eg: <code>day:clone</code>) and th interaction of all three factors(<code>day:clone:induced</code>).</p>
+</section></section><section id="the-end" class="level1" data-number="9"><h1 data-number="9">
+<span class="header-section-number">9</span> The End</h1>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Did you know ANOVA’s were invented for biological data?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>ANOVA’s were invented by a <a href="https://en.wikipedia.org/wiki/Ronald_Fisher">RA Fisher</a>, a British mathematician, statistician, biologist and geneticist. Fisher also had a big influence on evolutionary biology.</p>
+</div>
+</div>
 
 
-</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");

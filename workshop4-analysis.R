@@ -84,6 +84,33 @@ predicted.data<-data.frame(absorb=c(1,2,3),conc=predicted.pnpp.concs,rep="predic
 
 #So I should use the tracks data
 
+library(tidyverse)
+library(readxl)
+library(ggpubr)
+library(gganimate)
+
+ap<-read_excel("raw-data/example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx", sheet=1, skip=3)
+
+ap.pivot <- 
+  ap |> 
+  select(-mean.abs, -standard.deviation) |>
+  pivot_longer(-pNP.conc, names_to = "rep", values_to = "absorb")
+ap.pivot <- relocate(ap.pivot, absorb)
+linear_model <- lm(pNP.conc ~ absorb , data = ap.pivot)
+
+mock<-read_excel("raw-data/example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx", sheet=2, skip=1)
+mock$day <-as.factor(mock$day)
+mock$clone <-as.factor(mock$clone)
+mock$differentiated <-as.factor(mock$differentiated)
+mock <- mock |> 
+  rowwise() |> 
+  mutate(absorb=mean(c(absorb.rep1,absorb.rep2,absorb.rep3)))
+
+ggplot(data=mock, aes(x=day, y=predicted.pNP.concs,fill=clone:differentiated)) +
+  geom_bar(stat="identity", position=position_dodge())
+
+
+
 ####################################################################
 #DATA CLEAN UP - AMANDA YOU CAN SKIP THIS
 ####################################################################
@@ -201,7 +228,6 @@ points<-read_csv("data/points.data.2024-03-16.csv",
                  col_types = cols(LID = col_factor(),TID = col_factor(),pid = col_factor())
 )
 
-
 #how fast to they move
 points |>
   ggplot(aes(x=clone,y=log10(velocity)))+
@@ -231,7 +257,7 @@ points2 |>
 
 #show all lineages in A
 points |>
-  filter(clone == "A")|>
+  #filter(clone == "A")|>
   ggplot(aes(x=x.position,y=y.position,colour=clone))+
   geom_point(size=1)+
   facet_wrap(~LID)
@@ -367,4 +393,60 @@ tracking2 |>
   geom_vline(xintercept = 0,col=1,linetype = 2,alpha = 0.8)+
   facet_wrap(~clone)+
   theme_classic()
+
+
+
+####################################################################
+#ANALYSIS: DO CELLS FOLLLOW EACH OTHER??
+####################################################################
+
+
+rm(list=ls())
+library(tidyverse)
+library(readxl)
+library(ggpubr)
+library(corrr)
+
+#load data from a URL
+points<-read_csv(url("https://djeffares.github.io/BIO66I/points.data.2024-03-16.csv"),
+                 col_types = cols(LID = col_factor(),TID = col_factor(),pid = col_factor())
+)
+
+names(points)
+
+#we want to compare each LID to each other, and see if the x.position's correlate. Then y.position's.
+view(points)
+
+#break data down into clone A and clone B and
+#select only LID TID, x.position, y.position and time
+
+
+
+################################################
+### UP TO HERE
+#WE NEED TO RESHAPE OUR DATA, so that 
+#So that we each LID has a new column
+
+################################################
+
+df1 <- points |> 
+  filter(clone == "A" & LID==1) |>
+  select(LID, TID, pid, time, x.position) 
+
+df2 <- points |> 
+  filter(clone == "A" & LID==2) |>
+  select(LID, TID, pid, time, x.position) 
+
+
+view(df1)
+glimpse(df2)
+
+
+
+#see https://youtu.be/YpAdZ4079qs?si=H1wVr45UrjkPgYLM
+
+
+
+
+  
 

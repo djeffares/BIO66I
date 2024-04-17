@@ -255,7 +255,7 @@ view(mock)
 save.image("chocolate-fish.Rda")
 ```
 
-## making a bar plot of predicted pNP concetrations
+## Making a bar plot of predicted pNP concetrations
 
 First, we need to ensure that the `day`, `clone` and `differentiated` columns are set as **factors*. This is important because we want to treat these columns as **categories**, not **numeric values**:
 
@@ -614,3 +614,158 @@ To consolidate, follow up on aspects of the previous workshops that you are unsu
 The RStudio Project should:
 
 Create a logical folder structure for your analysis. The top folder should be named with your exam number, for example Y12345678, do not include your name in the submission. Your submission should include the script you used for your work, any accessory functions and the data itself. Your script should be well-commented, well-organised and follow good practice in use of spacing, indentation and variable naming. It should include all the code required to reproduce data import and formatting as well as the summary information, analyses and figures in your report.
+
+
+# Supplementary analysis: three-way ANOVA
+
+In practical 4, you collected absorbance readings for concentrations of pNP in triplicate, to provide an indication of the two clones to undergo osteogenesis. pNP concentrations were measured in day 0,4 and 8, and at each time point you have data for both induced cells and non-induced cells (negative control), with the exception of day 0 as the differentiation was induced at day 1.
+
+To find out which the conditions affect the pNP, we can carry out a three-way ANOVA is used to compare the effects of three **grouping variables** (day, clone and induction condition) on the one **response variable** pNP concentration.
+
+The methods below show you how to do this. We first start by assuming that the grouping variables do not interact (ie: combinations of two factors don't cause different outcomes to each factor alone), in what is called an **additive model (or multiplicative) model**.
+
+:::callout-note
+# An example of a multiplicative model
+Two people (A and B) walk back to their hotel, in a city they don't know well. Last time, when they both had their phones, it took 30 minutes. When person A lost their phone, so it took 35 minutes (ie: +5 minutes). When **both** A and B lost their phones, it took 60 minutes. This much longer we would expect the lost-phones problem was simply an **additive** effect of two phone being lost (30 + 5 + 5). The problems were multiplicative rather than merely additive.
+:::
+
+
+But the three grouping variables may have interacting effects, and not be independent. So then we then examine a non additive model. You'll see more clearly what this means as you do the analysis.
+
+## Read data and reformat with `pivot_longer`
+
+We'll assume you have the  `tidyverse` and `readxl` libraries load already. If not load these now.
+
+First, we load the data. Your data file might have a different name. This code will work without adjustment of your file has the same rows and columns as [this example file ](https://djeffares.github.io/BIO66I/example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx). We'll also rename a column, so it's more intuitive.
+
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+
+#load the data
+ap<-read_excel("raw-data/alkaline-phosphatase-activity-assay-real-data.xlsx",sheet=2)
+
+#rename the 'differentiated' column 'induced', which describes it better
+names(ap)[3]<-'induced'
+```
+
+
+
+Then we need to set some columns to be factors:
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+
+#set day, clone and induced columns to be factors
+ap$day <-as.factor(ap$day)
+ap$clone <-as.factor(ap$clone)
+ap$induced <-as.factor(ap$induced)
+
+#this is what we have:
+head(ap)
+```
+
+Now we use `pivot_longer` to reformat the data, so we can use all the repeats. The `cols=!c(day,clone,differentiated)` part indicates that the day,clone,differentiated columns are not to be lengthened in to the 'absorb' column. So it is `onlyabsorptionrep1`,`absorptionrep2` and `absorptionrep3` that are put into the 'absorb' column.
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+ap.pivot<-ap |> 
+  pivot_longer(cols=!c(day,clone,induced), names_to = "rep", values_to = "absorb")
+
+#this is what we have now
+head(ap.pivot)
+```
+
+
+## Make some plots
+
+If we look at the absorbance by day, we can see that absorbance goes up each day. Here we are ignoring the media (`induced`).
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+
+ggplot(ap.pivot, aes(x = clone, y = absorb, color = day))+
+  geom_boxplot()+
+  theme_classic()
+```
+
+Then we can use `facet_wrap` to examine the data by day *and* by media. We can see that clone A has much higher values in the differentiation media.
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+
+ggplot(ap.pivot, aes(x = clone, y = absorb, color = day))+
+  geom_boxplot()+
+  theme_classic()+
+  facet_wrap(~induced)
+```
+
+
+## ANOVA (additive model)
+
+To find out if there is evidence that the absorbance value affected by day, clone or media using an ANOVA, we can use the the R function `aov()`.
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+
+#we save the result in an object called aov.result.additive
+aov.result.add <- aov(absorb ~ day + clone + induced, data = ap.pivot)
+```
+
+To view the results, we do:
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+
+summary(aov.result.add)
+```
+
+::: callout-note
+# Interpretation 
+When p-values are < 0.05, this means we have a significant effect from this factor.\ 
+Do day, clone, and the induction media all have a significant effects?
+:::
+
+## ANOVA (multiplicative model)
+
+Now then examine a multiplicative (non additive) model. Here we examine whether interactions between the factors affect the pNP levels. To test this, we simple replace the plus symbol (+) with an asterisk (*) in our code:
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+
+
+#run the ANOVA
+aov.result.mult  <- aov(absorb ~ day * clone * induced, data = ap.pivot)
+
+#to view the results
+summary(aov.result.mult)
+```
+
+**Interpretation:** Where the p-values `Pr(>F)` are < 0.05, we have a significant effect of this factor on the pNP level (and therefore osteogenesis). The multiplicative tests all single factors, all pairwise factors (eg: `day:clone`) and th interaction of all three factors(`day:clone:induced`).
+
+
+# The End
+
+::: callout-tip
+# Did you know ANOVA's were invented for biological data?
+ANOVA's were invented by a [RA Fisher](https://en.wikipedia.org/wiki/Ronald_Fisher), a British mathematician, statistician, biologist and geneticist. Fisher also had a big influence on evolutionary biology. 
+:::
+
+
+
