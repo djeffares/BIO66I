@@ -15,9 +15,10 @@ format:
 editor: source
 ---
 
-::: callout-note
-## Welcome
+:::callout-note
+Workshop 1 for this module is [here](https://3mmarand.github.io/R4BABS/r4babs4/week-1/overview.html)
 :::
+
 
 # Learning objectives
 

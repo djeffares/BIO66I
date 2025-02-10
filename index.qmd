@@ -11,5 +11,8 @@ This page is to contain the workshops for BIO00066I, Becoming a Bioscientist: Re
 The module summary is [here](https://www.york.ac.uk/students/studying/manage/programmes/module-catalogue/module/BIO00066I/latest)
 
 
+:::callout-note
+Workshop 1 for this module is [here](https://3mmarand.github.io/R4BABS/r4babs4/week-1/overview.html)
+:::
 
 
