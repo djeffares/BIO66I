@@ -508,6 +508,6 @@
     "href": "BIO00066I-template.html#callouts",
     "title": "BIO00066I",
     "section": "Callouts:",
-    "text": "Callouts:\nSee this site for more info.\nThere are five different types of callouts available:\n\nnote\nwarning\nimportant\ntip\ncaution\n\n\n\n\n\n\n\nThis is a callout note block.\n\n\n\nText or code goes here.\n\nmean(rnorm(100))\n\n[1] 0.2218214\n\n\n\n\n\n\n\n\n\n\nCallout warning\n\n\n\nwarning\n\n\n\n\n\n\n\n\nCallout important\n\n\n\nimportant\n\n\n\n\n\n\n\n\nCallout tip\n\n\n\ntip\n\n\n\n\n\n\n\n\nCallout caution\n\n\n\ncaution"
+    "text": "Callouts:\nSee this site for more info.\nThere are five different types of callouts available:\n\nnote\nwarning\nimportant\ntip\ncaution\n\n\n\n\n\n\n\nThis is a callout note block.\n\n\n\nText or code goes here.\n\nmean(rnorm(100))\n\n[1] -0.0002457122\n\n\n\n\n\n\n\n\n\n\nCallout warning\n\n\n\nwarning\n\n\n\n\n\n\n\n\nCallout important\n\n\n\nimportant\n\n\n\n\n\n\n\n\nCallout tip\n\n\n\ntip\n\n\n\n\n\n\n\n\nCallout caution\n\n\n\ncaution"
   }
 ]
