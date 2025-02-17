@@ -19,6 +19,9 @@ editor: source
 Workshop 1 for this module is [here](https://3mmarand.github.io/R4BABS/r4babs4/week-1/overview.html)
 :::
 
+::: callout-important
+The data you will work on in these workshops is **the complete data set** for the report. This is not example data.
+:::
 
 # Learning objectives
 
@@ -148,6 +151,10 @@ library(tidyverse)
 #load the ggpubr package for multi-part plots
 library(ggpubr)
 ```
+
+::: callout-important
+The data you will work on in these workshops is **the complete data set** for the report. This is not example data.
+:::
 
 7.  Make sure all these lines of code are in your script, with comments.
 8.  Save the script.

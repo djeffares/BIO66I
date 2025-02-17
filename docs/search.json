@@ -151,7 +151,7 @@
     "href": "workshop2.html#getting-started",
     "title": "BIO00066I Workshop 2",
     "section": "\n3.1 Getting started",
-    "text": "3.1 Getting started\n\nStart RStudio from the Start menu\nOpen your RStudio project using the dropdown menu at the very top right of the RStudio window.\nMake a new script then save it with a sensible name that will help you to know later what is in this file. BIO00066I-workshop2.R would work.\nAdd a comment to the script so you know what it is about, for example\n\n\n#Data Analysis 2: Cell Biology\n#date 2024-30-01\n\n\nClear all the previous data, and load tidyverse package by adding these lines to your script:\n\n\n#clear previous data\nrm(list=ls())\n\n#load the tidyverse\nlibrary(tidyverse)\n\n\nFinally load another library that allows us to make multi-part plots (this can be useful sometimes). #we need this to make pretty plots with the ‘ggarrange’ package\n\n\n#load the ggpubr package for multi-part plots\nlibrary(ggpubr)\n\n\nMake sure all these lines of code are in your script, with comments.\nSave the script."
+    "text": "3.1 Getting started\n\nStart RStudio from the Start menu\nOpen your RStudio project using the dropdown menu at the very top right of the RStudio window.\nMake a new script then save it with a sensible name that will help you to know later what is in this file. BIO00066I-workshop2.R would work.\nAdd a comment to the script so you know what it is about, for example\n\n\n#Data Analysis 2: Cell Biology\n#date 2024-30-01\n\n\nClear all the previous data, and load tidyverse package by adding these lines to your script:\n\n\n#clear previous data\nrm(list=ls())\n\n#load the tidyverse\nlibrary(tidyverse)\n\n\nFinally load another library that allows us to make multi-part plots (this can be useful sometimes). #we need this to make pretty plots with the ‘ggarrange’ package\n\n\n#load the ggpubr package for multi-part plots\nlibrary(ggpubr)\n\n\n\n\n\n\n\nImportant\n\n\n\nThe data you will work on in these workshops is the complete data set for the report. This is not example data.\n\n\n\nMake sure all these lines of code are in your script, with comments.\nSave the script."
   },
   {
     "objectID": "workshop2.html#loading-the-data",
@@ -508,6 +508,6 @@
     "href": "BIO00066I-template.html#callouts",
     "title": "BIO00066I",
     "section": "Callouts:",
-    "text": "Callouts:\nSee this site for more info.\nThere are five different types of callouts available:\n\nnote\nwarning\nimportant\ntip\ncaution\n\n\n\n\n\n\n\nThis is a callout note block.\n\n\n\nText or code goes here.\n\nmean(rnorm(100))\n\n[1] -0.1396175\n\n\n\n\n\n\n\n\n\n\nCallout warning\n\n\n\nwarning\n\n\n\n\n\n\n\n\nCallout important\n\n\n\nimportant\n\n\n\n\n\n\n\n\nCallout tip\n\n\n\ntip\n\n\n\n\n\n\n\n\nCallout caution\n\n\n\ncaution"
+    "text": "Callouts:\nSee this site for more info.\nThere are five different types of callouts available:\n\nnote\nwarning\nimportant\ntip\ncaution\n\n\n\n\n\n\n\nThis is a callout note block.\n\n\n\nText or code goes here.\n\nmean(rnorm(100))\n\n[1] -0.1187563\n\n\n\n\n\n\n\n\n\n\nCallout warning\n\n\n\nwarning\n\n\n\n\n\n\n\n\nCallout important\n\n\n\nimportant\n\n\n\n\n\n\n\n\nCallout tip\n\n\n\ntip\n\n\n\n\n\n\n\n\nCallout caution\n\n\n\ncaution"
   }
 ]
