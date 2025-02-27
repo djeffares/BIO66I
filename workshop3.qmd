@@ -269,7 +269,7 @@ So Amanda spent many hours *manually* tracking cells. These results were process
 #| eval: true
 
 #load the manual tracking data
-track <-read_tsv(url("https://djeffares.github.io/BIO66I/A1-and-B2-tracking.data.tsv"))
+track <-read_tsv(url("https://djeffares.github.io/BIO66I/A1-and-B2-tracking.data.2025-02-27.tsv"))
 
 #check it out
 glimpse(track)
@@ -324,7 +324,7 @@ cor.test(track$track.length,track$mean.speed,method="spearman")
 ::: callout-warning
 ## A Non parametric warning
 
-Here we use the non parametric test `method="spearman` to calculate correlations, because we know from looking at the data that the `track.length` and probably `mean.speed` are not normally distributed. In a [Spearman rank correlation](https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient), `rho` is the correlation coefficient (sometimes rho is written using the Greek symbol **$\rho$**).
+Here we use the non parametric test `method="spearman"` to calculate correlations, because we know from looking at the data that the `track.length` and probably `mean.speed` are not normally distributed. In a [Spearman rank correlation](https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient), `rho` is the correlation coefficient (sometimes rho is written using the Greek symbol **$\rho$**).
 :::
 
 But since there are 11 cell movment metrics, this would quickly become boring. And (just as importantly) the data would be a challenge to understand.
@@ -371,6 +371,60 @@ ggplot(track.correlations.pivot, aes(Variable1, Variable2)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
+### Removing unneeded columns
+
+OK, this is a useful plot. If you have got this far in the workshop, **you are doing well!**
+
+But it is a bit cluttered. We could improve it by removing the TID and LID columns, because these are arbitrary numbers that don't tell us *anything* about the biology. 
+
+Luckily, we don't have to do all our analysis again. We can just remove these columns from the `track.correlations.pivot` data frame, before we make the plot. Here is how:
+
+
+```{r}
+
+#pipe track.correlations.pivot data frame into filter
+track.correlations.pivot |>
+
+  #filter out the TID and LID columns
+  filter(Variable1 != 'LID') |>
+  filter(Variable2 != 'LID') |>
+  filter(Variable1 != 'TID') |>
+  filter(Variable2 != 'TID') |>
+  
+  #now we put the plotting code here
+  ggplot(aes(Variable1, Variable2)) +
+  geom_tile(aes(fill = corr.coeff)) +
+  geom_text(aes(label = round(corr.coeff, 1))) +
+  scale_fill_gradient(low = "white", high = "red")+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+
+#and voila! no more TID and LID columns
+```
+
+
+
+### Relate the maths to the biology
+
+-   **Positive correlations** mean that when one metric is high, the other is high too. For example, `track.length` and `mean.speed` are positively correlated. This makes sense, because a cell that has managed to travel a long way, is probably a fast mover.
+
+-   **Negative correlations** mean that when one metric is high, the other is low. For example, `track.length` and `meandering.index` are negatively correlated. This makes sense, because a cell that meanders about (doesn't go a in straight line) *probably* doesn't have a long total track length?
+
+-   **Correlations near zero** mean that the two metrics are not strongly related.
+
+
+
+
+
+#plot data in the track.correlations.pivot table
+#using geom_tile (for coloured boxes) and geom_text (to show the correlation coefficient values) 
+track.correlations.pivot
+
+ggplot(track.correlations.pivot, aes(Variable1, Variable2)) +
+  geom_tile(aes(fill = corr.coeff)) +
+  geom_text(aes(label = round(corr.coeff, 1))) +
+  scale_fill_gradient(low = "white", high = "red")+
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  
 
 ::: callout-tip
 ## Some points to note in this plot:

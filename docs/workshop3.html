@@ -532,13 +532,13 @@ Optional
 <p>So Amanda spent many hours <em>manually</em> tracking cells. These results were processed into manual tracking data. First, load the data and of course <strong>examine what you have</strong>.</p>
 <div class="cell">
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#load the manual tracking data</span></span>
-<span><span class="va">track</span> <span class="op">&lt;-</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_tsv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/connections.html">url</a></span><span class="op">(</span><span class="st">"https://djeffares.github.io/BIO66I/A1-and-B2-tracking.data.tsv"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">track</span> <span class="op">&lt;-</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_tsv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/connections.html">url</a></span><span class="op">(</span><span class="st">"https://djeffares.github.io/BIO66I/A1-and-B2-tracking.data.2025-02-27.tsv"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">#check it out</span></span>
 <span><span class="fu"><a href="https://pillar.r-lib.org/reference/glimpse.html">glimpse</a></span><span class="op">(</span><span class="va">track</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 201
-Columns: 13
+Columns: 10
 $ LID                           &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2…
 $ TID                           &lt;dbl&gt; 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 1, 2…
 $ track.duration                &lt;dbl&gt; 230, 1587, 1702, 2484, 2484, 1725, 2484,…
@@ -548,9 +548,6 @@ $ euclidean.distance            &lt;dbl&gt; 6.79290, 128.38031, 341.09370, 128.9
 $ mean.speed                    &lt;dbl&gt; 0.3515217, 0.3993837, 0.4181263, 0.38779…
 $ track.present.at.start.or.end &lt;lgl&gt; TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, T…
 $ track.never.divides           &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE…
-$ start.time.total.time         &lt;dbl&gt; 0.00000000, 0.04166667, 0.30681818, 0.59…
-$ end.time.total.time           &lt;dbl&gt; 0.03787879, 0.30303030, 0.58712121, 1.00…
-$ track.duration.total.time     &lt;dbl&gt; 0.03787879, 0.26136364, 0.28030303, 0.40…
 $ cell.line                     &lt;chr&gt; "A1", "A1", "A1", "A1", "A1", "A1", "A1"…</code></pre>
 </div>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">track</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -559,9 +556,7 @@ $ cell.line                     &lt;chr&gt; "A1", "A1", "A1", "A1", "A1", "A1", 
  [3] "track.duration"                "track.length"                 
  [5] "meandering.index"              "euclidean.distance"           
  [7] "mean.speed"                    "track.present.at.start.or.end"
- [9] "track.never.divides"           "start.time.total.time"        
-[11] "end.time.total.time"           "track.duration.total.time"    
-[13] "cell.line"                    </code></pre>
+ [9] "track.never.divides"           "cell.line"                    </code></pre>
 </div>
 </div>
 <p>In this data, <code>TID</code> is the Livecyte <strong>tracking ID</strong>, a unique number that the microscope gives to each ‘object’ it can identify. <code>LID</code> is the Livecyte <strong>lineage ID</strong>. This keeps track of the cell lineage (ie: the initial cells, and the subsequent daughter cells that are derived from it as it divides). When a cell divides, both ‘daughter cells’ keep the same <strong>lineage ID</strong>, but each is assigned a new unique <strong>tracking ID</strong>.</p>
@@ -658,7 +653,7 @@ A Non parametric warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Here we use the non parametric test <code>method="spearman</code> to calculate correlations, because we know from looking at the data that the <code>track.length</code> and probably <code>mean.speed</code> are not normally distributed. In a <a href="https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient">Spearman rank correlation</a>, <code>rho</code> is the correlation coefficient (sometimes rho is written using the Greek symbol <strong><span class="math inline">\(\rho\)</span></strong>).</p>
+<p>Here we use the non parametric test <code>method="spearman"</code> to calculate correlations, because we know from looking at the data that the <code>track.length</code> and probably <code>mean.speed</code> are not normally distributed. In a <a href="https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient">Spearman rank correlation</a>, <code>rho</code> is the correlation coefficient (sometimes rho is written using the Greek symbol <strong><span class="math inline">\(\rho\)</span></strong>).</p>
 </div>
 </div>
 <p>But since there are 11 cell movment metrics, this would quickly become boring. And (just as importantly) the data would be a challenge to understand.</p>
@@ -677,7 +672,7 @@ Correlation computed with
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#see what we have</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">track.correlations</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 11
+<pre><code># A tibble: 6 × 8
   term                   LID    TID track.duration track.length meandering.index
   &lt;chr&gt;                &lt;dbl&gt;  &lt;dbl&gt;          &lt;dbl&gt;        &lt;dbl&gt;            &lt;dbl&gt;
 1 LID               NA       -0.148         0.0411       0.0346           0.0281
@@ -686,9 +681,7 @@ Correlation computed with
 4 track.length       0.0346  -0.268         0.840       NA               -0.345 
 5 meandering.index   0.0281   0.221        -0.477       -0.345           NA     
 6 euclidean.distan…  0.00902 -0.133         0.413        0.626            0.407 
-# ℹ 5 more variables: euclidean.distance &lt;dbl&gt;, mean.speed &lt;dbl&gt;,
-#   start.time.total.time &lt;dbl&gt;, end.time.total.time &lt;dbl&gt;,
-#   track.duration.total.time &lt;dbl&gt;</code></pre>
+# ℹ 2 more variables: euclidean.distance &lt;dbl&gt;, mean.speed &lt;dbl&gt;</code></pre>
 </div>
 </div>
 <p>Then we use <code>pivot_longer</code> ass we did in <a href="https://3mmarand.github.io/R4BABS/r4babs4/week-1/workshop.html#visualisation">BIO00066I core workshop 1</a>, to simplify the data format.</p>
@@ -730,7 +723,7 @@ Correlation computed with
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html">scale_fill_gradient</a></span><span class="op">(</span>low <span class="op">=</span> <span class="st">"white"</span>, high <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, vjust <span class="op">=</span> <span class="fl">0.5</span>, hjust<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Warning: Removed 10 rows containing missing values or values outside the scale range
+<pre><code>Warning: Removed 7 rows containing missing values or values outside the scale range
 (`geom_text()`).</code></pre>
 </div>
 <div class="cell-output-display">
@@ -740,6 +733,48 @@ Correlation computed with
 </div>
 </div>
 </div>
+<section id="removing-unneeded-columns" class="level3" data-number="3.6.1"><h3 data-number="3.6.1" class="anchored" data-anchor-id="removing-unneeded-columns">
+<span class="header-section-number">3.6.1</span> Removing unneeded columns</h3>
+<p>OK, this is a useful plot. If you have got this far in the workshop, <strong>you are doing well!</strong></p>
+<p>But it is a bit cluttered. We could improve it by removing the TID and LID columns, because these are arbitrary numbers that don’t tell us <em>anything</em> about the biology.</p>
+<p>Luckily, we don’t have to do all our analysis again. We can just remove these columns from the <code>track.correlations.pivot</code> data frame, before we make the plot. Here is how:</p>
+<div class="cell">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#pipe track.correlations.pivot data frame into filter</span></span>
+<span><span class="va">track.correlations.pivot</span> <span class="op">|&gt;</span></span>
+<span></span>
+<span>  <span class="co">#filter out the TID and LID columns</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Variable1</span> <span class="op">!=</span> <span class="st">'LID'</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Variable2</span> <span class="op">!=</span> <span class="st">'LID'</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Variable1</span> <span class="op">!=</span> <span class="st">'TID'</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Variable2</span> <span class="op">!=</span> <span class="st">'TID'</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  </span>
+<span>  <span class="co">#now we put the plotting code here</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">Variable1</span>, <span class="va">Variable2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_tile.html">geom_tile</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">corr.coeff</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">geom_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">corr.coeff</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_gradient.html">scale_fill_gradient</a></span><span class="op">(</span>low <span class="op">=</span> <span class="st">"white"</span>, high <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">90</span>, vjust <span class="op">=</span> <span class="fl">0.5</span>, hjust<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 5 rows containing missing values or values outside the scale range
+(`geom_text()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="workshop3_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#and voila! no more TID and LID columns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="relate-the-maths-to-the-biology" class="level3" data-number="3.6.2"><h3 data-number="3.6.2" class="anchored" data-anchor-id="relate-the-maths-to-the-biology">
+<span class="header-section-number">3.6.2</span> Relate the maths to the biology</h3>
+<ul>
+<li><p><strong>Positive correlations</strong> mean that when one metric is high, the other is high too. For example, <code>track.length</code> and <code>mean.speed</code> are positively correlated. This makes sense, because a cell that has managed to travel a long way, is probably a fast mover.</p></li>
+<li><p><strong>Negative correlations</strong> mean that when one metric is high, the other is low. For example, <code>track.length</code> and <code>meandering.index</code> are negatively correlated. This makes sense, because a cell that meanders about (doesn’t go a in straight line) <em>probably</em> doesn’t have a long total track length?</p></li>
+<li><p><strong>Correlations near zero</strong> mean that the two metrics are not strongly related.</p></li>
+</ul>
+<p>#plot data in the track.correlations.pivot table #using geom_tile (for coloured boxes) and geom_text (to show the correlation coefficient values) track.correlations.pivot</p>
+<p>ggplot(track.correlations.pivot, aes(Variable1, Variable2)) + geom_tile(aes(fill = corr.coeff)) + geom_text(aes(label = round(corr.coeff, 1))) + scale_fill_gradient(low = “white”, high = “red”)+ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -761,7 +796,7 @@ Some points to note in this plot:
 </ul>
 </div>
 </div>
-</section></section><section id="reflection" class="level1" data-number="4"><h1 data-number="4">
+</section></section></section><section id="reflection" class="level1" data-number="4"><h1 data-number="4">
 <span class="header-section-number">4</span> Reflection</h1>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -801,7 +836,7 @@ It is critical to think about what our analysis shows aout the biology
 <p>Fortunately, this information in the data already. We do <em>not</em> see the entire ‘lifetime’ of any cell tracked object that have the value <code>TRUE</code> in in the column <code>track.present.at.start.or.end</code>, because we starting tracking them some time after they were born, or stopped tracking them before they divided again.</p>
 <p>So we can filter out these lines by putting <code>filter(track.present.at.start.or.end != TRUE)</code> in our code. Let’s check if this makes any difference by comparing <code>track.length</code>without the filter, and then with the filter:</p>
 <div class="cell">
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#track.length without the filter</span></span>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#track.length without the filter</span></span>
 <span><span class="va">no.filter.plot</span><span class="op">&lt;-</span> <span class="va">track</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">cell.line</span>, y <span class="op">=</span> <span class="va">track.length</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
@@ -842,7 +877,7 @@ Did this make a difference?
 <span class="header-section-number">5.1.2</span> Improve the correlation heat map</h3>
 <p>What if we wanted to show only the correlations where the absolute value of <span class="math inline">\(\rho\)</span> was greater than 0.25? Try using the pipe operator <code>|&gt;</code> to filter the <code>track.correlations.pivot</code> data before plotting, with:</p>
 <div class="cell">
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#filter the data</span></span>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#filter the data</span></span>
 <span><span class="va">track.correlations.pivot</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">corr.coeff</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0.25</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span><span class="co">#now we put the plotting code here </span></span>
@@ -867,7 +902,7 @@ Did this make a difference?
 <span class="header-section-number">5.3</span> In case install.packages fails</h2>
 <p>If <code>install.packages("corrr")</code> fails, you can obtain the <code>track.correlations</code> data frame like this:</p>
 <div class="cell">
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">track.correlations</span> <span class="op">&lt;-</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_tsv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/connections.html">url</a></span><span class="op">(</span><span class="st">"https://djeffares.github.io/BIO66I/track.correlations.tsv"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">track.correlations</span> <span class="op">&lt;-</span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_tsv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/connections.html">url</a></span><span class="op">(</span><span class="st">"https://djeffares.github.io/BIO66I/track.correlations.tsv"</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
