@@ -773,8 +773,6 @@ Correlation computed with
 <li><p><strong>Negative correlations</strong> mean that when one metric is high, the other is low. For example, <code>track.length</code> and <code>meandering.index</code> are negatively correlated. This makes sense, because a cell that meanders about (doesn’t go a in straight line) <em>probably</em> doesn’t have a long total track length?</p></li>
 <li><p><strong>Correlations near zero</strong> mean that the two metrics are not strongly related.</p></li>
 </ul>
-<p>#plot data in the track.correlations.pivot table #using geom_tile (for coloured boxes) and geom_text (to show the correlation coefficient values) track.correlations.pivot</p>
-<p>ggplot(track.correlations.pivot, aes(Variable1, Variable2)) + geom_tile(aes(fill = corr.coeff)) + geom_text(aes(label = round(corr.coeff, 1))) + scale_fill_gradient(low = “white”, high = “red”)+ theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">

@@ -412,20 +412,6 @@ track.correlations.pivot |>
 -   **Correlations near zero** mean that the two metrics are not strongly related.
 
 
-
-
-
-#plot data in the track.correlations.pivot table
-#using geom_tile (for coloured boxes) and geom_text (to show the correlation coefficient values) 
-track.correlations.pivot
-
-ggplot(track.correlations.pivot, aes(Variable1, Variable2)) +
-  geom_tile(aes(fill = corr.coeff)) +
-  geom_text(aes(label = round(corr.coeff, 1))) +
-  scale_fill_gradient(low = "white", high = "red")+
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-  
-
 ::: callout-tip
 ## Some points to note in this plot:
 - `round(corr.coeff, 1)` reduces the number of  decimal places to 1.
