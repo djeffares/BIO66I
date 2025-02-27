@@ -4,9 +4,6 @@
 #clear th decks
 rm(list=ls())
 
-#set the working directory
-setwd("/Users/dj757/gd/modules/BIO00066I")
-
 #load libraries
 library(tidyverse)
 
@@ -156,4 +153,28 @@ names(dat)[10]="volume"
 write_tsv(dat, file="/Users/dj757/gd/github/djeffares.github.io/data/BIO00066I/all-cell-data-FFT.tsv")
 
 
-#end
+
+# UPDATE 2025-02-27 additional clean up of
+# all-cell-data-FFT.filtered.2024-02-22.tsv
+#As per Amanda's request in: 
+#https://docs.google.com/document/d/10M3xbtaG98dTkUm7s9n_Yj9wScseoB6bYtCwEt3nIhk/edit?usp=sharing
+
+#To remove:
+#Section 3.4 we can remove some of the columns from the ‘track data’ as they 
+#were used for my previous python analysis and probably not useful here. 
+#Remove: start.time.total.time, end.time.total.time, track.duration.total.time.
+
+#load the manual tracking data
+track <-read_tsv(url("https://djeffares.github.io/BIO66I/A1-and-B2-tracking.data.tsv"))
+
+#check it out
+names(track)
+
+#remove the columns
+track<-track |>
+    select(-start.time.total.time, -end.time.total.time, -track.duration.total.time)
+names(track)
+
+#output
+write_tsv(track, file="data/A1-and-B2-tracking.data.2025-02-27.tsv")
+
