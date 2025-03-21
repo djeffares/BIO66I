@@ -112,7 +112,7 @@ library(gganimate)
 
 ## Load data
 
-First, read in some ata from an Excel file. You can obtain [an example file from here](https://djeffares.github.io/BIO66I/example_alkaline_phosphatase_activity_assay_DNA_Lab.xlsx). Click to download, and then save the file in your **raw-data** directory. If you don't have a **raw-data** directory, make one!
+First, read in some ata from an Excel file. You can obtain [an example file from here](https://docs.google.com/spreadsheets/d/1xcRoGBI8CoAu343Et2aiVSfoZ7FGBtBy/edit?usp=sharing&ouid=113672614936656202737&rtpof=true&sd=true). Click to download, and then save the file in your **raw-data** directory. If you don't have a **raw-data** directory, make one!
 
 Then read in the Excel file. Two important things to note about reading Excel files:
 
@@ -124,7 +124,7 @@ Then read in the Excel file. Two important things to note about reading Excel fi
 #| echo: true
 #| warning: false
 #| eval: true
-ap<-read_excel("raw-data/example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx", sheet=1, skip=3)
+ap<-read_excel("raw-data/example_alkaline_phosphatase_activity_assay_DNA_Lab.xlsx", sheet=1, skip=3)
 
 #check what we have
 view(ap)

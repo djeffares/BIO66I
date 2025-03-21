@@ -333,14 +333,14 @@ Same coding methods, different data
 </div>
 </section><section id="load-data" class="level2" data-number="3.2"><h2 data-number="3.2" class="anchored" data-anchor-id="load-data">
 <span class="header-section-number">3.2</span> Load data</h2>
-<p>First, read in some ata from an Excel file. You can obtain <a href="https://djeffares.github.io/BIO66I/example_alkaline_phosphatase_activity_assay_DNA_Lab.xlsx">an example file from here</a>. Click to download, and then save the file in your <strong>raw-data</strong> directory. If you don’t have a <strong>raw-data</strong> directory, make one!</p>
+<p>First, read in some ata from an Excel file. You can obtain <a href="https://docs.google.com/spreadsheets/d/1xcRoGBI8CoAu343Et2aiVSfoZ7FGBtBy/edit?usp=sharing&amp;ouid=113672614936656202737&amp;rtpof=true&amp;sd=true">an example file from here</a>. Click to download, and then save the file in your <strong>raw-data</strong> directory. If you don’t have a <strong>raw-data</strong> directory, make one!</p>
 <p>Then read in the Excel file. Two important things to note about reading Excel files:</p>
 <ul>
 <li>we use <code>sheet=1</code> to specify that we want the first sheet (or tab)</li>
 <li>we use <code>skip=3</code> to specify that we want to skip the first three lines (because they are comments, not data)</li>
 </ul>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ap</span><span class="op">&lt;-</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"raw-data/example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx"</span>, sheet<span class="op">=</span><span class="fl">1</span>, skip<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ap</span><span class="op">&lt;-</span><span class="fu"><a href="https://readxl.tidyverse.org/reference/read_excel.html">read_excel</a></span><span class="op">(</span><span class="st">"raw-data/example_alkaline_phosphatase_activity_assay_DNA_Lab.xlsx"</span>, sheet<span class="op">=</span><span class="fl">1</span>, skip<span class="op">=</span><span class="fl">3</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">#check what we have</span></span>
 <span><span class="fu"><a href="https://tibble.tidyverse.org/reference/view.html">view</a></span><span class="op">(</span><span class="va">ap</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
