@@ -319,7 +319,7 @@
     "href": "workshop4.html#making-a-bar-plot-of-predicted-pnp-concetrations",
     "title": "BIO00066I Workshop 4",
     "section": "\n4.3 Making a bar plot of predicted pNP concetrations",
-    "text": "4.3 Making a bar plot of predicted pNP concetrations\nFirst, we need to ensure that the day, clone and differentiated columns are set as **factors*. This is important because we want to treat these columns as categories, not numeric values:\n\nmock$day &lt;-as.factor(mock$day)\nmock$clone &lt;-as.factor(mock$clone)\nmock$differentiated &lt;-as.factor(mock$differentiated)\n\nThen we can make a plot:\n\n#make the plot\nggplot(data=mock, aes(x=day, y=predicted.pNP.concs,fill=clone:differentiated)) +\n  geom_bar(stat=\"identity\", position=position_dodge())\n\n\n\n\n\n\n\nNote that this dummy data may look very different from your real data."
+    "text": "4.3 Making a bar plot of predicted pNP concetrations\nFirst, we need to ensure that the day, clone and differentiated columns are set as **factors*. This is important because we want to treat these columns as categories, not numeric values:\n\nmock$day &lt;-as.factor(mock$day)\nmock$clone &lt;-as.factor(mock$clone)\nmock$differentiated &lt;-as.factor(mock$differentiated)\n\nThen we can make a plot (with the un-normalised data).\n\n#make the plot\nggplot(data=mock, aes(x=day, y=predicted.pNP.concs,fill=clone:differentiated)) +\n  geom_bar(stat=\"identity\", position=position_dodge())\n\n\n\n\n\n\n\nNote that this dummy data may look very different from your real data.\nNoe let’s make a plot (with the normalised data). This will account for differential growth rates of the clones.\n\n# first check that data columns we have \nnames(mock)\n\n [1] \"day\"                  \"clone\"                \"differentiated\"      \n [4] \"absorb.rep1\"          \"absorb.rep2\"          \"absorb.rep3\"         \n [7] \"DNA_ug_per_ml\"        \"absorb\"               \"predicted.pNP.concs\" \n[10] \"normalised.pNP.concs\"\n\n#make the plot using the normalised.pNP.concs as a y values\nggplot(data=mock, aes(x=day, y=normalised.pNP.concs,fill=clone:differentiated)) +\n  geom_bar(stat=\"identity\", position=position_dodge())"
   },
   {
     "objectID": "workshop4.html#end-of-part-1.",
@@ -522,6 +522,6 @@
     "href": "BIO00066I-template.html#callouts",
     "title": "BIO00066I",
     "section": "Callouts:",
-    "text": "Callouts:\nSee this site for more info.\nThere are five different types of callouts available:\n\nnote\nwarning\nimportant\ntip\ncaution\n\n\n\n\n\n\n\nThis is a callout note block.\n\n\n\nText or code goes here.\n\nmean(rnorm(100))\n\n[1] 0.02686419\n\n\n\n\n\n\n\n\n\n\nCallout warning\n\n\n\nwarning\n\n\n\n\n\n\n\n\nCallout important\n\n\n\nimportant\n\n\n\n\n\n\n\n\nCallout tip\n\n\n\ntip\n\n\n\n\n\n\n\n\nCallout caution\n\n\n\ncaution"
+    "text": "Callouts:\nSee this site for more info.\nThere are five different types of callouts available:\n\nnote\nwarning\nimportant\ntip\ncaution\n\n\n\n\n\n\n\nThis is a callout note block.\n\n\n\nText or code goes here.\n\nmean(rnorm(100))\n\n[1] 0.0988482\n\n\n\n\n\n\n\n\n\n\nCallout warning\n\n\n\nwarning\n\n\n\n\n\n\n\n\nCallout important\n\n\n\nimportant\n\n\n\n\n\n\n\n\nCallout tip\n\n\n\ntip\n\n\n\n\n\n\n\n\nCallout caution\n\n\n\ncaution"
   }
 ]

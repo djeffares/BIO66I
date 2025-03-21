@@ -238,7 +238,6 @@ mock <- mock |>
 We named our mean absorbance `absorb`  because we specified the `absorb` variable in the code `linear_model <- lm(pNP.conc ~ absorb , data = ap.pivot)` above. So our linear model is 'looking for' an absorb variable to use.
 
 
-
 # Predict values based on a linear model
 
 ## Apply our linear model to the mock data
@@ -306,7 +305,7 @@ mock$clone <-as.factor(mock$clone)
 mock$differentiated <-as.factor(mock$differentiated)
 ```
 
-Then we can make a plot:
+Then we can make a plot (with the **un-normalised** data).
 
 ```{R}
 #| echo: true
@@ -320,6 +319,26 @@ ggplot(data=mock, aes(x=day, y=predicted.pNP.concs,fill=clone:differentiated)) +
 ```
 
 **Note** that this dummy data may look *very* different from your real data.
+
+Noe let's make a plot (with the **normalised** data). This will account for differential growth rates of the clones.
+
+
+
+```{R}
+#| echo: true
+#| warning: false
+#| eval: true
+
+# first check that data columns we have 
+names(mock)
+
+
+#make the plot using the normalised.pNP.concs as a y values
+ggplot(data=mock, aes(x=day, y=normalised.pNP.concs,fill=clone:differentiated)) +
+  geom_bar(stat="identity", position=position_dodge())
+
+```
+
 
 ## End of Part 1.
 
