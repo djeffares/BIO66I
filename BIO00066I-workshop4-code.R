@@ -46,3 +46,68 @@ b = a +1
 wilcox.test.result <- wilcox.test(a,b)
 wilcox.test.result$p.value
 
+ap<-read_excel("raw-data/example_alkaline_phosphatase_activity_assay_DNA_Lab.xlsx", sheet=1, skip=3)
+
+#check what we have
+view(ap)
+
+ap.pivot <- 
+  ap |> 
+  select(-mean.abs, -standard.deviation) |>
+  pivot_longer(-pNP.conc, names_to = "rep", values_to = "absorb")
+view(ap.pivot)
+
+ap.pivot <- relocate(ap.pivot, absorb)
+
+#plot, saving thr plot in an object called 'pNP.plot'
+pNP.plot <- ap.pivot |>
+  ggplot(aes(x=absorb, y=pNP.conc))+
+  geom_point()+
+  geom_smooth(method="lm")+
+  xlab("Absorbance")+
+  ylab("pNP concentration")
+
+#show the plot
+pNP.plot
+
+#save as a pdf
+ggsave("pNP.plot.pdf",pNP.plot,width=7,height=7) 
+
+#save as a jpeg, with a better name
+ggsave("BIO66I-2025-03-21-pNP.plot.jpeg",pNP.plot,width=7,height=7)
+
+linear_model <- lm(pNP.conc ~ absorb , data = ap.pivot)
+
+mock<-read_excel("raw-data/example_alkaline_phosphatase_activity_assay_DNA_Lab.xlsx", sheet=2, skip=1)
+
+#check what we have
+view(mock)
+
+mock <- mock |> 
+  rowwise() |> 
+  mutate(absorb=mean(c(absorb.rep1,absorb.rep2,absorb.rep3),na.rm=T)) 
+
+
+#calculate predicted pNP concentration using the linear model
+predictions.from.lm <- predict(linear_model,mock)
+
+#Add these predictions from the linear model (predictions.from.lm)
+#As a new column
+mock$predicted.pNP.concs = predictions.from.lm
+
+#check what we have
+view(mock)
+
+mock$DNA_ug_per_ml
+
+#And save all our data (give your Rda file a sensible name!)
+save.image("chocolate-fish.Rda")
+
+mock$day <-as.factor(mock$day)
+mock$clone <-as.factor(mock$clone)
+mock$differentiated <-as.factor(mock$differentiated)
+
+#make the plot
+ggplot(data=mock, aes(x=day, y=predicted.pNP.concs,fill=clone:differentiated)) +
+  geom_bar(stat="identity", position=position_dodge())
+
