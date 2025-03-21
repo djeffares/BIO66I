@@ -210,7 +210,7 @@ We can use the `lm` function to make a linear model. This is a simple model that
 linear_model <- lm(pNP.conc ~ absorb , data = ap.pivot)
 ```
 
-Now we have the linear model, if we have some some pNP absorbance values, we can determine of the pNPP enzyme concentrations. We have put some mock pNP values in the excel file `example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx`, in sheet two.
+Now we have the linear model, if we have some some pNP absorbance values, we can determine of the pNP product concentrations. We have put some mock pNP values in the excel file `example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx`, in sheet two.
 
 ```{r}
 #| echo: true
@@ -267,7 +267,7 @@ save.image("BIO00066I-workshop4-2025-03-21.Rda")
 
 ## Normalise pNP concentrations
 
-Each experiment will have a slightly different number of cells, and this will affect the amount of the para-nitrophenyl phosphate (pNPP) enzyme, and therefore the amount of pNP product produced.
+Each experiment will have a slightly different number of cells, and this will affect the amount of the para-nitrophenyl phosphate (pNPP) substrate, and therefore the amount of pNP product produced.
 
 :::callout-note
 # Why normalise?
@@ -331,7 +331,6 @@ Noe let's make a plot (with the **normalised** data). This will account for diff
 
 # first check that data columns we have 
 names(mock)
-
 
 #make the plot using the normalised.pNP.concs as a y values
 ggplot(data=mock, aes(x=day, y=normalised.pNP.concs,fill=clone:differentiated)) +
