@@ -3,7 +3,7 @@ title: "BIO00066I Workshop 2"
 subtitle: "Cell Biology Data Analysis Workshop 2"
 
 author: Daniel Jeffares
-date: 2024-01-25
+date: last-modified
 format:
     html:
         code-link: true
@@ -46,7 +46,7 @@ The Module learning outcomes [can be seen here](https://www.york.ac.uk/students/
 ::: callout-important
 ## Philosophy
 
-Workshops are not a test. It's OK to make mistakes. It's OK to need help. You should be familiar with independent study content before the workshop, but you don't need to understand **every detail**. The workshop will hlpe you to build and consolidate your understanding. Tips:
+Workshops are not a test. It's OK to make mistakes. It's OK to need help. You should be familiar with independent study content before the workshop, but you don't need to understand **every detail**. The workshop will help you to build and consolidate your understanding. Tips:
 
 -   there are **no stupid questions** (ask us anything!)
 -   don't worry about making mistakes (we all make mistakes)
@@ -56,7 +56,7 @@ Workshops are not a test. It's OK to make mistakes. It's OK to need help. You sh
 
 ## The biology
 
-Today we will look at some data from mesenchymal stem  cells (MSCs, sometimes called *stromal* cells). MCSs are are *multipotent* cells, than can differentiate into many kinds of mesenchymal cells, including bone, cartilage and fat cells. They are not *pluripotent*, in that they do have limits about how they differentiate.
+Today we will look at some data from mesenchymal stem  cells (MSCs, sometimes called *stromal* cells). MCSs are *multipotent* cells, than can differentiate into many kinds of mesenchymal cells, including bone, cartilage and fat cells. They are not *pluripotent*, in that they do have limits about how they differentiate.
 
 MSCs are also:
 
@@ -98,7 +98,7 @@ Data science can be challenging when you first start. But data science does have
 
 -   Consider the motivation or scientific question *before* drawing a plot
 -   Reflect on how the plot or analysis addresses the scientific question
--   Use each plots to adapt, to inspire new research questions and new inquiries
+-   Use each plot to adapt, to inspire new research questions and new inquiries
 -   Ensure that your scripts are reproducible and clearly commented
 -   **Consider what the results tell you about the biology**
 :::
@@ -107,7 +107,7 @@ Data science can be challenging when you first start. But data science does have
 
 ::: callout-important
 ## Develop your R script, carefully.
-As we run though the exercises, copy the code to your script. You can cop the code by clicking on the 'clipboard' symbol at the top tight of the grey code chunks.  
+As we run through the exercises, copy the code to your script. You can copy the code by clicking on the 'clipboard' symbol at the top right of the grey code chunks.  
 
 **#Comments**
 In R scripts, lines that start with the hash symbol (`#`) are comments. Add comments so you can remember what this code does. Commenting code makes it readable, for you and anyone else. Good data science includes clearly commented code.
@@ -123,7 +123,7 @@ In R scripts, lines that start with the hash symbol (`#`) are comments. Add comm
 
 ```{r}
 #Data Analysis 2: Cell Biology
-#date 2024-30-01
+#Date 2026-02-13
 ```
 
 5.  Clear all the previous data, and load **`tidyverse`** package by adding these lines to your script:
@@ -412,7 +412,7 @@ ggplot(cells,aes(x=clone,y=width))+
 # Next step: modify the code
 
 ::: callout-important
-## If there is something you don't uderstand, it's OK to ask us!
+## If there is something you don't understand, it's OK to ask us!
 :::
 
 To increase your understanding, run through all the plots in section 3.5 with some other cell shape or size metric. To start, find what metrics are present with:
@@ -440,7 +440,7 @@ We suggest using one of these, in place of `width`:
 
 So far, we have used **all** the rows in our data frame. But perhaps this isn't wise, because the Livecyte tracking followed each cell over time. So each measurement of cell shape is not a *completely independent* measurement. It is more of a technical replicate than a biological replicate. 
 
-It is also valuable to learn how to make plots and analyse small data sets, as well as large ones. So not we will create a very small subset of the data, and investigate this.
+It is also valuable to learn how to make plots and analyse small data sets, as well as large ones. So now we will create a very small subset of the data, and investigate this.
 
 First, read in the small data set we prepared, and have a quick look, to check what we have.
 
@@ -548,20 +548,33 @@ small.data.plot <- ggplot(small.tracking.data, aes(x=clone, y=width))+
 ggarrange(large.data.plot,small.data.plot)
 ```
 
-The `geom_jitter` with the large data set looks *terrible*! This is not a good way to show this data. So remove this part of the plot, and try again. You may also want ot try using `geom_violin` instead of `geom_boxplot`. 
+The `geom_jitter` with the large data set looks *terrible*! This is not a good way to show this data. So remove this part of the plot, and try again. You may also want to try using `geom_violin` instead of `geom_boxplot`. 
 
 You will also notice that we set the same *y* axis range for both plots, with `ylim(0,200)`. We did this so we can compare the plots side by side. 
+
+::: callout-tip
+# How to cite packages
+If you use a package in your work, you should cite it so that your code is fully transparent (for you, and others). **You'll also get points for citing packages in your Rstudio project.** You can obtain a nicely formatted citation for a package like so: 
+
+`print(citation("tidyverse"), style = "text")`
+:::
 
 # Reflection
 
 - After loading the data, what did we do first?
-- What did making the plots do that summary statistics (liek average, or median) cannot do?
+- What did making the plots do that summary statistics (like average, or median) cannot do?
 - What did we learn about the two clones?
 - How do we plot and consider P-values for small and large data sets?
 
 # The end
 
 **This is the end of the workshop for today.** We provide some consolidation exercises, extra material and advice about the R Studio project below.
+
+::: callout-tip
+## Download Code
+You can download all the R code from this workshop as a single script file:
+[workshop2.R](workshop2.R)
+:::
 
 # After the workshop
 
@@ -673,4 +686,12 @@ For this module, 30% of the grade is for an R Studio project. The script that yo
 Create a logical folder structure for your analysis. Your submission should include the script you used for your work, any accessory functions and the data itself. Your script should be well-commented, well-organised and follow good practice in use of spacing, indentation and variable naming. It should include all the code required to reproduce data import and formatting as well as the summary information, analyses and figures in your report. 
 :::
 
+```{r}
+#| include: false
+#| eval: true
+
+knitr::purl("workshop2.qmd", 
+            output = "workshop2.R", 
+            documentation = 0)
+```
 

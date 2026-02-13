@@ -29,6 +29,14 @@ print(citation("ggpubr"), style = "text")
 #PART 1: 
 ####################################################################
 
+cells <-read_tsv(url("https://djeffares.github.io/BIO66I/all-cell-data-FFT.filtered.2024-02-22.tsv"),
+                 col_types = cols(
+                   clone = col_factor(),
+                   replicate = col_factor(),
+                   tracking.id=col_factor(),
+                   lineage.id=col_factor()
+                 )
+)
 # Why we are doing this:
 # What the data is
 cells <-read_tsv(url("https://djeffares.github.io/BIO66I/all-cell-data-FFT.filtered.2024-02-22.tsv"),
@@ -39,6 +47,28 @@ cells <-read_tsv(url("https://djeffares.github.io/BIO66I/all-cell-data-FFT.filte
                    lineage.id=col_factor()
                  )
 )
+
+#to find out how many rows the cells data frame has
+nrow(cells)
+
+#but this is not correct, because we have multiple measurements for each cell
+#if we decide that the unique number of cells is the number of tracking.id's, 
+#we can count them this way:
+unique.tracking.ids <- unique(cells$tracking.id)
+length(unique.tracking.ids)
+#or in one step
+length(unique(cells$tracking.id))
+
+#but if we define that the unique number of cells is the numbe of lineage.id's
+#we can count them with
+unique.lineage.ids <- unique(cells$lineage.id)
+length(unique.lineage.ids)
+#or in one step
+length(unique(cells$lineage.id))
+
+
+
+
 
 
 #see what we have

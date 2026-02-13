@@ -178,3 +178,17 @@ names(track)
 #output
 write_tsv(track, file="data/A1-and-B2-tracking.data.2025-02-27.tsv")
 
+#check we can get the new file from GitHub
+track2 <-read_tsv(url("https://djeffares.github.io/BIO66I/A1-and-B2-tracking.data.2025-02-27.tsv"))
+
+names(track)
+names(track2)
+
+#now update workshop3.qmd
+
+
+
+#now
+
+
+

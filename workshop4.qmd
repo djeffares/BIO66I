@@ -3,7 +3,7 @@ title: "BIO00066I Workshop 4"
 subtitle: "Cell Biology Data Analysis Workshop 4"
 
 author: Daniel Jeffares
-date: 2024-03-16
+date: last-modified
 format:
     html:
         code-link: true
@@ -444,12 +444,17 @@ We can see that they wriggle about a lot. They do not move in straight lines. To
 #| warning: false
 #| eval: false
 
+
 points |>
-  filter(clone == "B" & LID==4)|>
-  ggplot(aes(x=x.position,y=y.position,colour=TID))+
+  filter(clone == "B" & LID==4) |>
+  # Convert TID to factor with numeric ordering
+  mutate(TID = factor(TID, levels = sort(as.numeric(as.character(unique(TID)))))) |>
+  ggplot(aes(x=x.position, y=y.position, colour=TID)) +
   geom_point(size=1)
 
 ```
+
+
 
 ## Scatter plots to show cell movement range intuitively
 
@@ -816,10 +821,22 @@ summary(aov.result.mult)
 
 # The End
 
+
 ::: callout-tip
-# Did you know ANOVA's were invented for biological data?
-ANOVA's were invented by a [RA Fisher](https://en.wikipedia.org/wiki/Ronald_Fisher), a British mathematician, statistician, biologist and geneticist. Fisher also had a big influence on evolutionary biology. 
+## Download Code
+You can download all the R code from this workshop as a single script file:
+[workshop4.R](workshop4.R)
 :::
+
+
+```{r}
+#| include: false
+#| eval: true
+
+knitr::purl("workshop4.qmd", 
+            output = "workshop4.R", 
+            documentation = 0)
+```
 
 
 

@@ -3,7 +3,7 @@ title: "BIO00066I Workshop 3"
 subtitle: "Cell Biology Data Analysis Workshop 3"
 
 author: Daniel Jeffares
-date: 2024-01-25
+date: last-modified
 format:
     html:
         code-link: true
@@ -22,6 +22,12 @@ editor: source
 
 Workshops are not a test. You may make a lot of mistakes - that is fine. It's OK to need help. The staff are here to help you, so don't be afraid to ask us anything :-)
 :::
+
+::: callout-tip
+# How to cite packages
+`print(citation("package_name"), style = "text")`
+:::
+
 
 ## Technical skills
 
@@ -443,6 +449,13 @@ Today you have learned some data handling and plotting skills. These are:
 - How to 'lengthen' and simplify data using `pivot_longer`
 - How to calculate and display numerous correlations in a grid with `geom_tile`
 
+# The end
+
+::: callout-tip
+## Download Code
+You can download all the R code from this workshop as a single script file:
+[workshop3.R](workshop3.R)
+:::
 
 # After the workshop
 
@@ -540,4 +553,15 @@ If `install.packages("corrr")` fails, you can obtain the `track.correlations` da
 
 track.correlations <-read_tsv(url("https://djeffares.github.io/BIO66I/track.correlations.tsv"))
 ```
+
+
+```{r}
+#| include: false
+#| eval: true
+
+knitr::purl("workshop3.qmd", 
+            output = "workshop3.R", 
+            documentation = 0)
+```
+
 
