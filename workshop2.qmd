@@ -167,7 +167,23 @@ In workshop 1, we showed you how to [import data from files](https://3mmarand.gi
 ```{r}
 #| echo: true
 #| warning: false
-cells <-read_tsv(url("https://djeffares.github.io/BIO66I/all-cell-data-FFT.filtered.2024-02-22.tsv"),
+#| eval: false
+cells <-read_tsv(url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-02-22.tsv"),
+    col_types = cols(
+        clone = col_factor(),
+        replicate = col_factor(),
+        tracking.id=col_factor(),
+        lineage.id=col_factor()
+    )
+)
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| eval: true
+#Load from local file for rendering
+cells <-read_tsv("data/all-cell-data-FFT.filtered.2024-02-22.tsv",
     col_types = cols(
         clone = col_factor(),
         replicate = col_factor(),
@@ -448,10 +464,10 @@ First, read in the small data set we prepared, and have a quick look, to check w
 #| echo: true
 #| warning: false
 #| output: false
-#| eval: true
+#| eval: false
 
 #read in some data from a website
-small.tracking.data <-read_tsv(url("https://djeffares.github.io/BIO66I/trackingid.small.data.tsv"),
+small.tracking.data <-read_tsv(url("https://djeffares.github.io/BIO66I/data/trackingid.small.data.tsv"),
     col_types = cols(
         clone = col_factor(),
         replicate = col_factor(),
@@ -461,6 +477,24 @@ small.tracking.data <-read_tsv(url("https://djeffares.github.io/BIO66I/trackingi
 )
 
 #check what we have
+glimpse(small.tracking.data)
+summary(small.tracking.data)
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| output: false
+#| eval: true
+#Load from local file for rendering
+small.tracking.data <-read_tsv("data/trackingid.small.data.tsv",
+    col_types = cols(
+        clone = col_factor(),
+        replicate = col_factor(),
+        tracking.id=col_factor(),
+        lineage.id=col_factor()
+    )
+)
 glimpse(small.tracking.data)
 summary(small.tracking.data)
 ```

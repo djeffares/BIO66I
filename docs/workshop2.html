@@ -416,7 +416,7 @@ Important
 <h2 data-number="3.2" class="anchored" data-anchor-id="loading-the-data"><span class="header-section-number">3.2</span> Loading the data</h2>
 <p>In workshop 1, we showed you how to <a href="https://3mmarand.github.io/R4BABS/r4babs1/week-8/workshop.html#importing-data-from-files">import data from files</a>. Today, we load a tab-separated value (TSV) file from a website:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cells <span class="ot">&lt;-</span><span class="fu">read_tsv</span>(<span class="fu">url</span>(<span class="st">"https://djeffares.github.io/BIO66I/all-cell-data-FFT.filtered.2024-02-22.tsv"</span>),</span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cells <span class="ot">&lt;-</span><span class="fu">read_tsv</span>(<span class="fu">url</span>(<span class="st">"https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-02-22.tsv"</span>),</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">col_types =</span> <span class="fu">cols</span>(</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">clone =</span> <span class="fu">col_factor</span>(),</span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">replicate =</span> <span class="fu">col_factor</span>(),</span>
@@ -583,7 +583,7 @@ Do you see any patterns in this data?
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="workshop2_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="workshop2_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -693,7 +693,7 @@ If there is something you don’t understand, it’s OK to ask us!
 <p>First, read in the small data set we prepared, and have a quick look, to check what we have.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#read in some data from a website</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>small.tracking.data <span class="ot">&lt;-</span><span class="fu">read_tsv</span>(<span class="fu">url</span>(<span class="st">"https://djeffares.github.io/BIO66I/trackingid.small.data.tsv"</span>),</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>small.tracking.data <span class="ot">&lt;-</span><span class="fu">read_tsv</span>(<span class="fu">url</span>(<span class="st">"https://djeffares.github.io/BIO66I/data/trackingid.small.data.tsv"</span>),</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">col_types =</span> <span class="fu">cols</span>(</span>
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">clone =</span> <span class="fu">col_factor</span>(),</span>
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">replicate =</span> <span class="fu">col_factor</span>(),</span>
@@ -747,7 +747,7 @@ if you have time
     Wilcoxon rank sum exact test
 
 data:  width by clone
-W = 75, p-value = 0.1261
+W = 100, p-value = 0.6236
 alternative hypothesis: true location shift is not equal to 0</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#test with 'cells' data frame - a *much* larger data set  </span></span>

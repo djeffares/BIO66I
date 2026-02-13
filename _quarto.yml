@@ -1,6 +1,9 @@
 project:
   type: website
   output-dir: docs
+  resources:
+    - data/all-cell-data-FFT.filtered.2024-02-22.tsv
+    - data/trackingid.small.data.tsv
 
 website:
   title: "BIO00066I"

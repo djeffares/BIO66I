@@ -11,7 +11,17 @@ library(tidyverse)
 #load the ggpubr package for multi-part plots
 library(ggpubr)
 
-cells <-read_tsv(url("https://djeffares.github.io/BIO66I/all-cell-data-FFT.filtered.2024-02-22.tsv"),
+# cells <-read_tsv(url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-02-22.tsv"),
+#     col_types = cols(
+#         clone = col_factor(),
+#         replicate = col_factor(),
+#         tracking.id=col_factor(),
+#         lineage.id=col_factor()
+#     )
+# )
+
+#Load from local file for rendering
+cells <-read_tsv("data/all-cell-data-FFT.filtered.2024-02-22.tsv",
     col_types = cols(
         clone = col_factor(),
         replicate = col_factor(),
@@ -91,8 +101,22 @@ wilcox.test(width ~ clone, data = cells)
 
 # names(cells)
 
-#read in some data from a website
-small.tracking.data <-read_tsv(url("https://djeffares.github.io/BIO66I/trackingid.small.data.tsv"),
+# #read in some data from a website
+# small.tracking.data <-read_tsv(url("https://djeffares.github.io/BIO66I/data/trackingid.small.data.tsv"),
+#     col_types = cols(
+#         clone = col_factor(),
+#         replicate = col_factor(),
+#         tracking.id=col_factor(),
+#         lineage.id=col_factor()
+#     )
+# )
+# 
+# #check what we have
+# glimpse(small.tracking.data)
+# summary(small.tracking.data)
+
+#Load from local file for rendering
+small.tracking.data <-read_tsv("data/trackingid.small.data.tsv",
     col_types = cols(
         clone = col_factor(),
         replicate = col_factor(),
@@ -100,8 +124,6 @@ small.tracking.data <-read_tsv(url("https://djeffares.github.io/BIO66I/trackingi
         lineage.id=col_factor()
     )
 )
-
-#check what we have
 glimpse(small.tracking.data)
 summary(small.tracking.data)
 
@@ -181,7 +203,3 @@ write_tsv(trackingid.small.data, file ="/Users/dj757/gd/modules/BIO66I/data/trac
 # 
 # #what does the data look like?
 # view(trackingid.small.data)
-
-knitr::purl("workshop2.qmd", 
-            output = "workshop2.R", 
-            documentation = 0)
