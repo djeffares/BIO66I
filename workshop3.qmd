@@ -146,10 +146,25 @@ Now read in the data from the file **all-cell-data-FFT.filtered.2024-02-22.tsv**
 ```{r}
 #| echo: true
 #| warning: false
-#| eval: true
+#| eval: false
 
 # Read the automated Livecyte data
-cells <-read_tsv(url("https://djeffares.github.io/BIO66I/all-cell-data-FFT.filtered.2024-02-22.tsv"),
+cells <-read_tsv(url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-02-22.tsv"),
+                 col_types = cols(
+                   clone = col_factor(),
+                   replicate = col_factor(),
+                   tracking.id=col_factor(),
+                   lineage.id=col_factor()
+                 )
+)
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| eval: true
+#Load from local file for rendering
+cells <-read_tsv("data/all-cell-data-FFT.filtered.2024-02-22.tsv",
                  col_types = cols(
                    clone = col_factor(),
                    replicate = col_factor(),
@@ -272,12 +287,22 @@ So Amanda spent many hours *manually* tracking cells. These results were process
 ```{r}
 #| echo: true
 #| warning: false
-#| eval: true
+#| eval: false
 
 #load the manual tracking data
-track <-read_tsv(url("https://djeffares.github.io/BIO66I/A1-and-B2-tracking.data.2025-02-27.tsv"))
+track <-read_tsv(url("https://djeffares.github.io/BIO66I/data/A1-and-B2-tracking.data.2025-02-27.tsv"))
 
 #check it out
+glimpse(track)
+names(track)
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| eval: true
+#Load from local file for rendering
+track <-read_tsv("data/A1-and-B2-tracking.data.2025-02-27.tsv")
 glimpse(track)
 names(track)
 ```

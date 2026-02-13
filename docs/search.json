@@ -1,0 +1,562 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "BIO00066I",
+    "section": "",
+    "text": "This page is to contain the workshops for BIO00066I, Becoming a Bioscientist: Research in Action.\nThe module summary is here\n\n\n\n\n\n\nNote\n\n\n\nWorkshop 1 for this module is here"
+  },
+  {
+    "objectID": "workshop3.html",
+    "href": "workshop3.html",
+    "title": "BIO00066I Workshop 3",
+    "section": "",
+    "text": "Philosophy\n\n\n\nWorkshops are not a test. You may make a lot of mistakes - that is fine. It’s OK to need help. The staff are here to help you, so don’t be afraid to ask us anything :-)\n\n\n\n\n\n\n\n\nHow to cite packages\n\n\n\nprint(citation(\"package_name\"), style = \"text\")\n\n\n\n\nToday we will work with plotting movement data from the Livecyte microscope.\nWe will learn some new R plotting skills:\n\nfacet_wrap a method to plot one variable split up over different treatments (or chromosomes, or days, or replicates)\nhow to create a correlation data frame using the correlate function. This allows us to explore many correlations between different metrics. Typically, these metrics are stored in the columns of our data frames.\n\n\n\n\nWe encourage you to develop your data handling skills. By:\n\nkeeping our script clear, simple, and well-annotated\ndeveloping your own habits to keep your awareness on what data the data contains\n\n\n\n\n\n\n\nKnow your data!\n\n\n\nTo understand the biology captured in the data, you need to know what is in the data. At each step, be sure you know the rows, the columns and what they mean. Keep notes about this in your script."
+  },
+  {
+    "objectID": "workshop3.html#technical-skills",
+    "href": "workshop3.html#technical-skills",
+    "title": "BIO00066I Workshop 3",
+    "section": "",
+    "text": "Today we will work with plotting movement data from the Livecyte microscope.\nWe will learn some new R plotting skills:\n\nfacet_wrap a method to plot one variable split up over different treatments (or chromosomes, or days, or replicates)\nhow to create a correlation data frame using the correlate function. This allows us to explore many correlations between different metrics. Typically, these metrics are stored in the columns of our data frames."
+  },
+  {
+    "objectID": "workshop3.html#thinking-like-a-data-scientist",
+    "href": "workshop3.html#thinking-like-a-data-scientist",
+    "title": "BIO00066I Workshop 3",
+    "section": "",
+    "text": "We encourage you to develop your data handling skills. By:\n\nkeeping our script clear, simple, and well-annotated\ndeveloping your own habits to keep your awareness on what data the data contains\n\n\n\n\n\n\n\nKnow your data!\n\n\n\nTo understand the biology captured in the data, you need to know what is in the data. At each step, be sure you know the rows, the columns and what they mean. Keep notes about this in your script."
+  },
+  {
+    "objectID": "workshop3.html#the-biology",
+    "href": "workshop3.html#the-biology",
+    "title": "BIO00066I Workshop 3",
+    "section": "2.1 The biology",
+    "text": "2.1 The biology\nToday, we will continue our quest to understand mesenchymal stromal cells (MSCs). Remember, the two clones we are studying were both obtained from one person, and they have been transformed with telomerase to make them immortal (so they don’t age). Then, they have been cultured in a lab for years.\nIn workshop 2, we saw that these two clones were different shapes. This time, we examine how they move.\n\n\n\n\n\n\nSometimes, asking a good question is the most important step!\n\n\n\nWhy do these clones maintain different shapes after growing in the lab for so long? Why don’t they revert to being the same?"
+  },
+  {
+    "objectID": "workshop3.html#the-data",
+    "href": "workshop3.html#the-data",
+    "title": "BIO00066I Workshop 3",
+    "section": "2.2 The data",
+    "text": "2.2 The data\nIn this workshop, we first examine cell movement data that was collected in an automated way by the Livecyte microscope. This shows something interesting, but it is not very reliable, because the Livecyte is not perfect at tracking individual cells.\nPeople are better at tracking individual cells. So we then look at some manual tracking data. We will se such metrics as euclidean.distance (how far the cells have moved), mean.speed (how fast they go), and meandering.index (how much they meander and change their minds about where they are going!).\nWhile we could guess how the cells differ from looking down the microscope, we can use our data science skills in two ways to enrich our perception, by:\n\nshowing metrics with plots - this will enhance out intuition\nusing statistical tests to test our intuitions\nthe tests will determine which metrics (if any) are significantly different between the clones\n\nThis work transforms intuitions into evidence."
+  },
+  {
+    "objectID": "workshop3.html#research-questions",
+    "href": "workshop3.html#research-questions",
+    "title": "BIO00066I Workshop 3",
+    "section": "2.3 Research questions",
+    "text": "2.3 Research questions\n\nDo the two mesenchymal stromal cell clones move differently?\nWhat data set(s) are most reliable?\nWhat are the best parameters to distinguish the clones?"
+  },
+  {
+    "objectID": "workshop3.html#setting-up",
+    "href": "workshop3.html#setting-up",
+    "title": "BIO00066I Workshop 3",
+    "section": "3.1 Setting up",
+    "text": "3.1 Setting up\n\nStart up R Studio, and open your Project.\nOpen the script your worked on in workshop 2\n\nWe will keep working on this script. We advise you to mark clearly where workshop 1, workshop 2 and workshop 3 are. Something like this will help:\n\n########################################################\n#WORKSHOP 3: CELL MOVEMENT DATA\n########################################################\n\nFirst we will install the corrr package. Do do this, we do:\n\ninstall.packages(\"corrr\")\n\n\n\n\n\n\n\ninstall.packages is like installing an app on your phone.\n\n\n\nR obtains the package from the The Comprehensive R Archive Network (CRAN), which is like the ‘app store’ for R. You need an internet connection to use it, but once you have installed a package once, you never need to install it again. Unless you are using a new computer.\n\n\nNote that in install.packages command we need to put quotes \" around the library name (corrr in this case), whereas when we load a library with library(corrr).\nThen clear the previous work, and load the libraries we need:\n\n#clear previous data\nrm(list=ls())\n\n#load the tidyverse\nlibrary(tidyverse)\n\n#load the corr library: this is for examining correlations between many metrics\nlibrary(corrr)\n\n#we need this to make pretty plots with the 'ggarrange' package\nlibrary(ggpubr)"
+  },
+  {
+    "objectID": "workshop3.html#automated-livecyte-cell-movment-data",
+    "href": "workshop3.html#automated-livecyte-cell-movment-data",
+    "title": "BIO00066I Workshop 3",
+    "section": "3.2 Automated Livecyte cell movment data",
+    "text": "3.2 Automated Livecyte cell movment data\nNow read in the data from the file all-cell-data-FFT.filtered.2024-02-22.tsv. This contains some cell movment data.\n\n# Read the automated Livecyte data\ncells &lt;-read_tsv(url(\"https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-02-22.tsv\"),\n                 col_types = cols(\n                   clone = col_factor(),\n                   replicate = col_factor(),\n                   tracking.id=col_factor(),\n                   lineage.id=col_factor()\n                 )\n)\n\nLets see what data we have:\n\nnames(cells)\n\n\n\n\n\n\n\nKeep it simple\n\n\n\nIn data science, we can easily get confused. keep the data as simple as you can (but no simpler).\n\n\nIn the spirit of keeping it simple, let’s retain only the columns in this data frame that we need, using the select function. The cells data framt still have all the data, so it is not lost.\n\nnames(cells)\n\n [1] \"clone\"                    \"replicate\"               \n [3] \"frame\"                    \"tracking.id\"             \n [5] \"lineage.id\"               \"position.x\"              \n [7] \"position.y\"               \"pixel.position.x\"        \n [9] \"pixel.position.y\"         \"volume\"                  \n[11] \"mean.thickness\"           \"radius\"                  \n[13] \"area\"                     \"sphericity\"              \n[15] \"length\"                   \"width\"                   \n[17] \"orientation\"              \"dry.mass\"                \n[19] \"displacement\"             \"instantaneous.velocity\"  \n[21] \"instantaneous.velocity.x\" \"instantaneous.velocity.y\"\n[23] \"track.length\"             \"length.to.width\"         \n\n#select only the columns we need\ncell.move.data &lt;- select(cells,\n        clone,\n        replicate,\n        displacement, \n        track.length, \n        instantaneous.velocity\n)\n#check that we have\nnames(cell.move.data)\n\n[1] \"clone\"                  \"replicate\"              \"displacement\"          \n[4] \"track.length\"           \"instantaneous.velocity\"\n\n#get a simple summaru, using summary and also glimpse\nsummary(cell.move.data)\n\n    clone       replicate  displacement     track.length   \n cloneA:38825   1:30471   Min.   :  0.00   Min.   :  0.00  \n cloneB:62217   2:44617   1st Qu.:  3.98   1st Qu.: 11.23  \n                3:25954   Median : 24.15   Median : 56.02  \n                          Mean   : 47.78   Mean   :102.69  \n                          3rd Qu.: 67.22   3rd Qu.:149.83  \n                          Max.   :514.09   Max.   :960.74  \n                                                           \n instantaneous.velocity\n Min.   :0.0000        \n 1st Qu.:0.0014        \n Median :0.0030        \n Mean   :0.0040        \n 3rd Qu.:0.0054        \n Max.   :0.0595        \n NA's   :15314         \n\nglimpse(cell.move.data)\n\nRows: 101,042\nColumns: 5\n$ clone                  &lt;fct&gt; cloneA, cloneA, cloneA, cloneA, cloneA, cloneA,…\n$ replicate              &lt;fct&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…\n$ displacement           &lt;dbl&gt; 0.000000, 1.617625, 2.247724, 4.052623, 0.00000…\n$ track.length           &lt;dbl&gt; 0.000000, 1.617625, 5.118308, 6.950720, 0.00000…\n$ instantaneous.velocity &lt;dbl&gt; NA, 0.0011713431, 0.0025367271, 0.0013278343, N…\n\n\nNow save your working data:\n\n#lets save our data\nsave.image(\"BIO00066I-workshop3-cell-movement-metrics.Rda\")\n\n#you can load this any time later with:\nload(\"BIO00066I-workshop3-cell-movement-metrics.Rda\")"
+  },
+  {
+    "objectID": "workshop3.html#making-plots",
+    "href": "workshop3.html#making-plots",
+    "title": "BIO00066I Workshop 3",
+    "section": "3.3 Making plots",
+    "text": "3.3 Making plots\nlet’s see how clone A and clone B move. First, we’ll plot the instantaneous.velocity:\n\n#instantaneous.velocity - geom_violin\nggplot(cell.move.data,aes(x=clone,y=instantaneous.velocity,colour=clone))+\n    geom_violin(alpha=0.5)+\n    stat_compare_means()\n\n\n\n\n\n\n\n\nThis plot isn’t very revealing is it? That is because most of the instantaneous.velocity values are very low, and the data are certainly not normally distributed. Biological data is often like this. Plotting metrics on a log scale is often the solution. Log2 or log10 scales are commonly used.\n\n\n\n\n\n\nAdjust this plot yourself\n\n\n\nSo that you plot y=log10(instantaneous.velocity). Does it look better?\n\n\n\n\n\n\n\n\nEnhance the plot with facet_wrap\n\n\n\nThis time, show the repeats by adding a new line to the plot code:\nfacet_wrap(~replicate)+\nWhat is facet_wrap?. Our first categorical value that we split up the data into was clone A and clone B. facet_wrap splits the data up again into a second categorical value, and plots each category. In this case our second category was ~replicate.\n\n\nIf these adjustments to the code worked, you will end up with a plot like this. What does this tell you about clone movement?.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nOptional\n\n\n\nUse your plot code to explore, displacement, track.length and/or instantaneous.velocity."
+  },
+  {
+    "objectID": "workshop3.html#manual-tracking-data",
+    "href": "workshop3.html#manual-tracking-data",
+    "title": "BIO00066I Workshop 3",
+    "section": "3.4 Manual tracking data",
+    "text": "3.4 Manual tracking data\nSometimes, the automated measurements are not the best quality. In this case, we know that the Livecyte microscope is not very good at tracking cells, so the cell movement metrics are not as good as we would like.\nSo Amanda spent many hours manually tracking cells. These results were processed into manual tracking data. First, load the data and of course examine what you have.\n\n#load the manual tracking data\ntrack &lt;-read_tsv(url(\"https://djeffares.github.io/BIO66I/data/A1-and-B2-tracking.data.2025-02-27.tsv\"))\n\n#check it out\nglimpse(track)\nnames(track)\n\n\n\nRows: 201\nColumns: 10\n$ LID                           &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2…\n$ TID                           &lt;dbl&gt; 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 1, 2…\n$ track.duration                &lt;dbl&gt; 230, 1587, 1702, 2484, 2484, 1725, 2484,…\n$ track.length                  &lt;dbl&gt; 80.850, 633.822, 711.651, 963.285, 870.3…\n$ meandering.index              &lt;dbl&gt; 0.08401856, 0.20254946, 0.47929912, 0.13…\n$ euclidean.distance            &lt;dbl&gt; 6.79290, 128.38031, 341.09370, 128.90071…\n$ mean.speed                    &lt;dbl&gt; 0.3515217, 0.3993837, 0.4181263, 0.38779…\n$ track.present.at.start.or.end &lt;lgl&gt; TRUE, FALSE, FALSE, TRUE, TRUE, FALSE, T…\n$ track.never.divides           &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALSE, FALSE…\n$ cell.line                     &lt;chr&gt; \"A1\", \"A1\", \"A1\", \"A1\", \"A1\", \"A1\", \"A1\"…\n\n\n [1] \"LID\"                           \"TID\"                          \n [3] \"track.duration\"                \"track.length\"                 \n [5] \"meandering.index\"              \"euclidean.distance\"           \n [7] \"mean.speed\"                    \"track.present.at.start.or.end\"\n [9] \"track.never.divides\"           \"cell.line\"                    \n\n\nIn this data, TID is the Livecyte tracking ID, a unique number that the microscope gives to each ‘object’ it can identify. LID is the Livecyte lineage ID. This keeps track of the cell lineage (ie: the initial cells, and the subsequent daughter cells that are derived from it as it divides). When a cell divides, both ‘daughter cells’ keep the same lineage ID, but each is assigned a new unique tracking ID.\n\n\n\n\n\n\nDifferent names, same metric!\n\n\n\nNote that different analysis software can use different terminologies to define their metrics. How confusing! In our case instantaneous.velocity from the cells data frame is the same as mean.speed in the tracking data. Both of these metrics are a measure of distance traveled/time.\n\n\n\n\n\nFigure 1. The tracking ID (TID) is a unique ID that the microscope assigned to each object (cell), as it tracks it through time. The lineage ID (LID) is a number assigned to the ‘family’ of cells that derived by cell division during the the experiment. When a cell divides, each daughter cell is given a new tracking ID, but they keep their lineage ID, because they are still part of the same family."
+  },
+  {
+    "objectID": "workshop3.html#plotting-manual-tracking-data",
+    "href": "workshop3.html#plotting-manual-tracking-data",
+    "title": "BIO00066I Workshop 3",
+    "section": "3.5 Plotting manual tracking data",
+    "text": "3.5 Plotting manual tracking data\nLet’s start by looking at the speed that each cell moves at during the experiment. This is recorded as mean.speed in this data set (the same as the instantenous.velocity in the cells data set). We can compare the clones (cell.line) like so:\n\n#compare mean.speed between cell lines\nggplot(track, aes(x=cell.line,y=mean.speed))+\n  geom_boxplot()+\n  stat_compare_means()\n\nWarning: Removed 1 row containing non-finite outside the scale range\n(`stat_boxplot()`).\n\n\nWarning: Removed 1 row containing non-finite outside the scale range\n(`stat_compare_means()`).\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nImprove the plot\n\n\n\nTry these things to improve this plot:\n\nuse geom_violin instead of geom_boxplot\nadding theme_classic\nmaking the x-axis and y-axis look better with xlab(\"something\") and ylab(\"something\")\ngiving the plot a title with ggtitle(\"top title\", subtitle =\"sub text\")\n\n\n\nAfter the workshop, we advise you to plot some other movement metrics from the tracking data."
+  },
+  {
+    "objectID": "workshop3.html#correlations-abound",
+    "href": "workshop3.html#correlations-abound",
+    "title": "BIO00066I Workshop 3",
+    "section": "3.6 Correlations abound!",
+    "text": "3.6 Correlations abound!\nWith biological data (and data from many other sources), different measurements of the same set of ‘things’ are often correlated. For example, human height and weight are strongly correlated. So it is with cells.\nWe could examine each correlation one by one, like so:\n\n#examine whether track.length and mean.speed are correlated\ncor.test(track$track.length,track$mean.speed,method=\"spearman\")\n\n\n    Spearman's rank correlation rho\n\ndata:  track$track.length and track$mean.speed\nS = 701096, p-value = 1.92e-13\nalternative hypothesis: true rho is not equal to 0\nsample estimates:\n      rho \n0.4741649 \n\n\n\n\n\n\n\n\nA Non parametric warning\n\n\n\nHere we use the non parametric test method=\"spearman\" to calculate correlations, because we know from looking at the data that the track.length and probably mean.speed are not normally distributed. In a Spearman rank correlation, rho is the correlation coefficient (sometimes rho is written using the Greek symbol \\(\\rho\\)).\n\n\nBut since there are 11 cell movment metrics, this would quickly become boring. And (just as importantly) the data would be a challenge to understand.\nFortunately, there is an easier way. First we use the correlate function to calculate all pairwise correlations. We save the correlation coefficients in the track.correlations data frame.\n\n#calculate all pairwise correlations\ntrack.correlations &lt;- \n  track |&gt;\n  correlate(method=\"spearman\")\n\nNon-numeric variables removed from input: `track.present.at.start.or.end`, `track.never.divides`, and `cell.line`\nCorrelation computed with\n• Method: 'spearman'\n• Missing treated using: 'pairwise.complete.obs'\n\n#see what we have\nhead(track.correlations)\n\n# A tibble: 6 × 8\n  term                   LID    TID track.duration track.length meandering.index\n  &lt;chr&gt;                &lt;dbl&gt;  &lt;dbl&gt;          &lt;dbl&gt;        &lt;dbl&gt;            &lt;dbl&gt;\n1 LID               NA       -0.148         0.0411       0.0346           0.0281\n2 TID               -0.148   NA            -0.255       -0.268            0.221 \n3 track.duration     0.0411  -0.255        NA            0.840           -0.477 \n4 track.length       0.0346  -0.268         0.840       NA               -0.345 \n5 meandering.index   0.0281   0.221        -0.477       -0.345           NA     \n6 euclidean.distan…  0.00902 -0.133         0.413        0.626            0.407 \n# ℹ 2 more variables: euclidean.distance &lt;dbl&gt;, mean.speed &lt;dbl&gt;\n\n\nThen we use pivot_longer ass we did in BIO00066I core workshop 1, to simplify the data format.\n\n\n\nFigure 2. How pivot_longer reshapes data. Notice that no data is lost. does.\n\n\nWe will use pivot_longer this way:\n\n#Adjust the name of the first column to \"Variable1\"\nnames(track.correlations)[1]=\"Variable1\"\n\n#simplify the data with pivot_longer\ntrack.correlations.pivot &lt;- \n  track.correlations |&gt; \n  pivot_longer(-Variable1, names_to = \"Variable2\", values_to = \"corr.coeff\")\n\n#examine what we have\nhead(track.correlations.pivot)\n\n# A tibble: 6 × 3\n  Variable1 Variable2          corr.coeff\n  &lt;chr&gt;     &lt;chr&gt;                   &lt;dbl&gt;\n1 LID       LID                  NA      \n2 LID       TID                  -0.148  \n3 LID       track.duration        0.0411 \n4 LID       track.length          0.0346 \n5 LID       meandering.index      0.0281 \n6 LID       euclidean.distance    0.00902\n\n\nFinally, we can show all the correlation coefficients in one plot. This gives us a unique and revealing sense of the data.\n\n#plot data in the track.correlations.pivot table\n#using geom_tile (for coloured boxes) and geom_text (to show the correlation coefficient values) \nggplot(track.correlations.pivot, aes(Variable1, Variable2)) +\n  geom_tile(aes(fill = corr.coeff)) +\n  geom_text(aes(label = round(corr.coeff, 1))) +\n  scale_fill_gradient(low = \"white\", high = \"red\")+\n  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))\n\nWarning: Removed 7 rows containing missing values or values outside the scale range\n(`geom_text()`).\n\n\n\n\n\n\n\n\n\n\n3.6.1 Removing unneeded columns\nOK, this is a useful plot. If you have got this far in the workshop, you are doing well!\nBut it is a bit cluttered. We could improve it by removing the TID and LID columns, because these are arbitrary numbers that don’t tell us anything about the biology.\nLuckily, we don’t have to do all our analysis again. We can just remove these columns from the track.correlations.pivot data frame, before we make the plot. Here is how:\n\n#pipe track.correlations.pivot data frame into filter\ntrack.correlations.pivot |&gt;\n\n  #filter out the TID and LID columns\n  filter(Variable1 != 'LID') |&gt;\n  filter(Variable2 != 'LID') |&gt;\n  filter(Variable1 != 'TID') |&gt;\n  filter(Variable2 != 'TID') |&gt;\n  \n  #now we put the plotting code here\n  ggplot(aes(Variable1, Variable2)) +\n  geom_tile(aes(fill = corr.coeff)) +\n  geom_text(aes(label = round(corr.coeff, 1))) +\n  scale_fill_gradient(low = \"white\", high = \"red\")+\n  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))\n\nWarning: Removed 5 rows containing missing values or values outside the scale range\n(`geom_text()`).\n\n\n\n\n\n\n\n\n#and voila! no more TID and LID columns\n\n\n\n3.6.2 Relate the maths to the biology\n\nPositive correlations mean that when one metric is high, the other is high too. For example, track.length and mean.speed are positively correlated. This makes sense, because a cell that has managed to travel a long way, is probably a fast mover.\nNegative correlations mean that when one metric is high, the other is low. For example, track.length and meandering.index are negatively correlated. This makes sense, because a cell that meanders about (doesn’t go a in straight line) probably doesn’t have a long total track length?\nCorrelations near zero mean that the two metrics are not strongly related.\n\n\n\n\n\n\n\nSome points to note in this plot:\n\n\n\n\nround(corr.coeff, 1) reduces the number of decimal places to 1.\ntry the plot with only: geom_text(aes(label = corr.coeff))+ (eek!)\nelement_text(angle = 90, vjust = 0.5, hjust=1) changes the direction of the x axis labels\ntry omitting this line (again, eeek!)\nthe geom_tile method can be used to plot any pairwise interaction data"
+  },
+  {
+    "objectID": "workshop3.html#consolodation-exercises",
+    "href": "workshop3.html#consolodation-exercises",
+    "title": "BIO00066I Workshop 3",
+    "section": "6.1 Consolodation exercises",
+    "text": "6.1 Consolodation exercises\n\n6.1.1 Explore the data\nUse the code from section 3.5 Plotting manual tracking data to plot other features of the manual tracking data. We advise you to plot: track.length, track.duration, meandering.index, and euclidean.distance.\nSometimes, we need to be careful with the data. For track.length, track.duration, we want to choose tracking data only for cells that we have observed it’s entire life - from when it is ‘born’ from the parental cell, to when it divides again.\nFortunately, this information in the data already. We do not see the entire ‘lifetime’ of any cell tracked object that have the value TRUE in in the column track.present.at.start.or.end, because we starting tracking them some time after they were born, or stopped tracking them before they divided again.\nSo we can filter out these lines by putting filter(track.present.at.start.or.end != TRUE) in our code. Let’s check if this makes any difference by comparing track.lengthwithout the filter, and then with the filter:\n\n#track.length without the filter\nno.filter.plot&lt;- track |&gt; \n  ggplot(aes(x=cell.line, y = track.length))+\n  geom_violin()+\n  stat_compare_means()+\n  ggtitle(\"no filter\")\n\n#track.length WITH the filter\nfilter.plot&lt;- track |&gt; \n  filter(track.present.at.start.or.end != TRUE) |&gt; \n  ggplot(aes(x=cell.line, y = track.length))+\n  geom_violin()+\n  stat_compare_means()+\n  ggtitle(\"with filter\")\n\n#show plots side by side\nggarrange(no.filter.plot,filter.plot)\n\n\n\n\n\n\n\nDid this make a difference?\n\n\n\n\nDid we get a different result after this ‘cleaning up’, with this large data set?\nMight we have a different result after this cleaning up, with a small data set?\n\n\n\n\n6.1.1.1 Explore other metrics\nTry using the code above to explore other metrics in the track data other than track.length. Options include track.duration, track.duration.total.time,euclidean.distanceandeuclidean.distance`.\n\n\n\n6.1.2 Improve the correlation heat map\nWhat if we wanted to show only the correlations where the absolute value of \\(\\rho\\) was greater than 0.25? Try using the pipe operator |&gt; to filter the track.correlations.pivot data before plotting, with:\n\n#filter the data\ntrack.correlations.pivot |&gt;\n  filter(abs(corr.coeff) &gt; 0.25) |&gt;\n#now we put the plotting code here \n  ggplot(aes(Variable1, Variable2)) +\n  geom_tile(aes(fill = corr.coeff)) +\n  geom_text(aes(label = round(corr.coeff, 1))) +\n  scale_fill_gradient(low = \"white\", high = \"red\")+\n  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))"
+  },
+  {
+    "objectID": "workshop3.html#planning-for-your-report",
+    "href": "workshop3.html#planning-for-your-report",
+    "title": "BIO00066I Workshop 3",
+    "section": "6.2 Planning for your report",
+    "text": "6.2 Planning for your report\nThe RStudio project is worth 30% of this module. The submission of your RStudio project should:\n\nhave a logical folder structure for your analysis\ncontain a well-commented script\nbe well-organised and follow good practice in use of spacing, indentation and variable naming.\n\nThe details are described in this document.\nThe aim of all this is to make the code and the data analysis clear and readable for someone else.\nSo spending just 10 minutes tidying your code now will make your future life easier. For example, look at your variable names, and make them clearer."
+  },
+  {
+    "objectID": "workshop3.html#in-case-install.packages-fails",
+    "href": "workshop3.html#in-case-install.packages-fails",
+    "title": "BIO00066I Workshop 3",
+    "section": "6.3 In case install.packages fails",
+    "text": "6.3 In case install.packages fails\nIf install.packages(\"corrr\") fails, you can obtain the track.correlations data frame like this:\n\ntrack.correlations &lt;-read_tsv(url(\"https://djeffares.github.io/BIO66I/track.correlations.tsv\"))"
+  },
+  {
+    "objectID": "BIO00066I-data-analysis-notes-2024.html",
+    "href": "BIO00066I-data-analysis-notes-2024.html",
+    "title": "Notes on data analysis",
+    "section": "",
+    "text": "Notes on data analysis\n\nstarted 2023-12-14\n\n\n2023-12-14\nThe data is here on google drive: https://drive.google.com/drive/folders/12ede56NYuNhz1mOmS6zBmXKzxJ7qTLGg\nDownload it all to /Users/dj757/gd/modules/BIO00066I-BABS4/data\n\n\n2023-12-17\nworking dir is now: /Users/dj757/gd/modules/BIO00066I set up a git repo https://github.com/djeffares/BIO00066I\nBIO00066I-workshop2.Rmd started and BIO00066I-workshop2.html\nCleaning up all the data files:\n\n\n2023-12-18\nMSCs mesenchymal stem cells / stromal cells are multipotent stem cells (but not pluripotent) mesenchymal: defined by cell surface marker can diff into mesenchymal cells: bone, cartilage, fat (connective tissues) in lots of tissues: bone marrow, adipose, etc ours are from BM\nMSCs: immuno-modulatory, make cytokines are heterogeneous have subpopulations - but not understood\nsource: BM femoral head tissues (hip bone) MSCs infected with telomerase –&gt; immortalised cloned by limiting dilution to CF units creating clonal homogenous cell lines\nA & B are different cell lines from one donor some are text book MSCs some we don’t know what they do: they are nullipotent but more immunomod clone A: text book (pluripotent) clone B: more immunomod\nclone A clone B\nClone A: Y201 more migratory might move to a site in the body thinnner: len/width ratio\nB: Y202\nless potent\nmore rounded\nremove area &lt; 500 ug dry mass &lt; 200 pg large ones?\n\n2024-01-12 data clean up and markdown work\nWorked on comparing the two clones in the all-cell-data-FFT.tsv file. Found some differences, in the script analysis-cloneA-v-cloneB-2024-01-12.R Put this in to a markdown: comparing-clones.Rmd, which may be a workshop.\n\n\n2024-01-16 looking at analysis-cloneA-v-cloneB-2024-01-12.R: filtering\nTo clean up the data, to remove area &lt; 500 ug dry mass &lt; 200 pg large ones? None of these make much sense, given the data. So I filtered by quantiles: c(0.0001,0.9999) for area, dry.mass and volume This data is saved in: all-cell-data-FFT.filtered.2024-01-16.tsv and all.filtering.plots.2024-01-16.pdf\n\n\n2024-01-16 looking at Manual Cell Tracking data (mtrackJ)\ndata in: /Users/dj757/gd/modules/BIO00066I/raw-data/ A1 points python output.csv renamed A1-points-python-output.csv B2 points python output.csv B2-points-python-output.csv\nimproved the column names: data/A1-points-python-output-improved-names-2024-01-16.csv\nscript: tracking-data-analysis.R\n\n\n\n\n2024-01-17: summary so far\n\nplay-with-data-2023-12-18.R\nshows that these metrics make nice plots, as are they are very different bwteeen A and clone B - width - area - length - track.length - length.to.width.ratio - sphercity\nSee: /Users/dj757/gd/modules/BIO00066I/plots/sample.metrics.2023-12-18.jpg\nscript: play-with-data-2023-12-18.R inputs: all-cell-data-FFT.tsv\nTO DO: remove track length give them an excel file with different tabs? would the website file loading affect R project stuff (ask Emma)\n###: Comparing and filtering data from clone A and clone B Shows: - cell volume, dry mass and cell area are very different between clone A and clone B filtering - filtering by area &lt; 500 ug, dry mass &lt; 200 or for large ones doe not make much sense - we can filter by quantiles, see: all.filtering.plots. This shows the distrbutions a little better\ncloneA is thinner and longer cloneB is wider and shorter\nall params of these cells are statistically different: Some have SUBTLE differences “dry.mass 7.7e-166” “volume 7.7e-166” “length 0” “orientation 1.9e-21”\nSome are VERY DIFFERENT “sphericity 0” “mean.thickness 0” “radius 0” “area 0” “width 0” “displacement 0” “instantaneous.velocity 0”\ninputs: all-cell-data-FFT.tsv which contains /Users/dj757/gd/modules/BIO00066I/raw-data/ A1-FFT.csv A2-FFT.csv A3-FFT.csv B1-FFT.csv B2-FFT.csv B3-FFT.csv\nscript: analysis-cloneA-v-cloneB-2024-01-12.R\nTO DO: do filtering to cut off the top ends a bit more add this to the workshop? do NOT trust the equipment! ie: the company recommended this - is this OK??\n\n\nLooking at Manual Cell Tracking data (mtrackJ): tracking-data-analysis\nShows: that speed and track length are very different between A1 and B2\nscript: tracking-data-analysis.R\ninputs: A1-points-python-output.csv B2-points-python-output.csv\n\n\nComparing the repeats:\nshows that clone B, replicate 3 is a little different\nscript: comparing-repeats.R\ninputs: A1-points-python-output.csv B2-points-python-output.csv\nTO DO:\n    igore movement from all FFT data\n    instead use the Manual Cell Tracking data\nTO DO next: make some rose plots from: alb_A1_8bit-0.25 points.xlsx (this is what the python script used as input)\nsee what I can do with these alb_A1_8bit-0.25 points.xlsx\n    animated plots?\n    do they move in random directions? or vertical/horizonal?\npossible workshops: 1. replicates and size metrics 2. movement information 1 3. extrapolation from lab stuff & movement information 2 (rose plots)\nALSO: molecular data secretome prpteomic analysis has been done and there is a manuscript on biorxiv: https://www.biorxiv.org/content/10.1101/2023.01.19.524473v1 calibration curve data from Amanda\n\n\n2024-01-17 Comments from Amnda about the cells & lab work\nFrom an email\nThe broad question I’m posing to the students is whether we can use morphometric parametres (which I define as size, shape) and cells migration as predictors as stem cell function, as cell structure relates to function. I.e. are then one or two parametres (or a combination) that a typical stem cell that can become multiple cell types has which then differs in a stem cell that doesn’t differentiate. This could then be useful therapeutically to characterise cells quickly without the need for longer functional assays or methods that don’t currently distinguish different stem cells easily from one another.\nThe practical sessions the students complete are: 1. Cell Culture and seeding the two clonal cell lines on to glass coverslips 2. ‘Fixing’ the cells a few days later and staining their cytoskeleton and nuclei 3. Imaging the cells using fluorescent microscopy 4. Enzyme activity assay of alkaline phosphatase as a marker of differentiation (functional stem cell assay) This is where the students will create a calibration curve and extrapolate unknown data.\nThe data analysis then complements what the students will see visually in the lab as they can work with multiple parameters to first see how they vary and then secondly perhaps try and define for themselves a specific signature of parametres that could be the basis of identifying the same cells from a mixed population, for example making plots with parametres on different axis and overlaying the data to see if that distinguishes or not (length to width ratio vs sphericity could be a good one based on your plots). I don’t know whether we could do something like PCA here to look at differences, I’ve never done it before so could be a ridiculous idea.\nThe two clonal lines are genetically identical as they come from the same donor, but they have different gene expression patterns, as they are functionally different and as shown from proteomics and secretome data. As far as they have characterised them functionally (stem cell differentiation) they haven’t noticeably changed, similarly to HeLa cells and CHO cells that have been cultured for many years.\n\n\n\n2024-01-18 consolodation into one script per workshop\n\nPossible workshops:\n\nCommon R workshop\nReplicates and size metrics\nMovement information 1\nMovement information 2 (rose plots) and calibration curve\n\n\ncell biology workshop 1. Replicates and size metrics\nscript: BIO00066I-workshop2-replicates-and-size-metrics.R workshop2-replicates-and-size-metrics.qmd\nUse these scripts as starting points:\n\nplay-with-data-2023-12-18.R #makes a nice summary table of the clones\nanalysis-cloneA-v-cloneB-2024-01-12.R #does some filtering and shows which metrics that are different\nBIO00066I-workshop2.Rmd #good for a simple into to the data\ncomparing-repeats.R #shows how repeats differ\n\ncombine all these scripts:\n\n\n\ngetting Quarto running:\nfrom: https://quarto.org/docs/get-started/\n\ninstalled Quarto\nfollow instructios here for R Studio: https://quarto.org/docs/get-started/hello/rstudio.html\n\nEASY!!\n\n2024-01-19\nworked on script: BIO00066I-workshop2-replicates-and-size-metrics.R\nthis is more or less complete and it:\n\nintroduces the full feature table data\nexplores cell shape/size metrics with plots and stats\nshows which shape/size metrics are correlated (most of them!)\ncell shape metriics consistently distinguish between clones, in all reps\n\nNB: now usingdata is filtered to remove the top end and low end of area, dry.mass and volume as described in filtering-FFT-data-2024-01-19.R\ndata from here\n\n\n2024-01-20\nworked on workshop 3: BIO00066I-workshop3-cell-movement-metrics.R\nexploring cell movement metrics: first, in the FFTdata, showing that the movement metrics are not strongly correlated (unlike the cell shape data) but they do consistently distinguish between clones, in all reps\nPCA\n\nI tried to separate the clones by principal componets clustering\nIt was not very convincing\nSee pca-trial-2024-01-20.R and arranged.pca.plot.2024.01.20.jpeg\n\n\n\n2024-01-23 workshop2 into quarto and trial of hosting:\nbased on this page: https://quarto.org/docs/publishing/github-pages.html\nI have the hosting working on the repo BIO66I, see: https://djeffares.github.io/BIO66I/\nThis is deployed from branch: gh-pages, from the folder docs/\nTo update make a new .qmd on terminal: quarto render (in the fir where the qmd’s are, this puts the htmls in docs) git add docs/*, commit and push you will then need to wait a bit for the pages build and deployment in workflows on github\nNOTE:\nThe navbar is controlled in _quarto.yml\nBIO66I/data/ contains all the data in branch main\nbut the only data available for download is in branch gh-pages, in dir docs/data this is at: https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-01-19.tsv\nNOTE: be careful that you are in branch gh-pages when adding, commiting and pushing\n\n\nMoving the directory:\nfrom /Users/dj757/gd/modules/BIO00066I to /Users/dj757/gd/modules/BIO66I\nbecause I got the BIO66I to be published, and its simpler to type!\n\n\n2024-02-15 starting on workshop 3\nstarting with: BIO00066I-workshop3-cell-movement-metrics.R\n\n\nImproving the analysis with the new dates data for w2\nSee script: BIO00066I-new-w2-gated-data.R obtained all data from AB /Users/dj757/gd/modules/BIO66I/raw-data/2016-08-26_14-47-36_P*csv\n\n\n\nWork for workshop 4\nfrom AB: Yes you’re right that the two files are alb_B2_8bit-0.25 tracks.xlsx and alb_A1_8bit-0.25 tracks.xlsx\nThe difference is the files you attached to the email. You’ve got the  alb_A1_8bit-0.25 points.xlsx attached to the email rather than alb_A1_8bit-0.25 tracks.xlsx. The points data is the raw data I obtained from cell tracking on imageJ. Whereas the tracks file is the output from python which analysed the point file to give metrics.\n\nnew names for manual point and track data:\nalb_A1_8bit-0.25 points.xlsx alb_B2_8bit-0.25 points.xlsx\nalb_A1_8bit-0.25 tracks.xlsx alb_B2_8bit-0.25 tracks.xlsx\nFrom AB:\nI’ve renamed the files to match each other, added labels to the columns and put the correct units in.\nWhat I would like to do on R if we can for each clone is: - Sort the data so we have summaries for each individual cell of the following metrics (mean speed, total distance travelled, euclidean distance (shortest distance from start to finish/as crow flies), meandering index (total distance travelled/euclidean distance) - For A1 the measurements for the first cell I tracked (from lineage 1, cell 1) is the first 15 rows of the spreadsheet. Cell I15 is the total distance travelled, cell J15 is the euclidean distance the mean speed is the mean of cells M6 - M15\n\n\n\n2024-03-16\n\n\nstandard curve\nworkind script:\nfile: raw-data/Example Alkaline Phosphatase Activity assay .xlsx added 2nd sheet that is more tidyverse"
+  },
+  {
+    "objectID": "BIO00066I-notes-2025-26.html",
+    "href": "BIO00066I-notes-2025-26.html",
+    "title": "BIO00066I notes 2025-26",
+    "section": "",
+    "text": "Google sheet Discussion board: https://docs.google.com/spreadsheets/d/1MYfLW1Y2cZ2QCfoOg-aEOhyD6bCpmAwoppUONhKDx2E/edit?resourcekey=&gid=1144808183#gid=1144808183\nStrand module planners https://docs.google.com/spreadsheets/d/1hBcOgTB9tPPznW0SjiwcTvzLcZeEZCtDvRNbmZUHles/edit?gid=372497470#gid=372497470\nTutors 2025/26: https://docs.google.com/spreadsheets/d/16Hq-KOXnIPV2nYB04M15dwkZqRm0x1is/edit?gid=1117387823#gid=1117387823\n##Tutorials The only change to tutorials are that Tutorial 1 and 5 will be taught to all groups combined (approx 18 - 24 students). This has been communicated to tutors. Each strand also has a GTA supporting tutorials, details in my previous email. For info: Tutors 2025/26.\n\n\n\nThe submission deadline for the scientific report and RStudio Project has moved later in the week this year. The deadline is Midday Thursday, 7th May. Please can you change this on any of your teaching materials.\n\n\n\nhttps://docs.google.com/document/d/1H6bGg_b6jKDrYMebNOGQdG1Dq04Imv0TsLtNJKra2Rg/edit?tab=t.0#heading=h.nvmdat48hjxm\n\n\n\nWeekly content on the VLE, to be released Wednesday the week beforehand."
+  },
+  {
+    "objectID": "BIO00066I-notes-2025-26.html#links",
+    "href": "BIO00066I-notes-2025-26.html#links",
+    "title": "BIO00066I notes 2025-26",
+    "section": "",
+    "text": "Google sheet Discussion board: https://docs.google.com/spreadsheets/d/1MYfLW1Y2cZ2QCfoOg-aEOhyD6bCpmAwoppUONhKDx2E/edit?resourcekey=&gid=1144808183#gid=1144808183\nStrand module planners https://docs.google.com/spreadsheets/d/1hBcOgTB9tPPznW0SjiwcTvzLcZeEZCtDvRNbmZUHles/edit?gid=372497470#gid=372497470\nTutors 2025/26: https://docs.google.com/spreadsheets/d/16Hq-KOXnIPV2nYB04M15dwkZqRm0x1is/edit?gid=1117387823#gid=1117387823\n##Tutorials The only change to tutorials are that Tutorial 1 and 5 will be taught to all groups combined (approx 18 - 24 students). This has been communicated to tutors. Each strand also has a GTA supporting tutorials, details in my previous email. For info: Tutors 2025/26."
+  },
+  {
+    "objectID": "BIO00066I-notes-2025-26.html#submission-deadline",
+    "href": "BIO00066I-notes-2025-26.html#submission-deadline",
+    "title": "BIO00066I notes 2025-26",
+    "section": "",
+    "text": "The submission deadline for the scientific report and RStudio Project has moved later in the week this year. The deadline is Midday Thursday, 7th May. Please can you change this on any of your teaching materials."
+  },
+  {
+    "objectID": "BIO00066I-notes-2025-26.html#week-56-employability-and-reflection-workshop",
+    "href": "BIO00066I-notes-2025-26.html#week-56-employability-and-reflection-workshop",
+    "title": "BIO00066I notes 2025-26",
+    "section": "",
+    "text": "https://docs.google.com/document/d/1H6bGg_b6jKDrYMebNOGQdG1Dq04Imv0TsLtNJKra2Rg/edit?tab=t.0#heading=h.nvmdat48hjxm"
+  },
+  {
+    "objectID": "BIO00066I-notes-2025-26.html#vle",
+    "href": "BIO00066I-notes-2025-26.html#vle",
+    "title": "BIO00066I notes 2025-26",
+    "section": "",
+    "text": "Weekly content on the VLE, to be released Wednesday the week beforehand."
+  },
+  {
+    "objectID": "workshop2.html",
+    "href": "workshop2.html",
+    "title": "BIO00066I Workshop 2",
+    "section": "",
+    "text": "Note\n\n\n\nWorkshop 1 for this module is here"
+  },
+  {
+    "objectID": "workshop2.html#the-biology",
+    "href": "workshop2.html#the-biology",
+    "title": "BIO00066I Workshop 2",
+    "section": "2.1 The biology",
+    "text": "2.1 The biology\nToday we will look at some data from mesenchymal stem cells (MSCs, sometimes called stromal cells). MCSs are multipotent cells, than can differentiate into many kinds of mesenchymal cells, including bone, cartilage and fat cells. They are not pluripotent, in that they do have limits about how they differentiate.\nMSCs are also:\n\nimmuno-modulatory (they make cytokines)\nheterogeneous (they have subpopulations that are different from each other)\n\nThe MSCs we are looking at are from bone marrow femoral head tissues (from the hip bone). These MSCs were immortalised (by transforming them with a telomerase gene), and then cloned by limiting dilution. We will compare the data on cell shape and size from just two clones, both obtained from one person’s femoral head tissues. Each clone was derived from a single cell from the person. We call these two clones clone A and clone B. Today, we will use our data analysis skills to explore how these cell line differ. Remember, these two cell lines were both obtained from one person. You probably have these kinds of MSCs too."
+  },
+  {
+    "objectID": "workshop2.html#research-questions",
+    "href": "workshop2.html#research-questions",
+    "title": "BIO00066I Workshop 2",
+    "section": "2.2 Research questions",
+    "text": "2.2 Research questions\n\nWhat parameters do we have in the data obtained from the Livecyte machine/method?\nWhich parameters differ between the clones?\nWhich parameters are correlated?"
+  },
+  {
+    "objectID": "workshop2.html#the-data",
+    "href": "workshop2.html#the-data",
+    "title": "BIO00066I Workshop 2",
+    "section": "2.3 The data",
+    "text": "2.3 The data\nThe data we have today are derived from live cell imagining of mesenchymal stem cells with a Livecyte microscope and the software it has. Each clones was cultured and the microscope captured cell shape and size information for thousands of cells from each clone (clone A and clone B). For each clone, we measured three biological replicates.\nThe Livecyte tracked each cell every 23 minutes, giving each data point a tracking ID (which tracks a unique cell ‘object’) and a lineage ID, which recalls the lineage of cells as they divide. For example, if cell 1, divided into cell 1A and cell 1B, they are all recorded by the Livecyte as being part of lineage ID 1.\nThis video shows what Livecyte can do (perhaps turn the sound down, or watch later).\n\n\n\n\n\n\n\nBiological replicates and technical replicates\n\n\n\nA biological replicate repeats an experiment from different cell types, tissue types, or organisms to see if similar results can be observed.\nTechnical replicates are repeat measurements of the same biological material, which help to show how much variation comes from the equipment or different methods (rather from the biology).\nOur replicates are almost biological replicates, because we grew the cells three times.\n\n\n\n\n\n\n\n\nThinking like a data scientist\n\n\n\nData science can be challenging when you first start. But data science does have core concepts, like any other science.\n\nConsider the motivation or scientific question before drawing a plot\nReflect on how the plot or analysis addresses the scientific question\nUse each plot to adapt, to inspire new research questions and new inquiries\nEnsure that your scripts are reproducible and clearly commented\nConsider what the results tell you about the biology"
+  },
+  {
+    "objectID": "workshop2.html#getting-started",
+    "href": "workshop2.html#getting-started",
+    "title": "BIO00066I Workshop 2",
+    "section": "3.1 Getting started",
+    "text": "3.1 Getting started\n\nStart RStudio from the Start menu\nOpen your RStudio project using the dropdown menu at the very top right of the RStudio window.\nMake a new script then save it with a sensible name that will help you to know later what is in this file. BIO00066I-workshop2.R would work.\nAdd a comment to the script so you know what it is about, for example\n\n\n#Data Analysis 2: Cell Biology\n#Date 2026-02-13\n\n\nClear all the previous data, and load tidyverse package by adding these lines to your script:\n\n\n#clear previous data\nrm(list=ls())\n\n#load the tidyverse\nlibrary(tidyverse)\n\n\nFinally load another library that allows us to make multi-part plots (this can be useful sometimes). #we need this to make pretty plots with the ‘ggarrange’ package\n\n\n#load the ggpubr package for multi-part plots\nlibrary(ggpubr)\n\n\n\n\n\n\n\nImportant\n\n\n\nThe data you will work on in these workshops is the complete data set for the report. This is not example data.\n\n\n\nMake sure all these lines of code are in your script, with comments.\nSave the script."
+  },
+  {
+    "objectID": "workshop2.html#loading-the-data",
+    "href": "workshop2.html#loading-the-data",
+    "title": "BIO00066I Workshop 2",
+    "section": "3.2 Loading the data",
+    "text": "3.2 Loading the data\nIn workshop 1, we showed you how to import data from files. Today, we load a tab-separated value (TSV) file from a website:\n\ncells &lt;-read_tsv(url(\"https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-02-22.tsv\"),\n    col_types = cols(\n        clone = col_factor(),\n        replicate = col_factor(),\n        tracking.id=col_factor(),\n        lineage.id=col_factor()\n    )\n)\n\n\n\n\n\n\n\nAbout read_tsv\n\n\n\nWe use the read_tsv function to read the tab-separated value file. Clicking on the link in the read_tsv takes you to a website about this function. All the code chunks in these workshops have links like this. The clone = col_factor(),replicate = col_factor() etc let’s R know that we want these columns to be factors, rather than numeric values. Factors are used to represent categorical data."
+  },
+  {
+    "objectID": "workshop2.html#exploring-the-data",
+    "href": "workshop2.html#exploring-the-data",
+    "title": "BIO00066I Workshop 2",
+    "section": "3.3 Exploring the data",
+    "text": "3.3 Exploring the data\nIt is important to know what data you have. How many rows and columns etc. There are many ways to do this in R. Here are some of our favourites. Copy and past these into your R script, and try them out.\n\n#look at the data, like an excel table:\nview(cells)\n\n#what are the names of the columns?\nnames(cells)\n\n#how many rows and columns you we have?\nnrow(cells)\nncol(cells)\ndim(cells)\n\n#other ways to peek at data:\nsummary(cells)\nglimpse(cells)\n\nYou may have noticed that we have two clones (cloneA and cloneB). For each clone, we have three replicates. For each replicate, we have many readings of cell widths, cell volume, cell sphericity, and so on.\n\n\n\n\n\n\nWhich method of do you like the best?\n\n\n\nWhy not take a note of this, and use it all the time?"
+  },
+  {
+    "objectID": "workshop2.html#cleaning-up",
+    "href": "workshop2.html#cleaning-up",
+    "title": "BIO00066I Workshop 2",
+    "section": "3.4 Cleaning up",
+    "text": "3.4 Cleaning up\nWhen you ran names(cells) you will have seen many metrics from the Livecyte software. We don’t need all these, and the movement metrics them are unreliable, so let’s remove them. It is simple to remove columns of data, using the select command, like so:\n\n#see what we have\nnames(cells)\n\n#remove all the movement metrics (which are not reliable)\ncells &lt;- select(cells, \n                -position.x,\n                -position.y, \n                -pixel.position.x, \n                -pixel.position.y,\n                -displacement,\n                -instantaneous.velocity,\n                -instantaneous.velocity.x,\n                -instantaneous.velocity.y,\n                -track.length\n)\n\n#check that our data is simpler\nnames(cells)\n\nIn the select function, using the minus sign - before a column name removes it. We can also also use select to define which columns to keep, by omitting the -. For example cells &lt;- select(cells, clone, replicate, volume) will only keep the columns we listed."
+  },
+  {
+    "objectID": "workshop2.html#save-your-work-regularly",
+    "href": "workshop2.html#save-your-work-regularly",
+    "title": "BIO00066I Workshop 2",
+    "section": "3.5 Save your work regularly",
+    "text": "3.5 Save your work regularly\nNow save your data and save your script. This command will save all the variables you have loaded, or created so far:\n\n#save all my stuff\nsave.image(\"BIO00066I-workshop2.Rda\")\n\nYou can load all the data again with:\n\n#load all my stuff from last time\nload(\"BIO00066I-workshop2.Rda\")"
+  },
+  {
+    "objectID": "workshop2.html#summarise-with-dplyr",
+    "href": "workshop2.html#summarise-with-dplyr",
+    "title": "BIO00066I Workshop 2",
+    "section": "3.6 Summarise with dplyr",
+    "text": "3.6 Summarise with dplyr\nThe view(cells) command shows that we have many cell shape metrics. We saw a summary of our cell shape metrics with the summary(cells) command above.\nWe can do even better, with tools from the dplyr package (part of the tidyverse). These allow us to make summaries of this data quickly. These methods will work for any data frames of any kind of data.\n\n\n\n\n\n\ndplyr is wonderful\n\n\n\ndplyr is like a set of pliers, helping us to ‘bend’ or ‘reshape’ our data.\n\n\nHere is the command. I will explain it below.\n\nsummary.table &lt;- cells |&gt; \n    group_by(clone, replicate) |&gt; \n    summarise(\n        volume=median(volume),\n        mean.thickness=median(mean.thickness),\n        radius=median(radius),\n        area=median(area),\n        sphericity=median(sphericity),\n        length=median(length),\n        dry.mass=median(dry.mass),\n        length.to.width=median(length.to.width)\n)\n\n\n3.6.1 What this code does\n\nThe cells |&gt; part takes the data from the cells data frame, and ‘pipes’ it into the group_by function. The |&gt; symbol as means put this data into the next bit.\ngroup_by(clone, replicate) means that make groups of data, according to which clone they are, and which replicate culture they were from.\nsummarise calculates some summaries of all the data rows (for each clone and replicate). The part volume=median(volume) creates a header called volume and fills this with the median cell volume for each clone and replicate\nRight at the top, summary.table &lt;- stores the results of all the piping in an object called summary.table.\n\nHave a look at the information we generated with:\n\nview(summary.table)\n\n\n\n\n\n\n\nDo you see any patterns in this data?\n\n\n\n\nWhat does this table tell you about clone A and clone B?\nWhat does this tell you about mesenchymal stem cells?"
+  },
+  {
+    "objectID": "workshop2.html#making-plots",
+    "href": "workshop2.html#making-plots",
+    "title": "BIO00066I Workshop 2",
+    "section": "3.7 Making plots",
+    "text": "3.7 Making plots\nIt looks like many of the cell shape metrics from above might differ between clones. So let’s look deeper, starting with cell width. We will make a box and whisker plot. We use a small ‘trick’ here: by including fill=replicate we force R to make different plots for each replicate.\n\nggplot(cells,aes(x=clone,y=width,fill=replicate))+\n    geom_boxplot()\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMaking plots with ggplot\n\n\n\nNo matter what shape plot you want, ggplot uses the same syntax.\n\nStart by telling R what data you want to use like this: ggplot(some_data_frame,aes(x=x_axis_data, y=y_axis_data) +\n\nIn this line, x_axis_data and y_axis_data are columns of some_data_frame.\n\nThen define what the shape plot you want (the ‘geometry’): geom_boxplot(), geom_histogram() etc.\nAdd extra things to customise your plot, eg: xlab(\"my x axis label\")\n\nIf you are unsure what to do, it’s OK to ask! Googling “ggpplot how to make a boxplot” (or any other plot) will help.\n\n\nIt does look like clone A and clone B differ consistently in width, with all repeats. To prove this, we would like to do a statistical test. A Student’s t-Test t.test would work. But t-Test’s assume that the data are normally distributed (like a bell curve).\nWe can test this approximately by plotting data, as below. It doesn’t look perfectly ‘bell shaped’, so let’s play is safe and use a nonparametric test.\n\nggplot(cells, aes(x = width)) +\n  geom_density()\n\nThe nonparametric equivalent of a t-Test is a Wilcoxon rank sum test. There are two ways to run this test in R. We can do wilcox.test(vectorA, vectorB), where vectorA and vectorB contain the numeric values we want to test.\nBut does does not suit tidyverse data frames very well. So we will use the wilcox.test(numeric_values ~ category_name, data = some_data_frame) method, like so:\n\n#Wilcoxon rank sum test\n#To test if cloneA and cloneB have statistically different widths\nwilcox.test(width ~ clone, data = cells)\n\n\n    Wilcoxon rank sum test with continuity correction\n\ndata:  width by clone\nW = 657964994, p-value &lt; 2.2e-16\nalternative hypothesis: true location shift is not equal to 0\n\n\nBecause the p-value is very low (&lt; 2.2e-16), this means the null hypothesis (that both sets of numbers come from the same population) is very unlikely to be true.\n\n\n\n\n\n\nNon-parametric tests are safe\n\n\n\nParametric tests are based on assumptions about the distribution of the real data. Nonparametric statistics are not based on these assumptions. So they are safer. Many biological metrics need nonparametric tests.\n\n\n\n3.7.1 An easier way\nFortunately, you can add the results of nonparametric tests to ggplot, by adding stat_compare_means() to our plot. Note that below we do not force R to split up the replicates as we did above.\n\nggplot(cells,aes(x=clone,y=width))+\n    geom_boxplot()+\n    stat_compare_means()"
+  },
+  {
+    "objectID": "workshop2.html#plotting-a-small-data-set",
+    "href": "workshop2.html#plotting-a-small-data-set",
+    "title": "BIO00066I Workshop 2",
+    "section": "5.1 Plotting a small data set",
+    "text": "5.1 Plotting a small data set\nPreviously we used geom_boxplot() to compare clone A and clone B. Box and whisker plots (geom_boxplot) and violin plots (geom_violin, which we describe below) are good ways of displaying large amounts of data, but they can be misleading for small data sets. For small data sets it is better to simpler plot all the data points, so the audience has all the information. Let’s compare boxplot and a ggplot method to plot all the data (geom_jitter).\n\nggplot(small.tracking.data, aes(x=clone, y=width))+\n    geom_boxplot(fill=NA)+\n    geom_jitter(width = 0.2,size=3,pch=1)+\n    theme_minimal()\n\nnames(small.tracking.data)\n\n\n\n\n\n\n\nif you have time\n\n\n\nTry two alternations of this plot.\n\nRemove the geom_boxplot(fill=NA)+ line. Does it display the data more clearly?\nReplace width in y=width with some other cell shape/size parameter. Using names(small.tracking.data) will show what metrics we have."
+  },
+  {
+    "objectID": "workshop2.html#statistical-tests-with-small-data-and-large-sets",
+    "href": "workshop2.html#statistical-tests-with-small-data-and-large-sets",
+    "title": "BIO00066I Workshop 2",
+    "section": "5.2 Statistical tests with small data and large sets",
+    "text": "5.2 Statistical tests with small data and large sets\nWe use statistical tests like the Wilcoxon rank sum test (wilcox.test) to estimate how likely to be drawn from the same ‘population’ (or distribution). If the P-value is very low (eg: one chance in 10,000 or 0.0001), then we can conclude that the two data sets are indeed different. But the power of such a test depends on the number of data points.\nWe can prove that to ourselves by comparing a Wilcox test results from the small.tracking.data and the much larger cells data set:\n\n#test with small.tracking.data\nwilcox.test(width ~ clone, data = small.tracking.data)\n\n\n    Wilcoxon rank sum exact test\n\ndata:  width by clone\nW = 153, p-value = 0.09753\nalternative hypothesis: true location shift is not equal to 0\n\n#test with 'cells' data frame - a *much* larger data set  \nwilcox.test(width ~ clone, data = cells)\n\n\n    Wilcoxon rank sum test with continuity correction\n\ndata:  width by clone\nW = 657964994, p-value &lt; 2.2e-16\nalternative hypothesis: true location shift is not equal to 0\n\n\n\n\n\n\n\n\nP-values can be misleading\n\n\n\nP-values are not the biology. Use them with caution, and your own judgment. Sometimes very small differences, or very weak correlations can be statistically significant, but have little relevance for the biology."
+  },
+  {
+    "objectID": "workshop2.html#comparing-plots-side-by-side",
+    "href": "workshop2.html#comparing-plots-side-by-side",
+    "title": "BIO00066I Workshop 2",
+    "section": "5.3 Comparing plots side by side",
+    "text": "5.3 Comparing plots side by side\nNow, lets look plotting the small and large data sets side by side. Sometimes, a plot can give us a better sense of the data that a P-value.\n\n#plot with the large data\n#storing the plot in an object called large.data.plot\nlarge.data.plot &lt;- ggplot(cells, aes(x=clone, y=width))+\n    geom_boxplot()+\n    geom_jitter(width = 0.2,size=3,pch=1)+\n    stat_compare_means()+\n    ylim(0,200)+\n    ggtitle(\"large data\")\n\n#plot with the small data\n#storing the plot in an object called small.data.plot\nsmall.data.plot &lt;- ggplot(small.tracking.data, aes(x=clone, y=width))+\n    geom_boxplot()+\n    geom_jitter(width = 0.2,size=3,pch=1)+\n    stat_compare_means()+\n    ylim(0,200)+\n    ggtitle(\"small data\")\n\n#create a two panel plot, with large.data.plot and small.data.plot\nggarrange(large.data.plot,small.data.plot)\n\nThe geom_jitter with the large data set looks terrible! This is not a good way to show this data. So remove this part of the plot, and try again. You may also want to try using geom_violin instead of geom_boxplot.\nYou will also notice that we set the same y axis range for both plots, with ylim(0,200). We did this so we can compare the plots side by side.\n\n\n\n\n\n\nHow to cite packages\n\n\n\nIf you use a package in your work, you should cite it so that your code is fully transparent (for you, and others). You’ll also get points for citing packages in your Rstudio project. You can obtain a nicely formatted citation for a package like so:\nprint(citation(\"tidyverse\"), style = \"text\")"
+  },
+  {
+    "objectID": "workshop2.html#consolidation-exercises",
+    "href": "workshop2.html#consolidation-exercises",
+    "title": "BIO00066I Workshop 2",
+    "section": "8.1 Consolidation exercises",
+    "text": "8.1 Consolidation exercises\n\n8.1.1 Violin plots geom_violin\n\nWe used geom_boxplot()to show the differences between categories (clone A and clone B). Try geom_violin instead. Which one do you prefer?\n\n\nggplot(cells,aes(x=clone,y=width,fill=replicate))+\n    geom_violin()\n\n\nNow adjust the title with ggtitle(label), and the axis labels with xlab(label) and ylab(label), and the theme (the general style of the plot), with theme_classic(). There are many themes for ggplot, which you can see here. Use whatever theme you feel makes the data clear and simple.\n\n\nggplot(cells,aes(x=clone,y=length,fill=replicate))+\n    geom_violin()+\n    ggtitle(\"put your title here!\")+\n    xlab(\"my X axis label\")+\n    ylab(\"my Y axis label\")+\n    theme_classic()\n\n\n\n8.1.2 Making the small data set\nThis is how we made the small data set trackingid.small.data. Reading through and/or trying out this code will enhance your skills.\nUse the dplyr tools group_by and summarise to calculate the average of all the cell shape measurements for each cell. Each cell is marked by the Livecyte software with a tracking id (tracking.id), so we group cells by this. The code group_by(clone, replicate, tracking.id) will group each measurement by the clone, replicate and tracking id, then the summarise part calculates the mean values for all our metrics:\n\n#take the mean of each unique tracking id\ntrackingid.summary.table&lt;-cells |&gt;\n    group_by(clone, replicate, tracking.id) |&gt;\n    summarise(\n        volume=median(volume),\n        mean.thickness=median(mean.thickness),\n        radius=median(radius),\n        area=median(area),\n        sphericity=median(sphericity),\n        length=median(length),\n        width=median(width),\n        dry.mass=median(dry.mass),\n        length.to.width=median(length.to.width)\n    )\n\n`summarise()` has grouped output by 'clone', 'replicate'. You can override\nusing the `.groups` argument.\n\n\nThen we use the dplyr function sample_n, which samples a number of rows from a data frame at random. If the data frame is grouped (which our data is),the number we set applies to each group:\n\n#collect a random subset, of 5 rows for each tracking id\ntrackingid.small.data &lt;- sample_n(trackingid.summary.table, 5)\n\n#check that we have\nnrow(trackingid.small.data)\nglimpse(trackingid.small.data)\n\nWe write the output to a file:\n\n#output trackingid.small.data as a tab-separated value (tsv) file\nwrite_tsv(trackingid.small.data, file =\"/Users/dj757/gd/modules/BIO66I/data/trackingid.small.data.tsv\")\n\nLook at the trackingid.small.data data frame, so we know what we have:\n\n#how many rows do we have?\nnrow(trackingid.small.data)\n\n#what does the data look like?\nview(trackingid.small.data)"
+  },
+  {
+    "objectID": "workshop2.html#planning-for-your-report",
+    "href": "workshop2.html#planning-for-your-report",
+    "title": "BIO00066I Workshop 2",
+    "section": "8.2 Planning for your report",
+    "text": "8.2 Planning for your report\nFor this module, 30% of the grade is for an R Studio project. The script that you are creating now is the start of this. Here is some information that will help you to prepare to submit your project.\n\n\n\n\n\n\nFor the R Studio project\n\n\n\nCreate a logical folder structure for your analysis. Your submission should include the script you used for your work, any accessory functions and the data itself. Your script should be well-commented, well-organised and follow good practice in use of spacing, indentation and variable naming. It should include all the code required to reproduce data import and formatting as well as the summary information, analyses and figures in your report."
+  },
+  {
+    "objectID": "workshop4.html",
+    "href": "workshop4.html",
+    "title": "BIO00066I Workshop 4",
+    "section": "",
+    "text": "Philosophy\n\n\n\n\nWorkshops are not a test.\nDon’t worry about making mistakes.\nThe staff are here to help.\n\n\n\n\n\nToday, we will learn how to:\n\nUse a linear model to predict some y values, given some x values\nIn our case we use absorbance (x values) to predict alkaline phosphatase activity (y values)\nMake animated plots with gganimate\n\n\n\n\nIt might seem like a lot of trouble to use R to read in a small number of x and y values from an Excel sheet to a standard curve, and then estimate some new y values. We could probably do this in Excel.\nBut what if we have 200 standard curves, and we want to automate the process? What if we have 50,000 x and y values and a non-linear model? For big data, R (or some similar software) is the only sensible way. NB: There are similar software for statistical analysis, but we don’t teach them here. R is currently the state of the art for analysis of biological data. And it’s free."
+  },
+  {
+    "objectID": "workshop4.html#technical-skills",
+    "href": "workshop4.html#technical-skills",
+    "title": "BIO00066I Workshop 4",
+    "section": "",
+    "text": "Today, we will learn how to:\n\nUse a linear model to predict some y values, given some x values\nIn our case we use absorbance (x values) to predict alkaline phosphatase activity (y values)\nMake animated plots with gganimate"
+  },
+  {
+    "objectID": "workshop4.html#thinking-like-a-data-scientist",
+    "href": "workshop4.html#thinking-like-a-data-scientist",
+    "title": "BIO00066I Workshop 4",
+    "section": "",
+    "text": "It might seem like a lot of trouble to use R to read in a small number of x and y values from an Excel sheet to a standard curve, and then estimate some new y values. We could probably do this in Excel.\nBut what if we have 200 standard curves, and we want to automate the process? What if we have 50,000 x and y values and a non-linear model? For big data, R (or some similar software) is the only sensible way. NB: There are similar software for statistical analysis, but we don’t teach them here. R is currently the state of the art for analysis of biological data. And it’s free."
+  },
+  {
+    "objectID": "workshop4.html#the-biology",
+    "href": "workshop4.html#the-biology",
+    "title": "BIO00066I Workshop 4",
+    "section": "2.1 The biology",
+    "text": "2.1 The biology\nWe saw in workshop 3 that clone A moves faster than clone B. This time we will use R to explore MCS cell movement in more depth. Use x and y coordinates from manually tracked cells. We have 10 manually tracked cell lineages of clone A and 9 manually tracked cell lineages of clone B. Today, we will explore the ways these lineages move.\n\n\n\nFigure 1. The tracking ID (TID) is a unique ID that the microscope assigned to each object (cell), as it tracks it through time. The lineage ID (LID) is a number assigned to the ‘family’ of cells that derived by cell division during the the experiment. When a cell divides, each daughter cell is given a new tracking ID, but they keep their lineage ID, because they are still part of the same family.\n\n\nTo help address our research question of whether morphology and migration can be used to predict MSC phenotype, we also need to investigate the phenotype (ability to differentiate) of the two clonal lines. In practical 4 we’ll explore the potency of the two clonal lines by looking at their capacity to undergo osteogenesis (differentiate into osteoblasts - bone cells) when they are given an inductive media.\nWe can use an enzyme called alkaline phosphatase as a biomarker to quantify osteogenesis in the cells, as the activity of the enzyme increases in cells undergoing osteogenesis as osteoblasts use the enzyme when producing bone extracellular matrix. To measure the activity of the enzyme we mix the lysate (cellular contents) of the cells with the substrate for the enzyme, para-nitrophenyl phosphate (pNPP) and measure the rate of product formation over time. The product of the reaction is para-nitro phenol (pNP) and we can measure it colorimetrically as it absorbs light at a known wavelength.\nCreating a standard curve and estimating values from this curve is Part 1 of our analysis today. Part 2 is looking at cell movement data.\n\n\n\n\n\n\nSame coding methods, different data\n\n\n\nThe methods we use to examine cells moving on x and x coordinates would be used any location data that tracks objects objects in a two-dimensional plane over time; traffic, birds, slugs, people. with consent"
+  },
+  {
+    "objectID": "workshop4.html#research-questions",
+    "href": "workshop4.html#research-questions",
+    "title": "BIO00066I Workshop 4",
+    "section": "2.2 Research questions",
+    "text": "2.2 Research questions\n\nWhat is the osteogenic potential of clonal lines A and B (Part 1)\nCan we see differences in how clonal lines A and B move?\nHow can we display this data visually?\nDo cells ‘follow’ each other in the petri dish?"
+  },
+  {
+    "objectID": "workshop4.html#the-data",
+    "href": "workshop4.html#the-data",
+    "title": "BIO00066I Workshop 4",
+    "section": "2.3 The data",
+    "text": "2.3 The data\n\n2.3.1 Part 1: pNP absorbance values\nOnce you’ve completed Practical 4 you’ll have your own data to use to make the standard curve of pNP and absorbance values for each of the clonal line time points. You should use your own standard curve data from the practical as well as your unknown values as the readings for absorbance will vary based on the plate the samples are in and the plate reader used.\nTo create the standard curve you have the absorbance readings for 8 concentrations of pNP in triplicate. To measure osteogenesis in the two clonal lines, samples of the cells were grown in an inductive media for 8 days. The cells were then lysed at different time points to measure the activity of alkaline phosphatase and explore how it varies over time and between the two clonal lines. The clonal lines were analysed at Day 0, Day 4 and Day 8. At each time point you have data for both induced cells and non-induced cells (negative control), with the exception of Day 0 as the differentiation was induced at Day 1. There are three repeated measures for the data at each time point.\n\n\n2.3.2 Part 2: manually-tracked cell movement ‘point’ data\nThe Livecyte data that tracked cells automatically was unreliable. In workshop 3 we looked at some manual tracking data. This contained information like track.length, the meandering.index, euclidean.distance and so on. This time we look at manual data in it’s raw form: x and y coordinates of the cells, tracked over time.\nWe can of course extract information from this about how far the cells travel, and how fast they travel (because we have distance and time measurements). But, we can do much more. This time we will be able to visualise the paths they take in culture dish. We may observe interesting patterns by studying this data."
+  },
+  {
+    "objectID": "workshop4.html#load-libraries-install-packages",
+    "href": "workshop4.html#load-libraries-install-packages",
+    "title": "BIO00066I Workshop 4",
+    "section": "3.1 Load libraries (install packages)",
+    "text": "3.1 Load libraries (install packages)\nFirst, install the gganimate package. We will use this to creating moving plots later. You only need to do this once.\n\n#install a new package\ninstall.packages(\"gganimate\")\n\nThen load all the libraries we’ll need today.\n\nlibrary(tidyverse)\nlibrary(readxl)\nlibrary(ggpubr)\nlibrary(gganimate)"
+  },
+  {
+    "objectID": "workshop4.html#load-data",
+    "href": "workshop4.html#load-data",
+    "title": "BIO00066I Workshop 4",
+    "section": "3.2 Load data",
+    "text": "3.2 Load data\nFirst, read in some ata from an Excel file. You can obtain an example file from here. Click to download, and then save the file in your raw-data directory. If you don’t have a raw-data directory, make one!\nThen read in the Excel file. Two important things to note about reading Excel files:\n\nwe use sheet=1 to specify that we want the first sheet (or tab)\nwe use skip=3 to specify that we want to skip the first three lines (because they are comments, not data)\n\n\nap&lt;-read_excel(\"raw-data/example_alkaline_phosphatase_activity_assay_DNA_Lab.xlsx\", sheet=1, skip=3)\n\n#check what we have\nview(ap)\n\nThen simplify the data with pivot_longer:\n\nap.pivot &lt;- \n  ap |&gt; \n  select(-mean.abs, -standard.deviation) |&gt;\n  pivot_longer(-pNP.conc, names_to = \"rep\", values_to = \"absorb\")\nview(ap.pivot)\n\nReorder the columns, so it is more intuitive for us using relocate:\n\nap.pivot &lt;- relocate(ap.pivot, absorb)"
+  },
+  {
+    "objectID": "workshop4.html#plot-enzyme-data",
+    "href": "workshop4.html#plot-enzyme-data",
+    "title": "BIO00066I Workshop 4",
+    "section": "3.3 Plot enzyme data",
+    "text": "3.3 Plot enzyme data\nLet’s make a simple plot, adding a line that shows the linear model with the line geom_smooth(method=\"lm\"). The method=\"lm means plotting a linear model.\n\n#plot, saving thr plot in an object called 'pNP.plot'\npNP.plot &lt;- ap.pivot |&gt;\n  ggplot(aes(x=absorb, y=pNP.conc))+\n  geom_point()+\n  geom_smooth(method=\"lm\")\n\n#show the plot\npNP.plot\n\n\n\n\n\n\n\n\nNow save the plot:\n\n#save as a pdf\nggsave(\"pNP.plot.pdf\",pNP.plot,width=7,height=7) \n\n#save as a jpeg, with a better name\n#easier to find in your files\n#has a 'date stamp' (2025-03-21) in the name\nggsave(\"BIO66I-2025-03-21-pNP.plot.jpeg\",pNP.plot,width=7,height=7)\n\n\n\n\n\n\n\nOptional: How close are the replicates?\n\n\n\nHow similar to the linear models look if you use: ggplot(aes(x=absorb, y=pNP.conc,colour = rep))"
+  },
+  {
+    "objectID": "workshop4.html#make-a-linear-model",
+    "href": "workshop4.html#make-a-linear-model",
+    "title": "BIO00066I Workshop 4",
+    "section": "3.4 Make a linear model",
+    "text": "3.4 Make a linear model\nWe can use the lm function to make a linear model. This is a simple model that assumes that the absorbance is linearly related to the pNP concentration. We can use this model to predict the pNP concentration of unknown samples.\n\nlinear_model &lt;- lm(pNP.conc ~ absorb , data = ap.pivot)\n\nNow we have the linear model, if we have some some pNP absorbance values, we can determine of the pNP product concentrations. We have put some mock pNP values in the excel file example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx, in sheet two.\n\nmock&lt;-read_excel(\"raw-data/example_alkaline_phosphatase_activity_assay_DNA_Lab.xlsx\", sheet=2, skip=1)\n\n#check what we have\nview(mock)\n\nNow we calculate the average for each of the three explicates using mutate. Note that mutate is a very useful function for creating new columns using existing ones. It can also join text columns. We can also use select after the mutation to remove the replicate columns.\n\nmock &lt;- mock |&gt; \n  rowwise() |&gt; \n  mutate(absorb=mean(c(absorb.rep1,absorb.rep2,absorb.rep3),na.rm=T)) \n\nWe named our mean absorbance absorb because we specified the absorb variable in the code linear_model &lt;- lm(pNP.conc ~ absorb , data = ap.pivot) above. So our linear model is ‘looking for’ an absorb variable to use."
+  },
+  {
+    "objectID": "workshop4.html#apply-our-linear-model-to-the-mock-data",
+    "href": "workshop4.html#apply-our-linear-model-to-the-mock-data",
+    "title": "BIO00066I Workshop 4",
+    "section": "4.1 Apply our linear model to the mock data",
+    "text": "4.1 Apply our linear model to the mock data\nIn your project work, you will use the real data collected. But for now, we will use some mock data. We will use the linear model we created to predict the pNP concentration of the mock data.\nHere is how do it, using the predict function:\n\n#calculate predicted pNP concentration using the linear model\npredictions.from.lm &lt;- predict(linear_model,mock)\n\n#Add these predictions from the linear model (predictions.from.lm)\n#As a new column\nmock$predicted.pNP.concs = predictions.from.lm\n\n#check what we have\nview(mock)\n\n#And save all our data\nsave.image(\"BIO00066I-workshop4-2025-03-21.Rda\")"
+  },
+  {
+    "objectID": "workshop4.html#normalise-pnp-concentrations",
+    "href": "workshop4.html#normalise-pnp-concentrations",
+    "title": "BIO00066I Workshop 4",
+    "section": "4.2 Normalise pNP concentrations",
+    "text": "4.2 Normalise pNP concentrations\nEach experiment will have a slightly different number of cells, and this will affect the amount of the para-nitrophenyl phosphate (pNPP) substrate, and therefore the amount of pNP product produced.\n\n\n\n\n\n\nWhy normalise?\n\n\n\nDuring the osteogenic differentiation of the clonal lines, the cells will proliferate at different rates. In basal conditions clone A normally grows slightly slower than clone B, and hMSCs also grow quicker in osteoinductive media, therefore we need to normalise the results of the experiment relative to cell number. Without normalisation, if we observe an increase in pNP concentration (and therefore ALP activity) in some of the conditions we cannot infer this is because the enzyme is more highly expressed. It could simply be due to the presence of a greater number of cells that are expressing the same amount of ALP as another condition, but there are just more cells present.\n\n\nSo we need to normalise these differences in growth rate. We can do this by dividing the predicted pNP concentration by the DNA concentration, because we know that cells don’t gain or lose large amounts of DNA very often!\nTo achieve this, we can use the mutate function to create a new column in the data frame, mock. We will call this new column normalised.pNP.concs. We will divide the predicted.pNP.concs column by the DNA.conc column.\n\n##divide the predicted.pNP.concs column by the DNA_ug_per_ml column\nmock &lt;- mock |&gt; \n  mutate(normalised.pNP.concs = predicted.pNP.concs / DNA_ug_per_ml)\n\nnames(mock)"
+  },
+  {
+    "objectID": "workshop4.html#making-a-bar-plot-of-predicted-pnp-concetrations",
+    "href": "workshop4.html#making-a-bar-plot-of-predicted-pnp-concetrations",
+    "title": "BIO00066I Workshop 4",
+    "section": "4.3 Making a bar plot of predicted pNP concetrations",
+    "text": "4.3 Making a bar plot of predicted pNP concetrations\nFirst, we need to ensure that the day, clone and differentiated columns are set as **factors*. This is important because we want to treat these columns as categories, not numeric values:\n\nmock$day &lt;-as.factor(mock$day)\nmock$clone &lt;-as.factor(mock$clone)\nmock$differentiated &lt;-as.factor(mock$differentiated)\n\nThen we can make a plot (with the un-normalised data).\n\n#make the plot\nggplot(data=mock, aes(x=day, y=predicted.pNP.concs,fill=clone:differentiated)) +\n  geom_bar(stat=\"identity\", position=position_dodge())\n\n\n\n\n\n\n\n\nNote that this dummy data may look very different from your real data.\nNoe let’s make a plot (with the normalised data). This will account for differential growth rates of the clones.\n\n# first check that data columns we have \nnames(mock)\n\n [1] \"day\"                  \"clone\"                \"differentiated\"      \n [4] \"absorb.rep1\"          \"absorb.rep2\"          \"absorb.rep3\"         \n [7] \"DNA_ug_per_ml\"        \"absorb\"               \"predicted.pNP.concs\" \n[10] \"normalised.pNP.concs\"\n\n#make the plot using the normalised.pNP.concs as a y values\nggplot(data=mock, aes(x=day, y=normalised.pNP.concs,fill=clone:differentiated)) +\n  geom_bar(stat=\"identity\", position=position_dodge())"
+  },
+  {
+    "objectID": "workshop4.html#end-of-part-1.",
+    "href": "workshop4.html#end-of-part-1.",
+    "title": "BIO00066I Workshop 4",
+    "section": "4.4 End of Part 1.",
+    "text": "4.4 End of Part 1."
+  },
+  {
+    "objectID": "workshop4.html#loading-data",
+    "href": "workshop4.html#loading-data",
+    "title": "BIO00066I Workshop 4",
+    "section": "5.1 Loading data",
+    "text": "5.1 Loading data\nFirst, load the data from the website, and check what you have:\n\n#load data from a URL\npoints&lt;-read_csv(url(\"https://djeffares.github.io/BIO66I/points.data.2024-03-16.csv\"),\n                 col_types = cols(LID = col_factor(),TID = col_factor(),pid = col_factor())\n)\n\n#check what we have\nglimpse(points)\nhead(points)"
+  },
+  {
+    "objectID": "workshop4.html#what-is-in-the-point-data",
+    "href": "workshop4.html#what-is-in-the-point-data",
+    "title": "BIO00066I Workshop 4",
+    "section": "5.2 What is in the ‘point’ data?",
+    "text": "5.2 What is in the ‘point’ data?\nThis data contains the positions of cells, tracked over time. Lineages are tracked. We have data for tracked cells for both clones (A and B). We have the following information, for many time points:\n\nlineage ID (LID)\ntracking ID (TID)\ndata point id* (pid)\nthe location of the cell in x and y coordinates (x.position, y.position)\nthe time point (time)\nmovement metrics (track.length, euclidean.distance, velocity)\na new movement metric: howfar the cell moved between this time ppint, and thr last one (jump.distance)\nclone (A/B)\n\nNB: pid describes what data point the row of data corresponds to for a cell with a specific LID and TID. For example, LID 1 TID 1 PID 1 would correspond to the first data point (it’s x and Y coordinates etc) for a cell with TID 1 from lineage 1."
+  },
+  {
+    "objectID": "workshop4.html#exploratory-plots",
+    "href": "workshop4.html#exploratory-plots",
+    "title": "BIO00066I Workshop 4",
+    "section": "5.3 Exploratory plots",
+    "text": "5.3 Exploratory plots\n\n5.3.1 Recap: how fast do they move\nYou’ll notice that this file has velocity, just like the last file we used in workshop 3. For a simple ‘sanity check’, we will tests again that the clones differ.\n\n\n\n\n\n\nCaution\n\n\n\nWe know that clone A moves faster than clone B. So why do it again?\nAnswer: data hygiene. We want to be very sure our data is good.\n\n\n\npoints |&gt;\n  ggplot(aes(x=clone,y=log10(velocity)))+\n  geom_violin()+\n  stat_compare_means()\n\n\n\n\n\n\n\nWhat does this do?\n\n\n\nTo find out what any function does, type ?function in the RStudio Console. For example to find out what glimpse does:\n\n?glimpse\n\n\n\n\n\n5.3.2 Plotting cell movement tracks\nNow, let’s examine the directions do the cells move in. A simple way to do this is to plot the x and y coordinates. We will use facet_wrap to plot one boz for each lineage ID LID. Remember, a lineage ID contains information for each cell, and all its daughter cell and so on.\nTo keep our image simple, we allow clone A and clone B to be on the same panels. But note that clone A, lineage ID 1 has no relationship to clone A, lineage ID 2 - they are merely the first lineage ID that Amanda tracked.\n\npoints |&gt;\n  ggplot(aes(x=x.position,y=y.position,colour=clone))+\n  geom_point(size=1)+\n  facet_wrap(~LID)\n\n#If we want to show just one clone add this line after 'points |&gt;'\n#filter(clone == \"A\")|&gt;\n\nWe can see that they wriggle about a lot. They do not move in straight lines. To show one lineage, from one clone and colour by TID (or time), we can do:\n\npoints |&gt;\n  filter(clone == \"B\" & LID==4) |&gt;\n  # Convert TID to factor with numeric ordering\n  mutate(TID = factor(TID, levels = sort(as.numeric(as.character(unique(TID)))))) |&gt;\n  ggplot(aes(x=x.position, y=y.position, colour=TID)) +\n  geom_point(size=1)"
+  },
+  {
+    "objectID": "workshop4.html#scatter-plots-to-show-cell-movement-range-intuitively",
+    "href": "workshop4.html#scatter-plots-to-show-cell-movement-range-intuitively",
+    "title": "BIO00066I Workshop 4",
+    "section": "5.4 Scatter plots to show cell movement range intuitively",
+    "text": "5.4 Scatter plots to show cell movement range intuitively\nIf we want to view how far many different cells have moved, we will need to adjust their point locations, so the median of their x.positions and x.positions are zero. Effectively setting all their start positions to x=0,y=0 on a grid.\nWe can use some simple math and the mutate function to achieve this:\n\n#use mutate to make new columns\npoints2&lt;- points |&gt; \n  group_by(LID) |&gt; \n  mutate(med.x = mean(x.position, na.rm = TRUE))|&gt;\n  mutate(adjusted.x =  x.position - med.x) |&gt;\n  mutate(med.y = mean(y.position, na.rm = TRUE))|&gt;\n  mutate(adjusted.y =  y.position - med.y)\n\n#check our new data\npoints2\n\nPlot the ‘centralised’ (x=0,y=0) cell positions. We use facet_wrap to show each clone on a different panel.\n\npoints2 |&gt;  \n  ggplot(aes(x=adjusted.x,y=adjusted.y,colour = time))+\n  geom_point(alpha=0.5, size=3)+\n  geom_hline(yintercept = 0)+\n  geom_vline(xintercept = 0)+\n  facet_wrap(~clone)"
+  },
+  {
+    "objectID": "workshop4.html#animate-it",
+    "href": "workshop4.html#animate-it",
+    "title": "BIO00066I Workshop 4",
+    "section": "5.5 Animate it!",
+    "text": "5.5 Animate it!\nggplot2 can achieve almost any plot you can image (and probably some you cant imagine!). To create very visually appealing graphics can help enormously to explain complex data. Animated plots are much more intuitive for explaining data with a time element.\nHere is now to make an amimated plot with gganimate:\n\n5.5.1 Animate: step 1.\nMake a static plot:\n\nstatic.plot &lt;-points |&gt;\n  filter(clone == \"B\", LID == 1) |&gt;\n  ggplot(aes(x=x.position,y=y.position, colour=TID))+\n  geom_point(size=10, pch=1,lwd=2)\nstatic.plot\n\nHere we only look at one clone and one lineage ID in the line\nfilter(clone == \"B\", LID == 1) |&gt;\n\nYou can (and should) alter the code to look at other clone and lineage IDs. You might also like to try these alternatives:\n\ncolour=time\nfacet_wrap(~LID)\ngeom_point(size=5, pch=1)\n\n\n\n5.5.2 Animate: step 2\nAnimate the plot:\n\n#set up the animation code\nanimated.plot &lt;- static.plot +\n  transition_time(time) +\n  shadow_mark(past = T, future=F, alpha=0.5)\n\n#check the animation worked\nanimate(animated.plot, width =800, height = 800)\n\n\n\n5.5.3 Animate: step 3\nSave the animation as a GIF:\n\n#save the animation as a gif\n#make sure you use a sensible file name\nanim_save(\"cloneB.ineage2gif\", animated.plot)\n\nSee this website to learn more about gganimate.\nThat is all for this workshop today. If you have time do look at the revision summary below."
+  },
+  {
+    "objectID": "workshop4.html#data-analysis-1-core",
+    "href": "workshop4.html#data-analysis-1-core",
+    "title": "BIO00066I Workshop 4",
+    "section": "6.1 Data Analysis 1: Core",
+    "text": "6.1 Data Analysis 1: Core\nIn this workshop, we learned:\n\nHow to achieve reproducibility\nSetting up an RStudio Project\nLoading packages\nThe importance of looking at, and knowing, your data\nCreating plots with ggplot to help with knowing your data\nQuality control\n\n\n\n\n\n\n\nIt is the undertanding that matters\n\n\n\nUnderstanding takes time. Be sure you understand all these concepts well."
+  },
+  {
+    "objectID": "workshop4.html#workshop-2-cell-biology",
+    "href": "workshop4.html#workshop-2-cell-biology",
+    "title": "BIO00066I Workshop 4",
+    "section": "6.2 Workshop 2: Cell Biology",
+    "text": "6.2 Workshop 2: Cell Biology\nIn this workshop, we learned about:\n\nLoading data from websites with read_tsv and read_csv.\nExploring data with view, names, ncol, ncol, nrow, summary, and glimpse\nSummarising large data sets with dplyr\nMaking plots to compare two or more categories with geom_boxplot, geom_violin, and geom_jitter\nThe differences between P-values and plotting small vs large data\n\n\n\n\n\n\n\nWhat does this do?\n\n\n\nTo find out what any function does, type ?function in the RStudio Console. For example to find out what glimpse does:\n\n?glimpse"
+  },
+  {
+    "objectID": "workshop4.html#workshop-3-cell-biology",
+    "href": "workshop4.html#workshop-3-cell-biology",
+    "title": "BIO00066I Workshop 4",
+    "section": "6.3 Workshop 3: Cell Biology",
+    "text": "6.3 Workshop 3: Cell Biology\nIn this workshop, we learned about:\n\nUsing summary to describe a large data frame\nAdjusting plot with a log scale (often important for biological data)\nUsing facet_wrap to create multiple panels for different replicate and so on\n‘Reshaping’ data tables with pivot_longer\nCorrelations between metrics in data sets (this is very common in biological data)\nCreating a correlation heat map"
+  },
+  {
+    "objectID": "workshop4.html#workshop-4-cell-biology-this-workshop",
+    "href": "workshop4.html#workshop-4-cell-biology-this-workshop",
+    "title": "BIO00066I Workshop 4",
+    "section": "6.4 Workshop 4: Cell Biology (this workshop)",
+    "text": "6.4 Workshop 4: Cell Biology (this workshop)\nWe learned:\n\nHow to make and use a linear model to infer values from a standard curve\nHow to plot objects on two-dimensional planes\nHow to use facet_wrap (again)\nHow to animate plots!"
+  },
+  {
+    "objectID": "workshop4.html#consolodation-exercises",
+    "href": "workshop4.html#consolodation-exercises",
+    "title": "BIO00066I Workshop 4",
+    "section": "7.1 Consolodation exercises",
+    "text": "7.1 Consolodation exercises\nTo consolidate, follow up on aspects of the previous workshops that you are unsure about. Try some different plots. Break the code, then try and fix it."
+  },
+  {
+    "objectID": "workshop4.html#planning-for-your-report",
+    "href": "workshop4.html#planning-for-your-report",
+    "title": "BIO00066I Workshop 4",
+    "section": "7.2 Planning for your report",
+    "text": "7.2 Planning for your report\nThe RStudio Project should:\nCreate a logical folder structure for your analysis. The top folder should be named with your exam number, for example Y12345678, do not include your name in the submission. Your submission should include the script you used for your work, any accessory functions and the data itself. Your script should be well-commented, well-organised and follow good practice in use of spacing, indentation and variable naming. It should include all the code required to reproduce data import and formatting as well as the summary information, analyses and figures in your report."
+  },
+  {
+    "objectID": "workshop4.html#read-data-and-reformat-with-pivot_longer",
+    "href": "workshop4.html#read-data-and-reformat-with-pivot_longer",
+    "title": "BIO00066I Workshop 4",
+    "section": "8.1 Read data and reformat with pivot_longer",
+    "text": "8.1 Read data and reformat with pivot_longer\nWe’ll assume you have the tidyverse and readxl libraries load already. If not load these now.\nFirst, we load the data. Your data file might have a different name. This code will work without adjustment of your file has the same rows and columns as this example file. We’ll also rename a column, so it’s more intuitive.\n\n#load the data\nap&lt;-read_excel(\"raw-data/alkaline-phosphatase-activity-assay-real-data.xlsx\",sheet=2)\n\n#rename the 'differentiated' column 'induced', which describes it better\nnames(ap)[3]&lt;-'induced'\n\nThen we need to set some columns to be factors:\n\n#set day, clone and induced columns to be factors\nap$day &lt;-as.factor(ap$day)\nap$clone &lt;-as.factor(ap$clone)\nap$induced &lt;-as.factor(ap$induced)\n\n#this is what we have:\nhead(ap)\n\nNow we use pivot_longer to reformat the data, so we can use all the repeats. The cols=!c(day,clone,differentiated) part indicates that the day,clone,differentiated columns are not to be lengthened in to the ‘absorb’ column. So it is onlyabsorptionrep1,absorptionrep2 and absorptionrep3 that are put into the ‘absorb’ column.\n\nap.pivot&lt;-ap |&gt; \n  pivot_longer(cols=!c(day,clone,induced), names_to = \"rep\", values_to = \"absorb\")\n\n#this is what we have now\nhead(ap.pivot)"
+  },
+  {
+    "objectID": "workshop4.html#make-some-plots",
+    "href": "workshop4.html#make-some-plots",
+    "title": "BIO00066I Workshop 4",
+    "section": "8.2 Make some plots",
+    "text": "8.2 Make some plots\nIf we look at the absorbance by day, we can see that absorbance goes up each day. Here we are ignoring the media (induced).\n\nggplot(ap.pivot, aes(x = clone, y = absorb, color = day))+\n  geom_boxplot()+\n  theme_classic()\n\nThen we can use facet_wrap to examine the data by day and by media. We can see that clone A has much higher values in the differentiation media.\n\nggplot(ap.pivot, aes(x = clone, y = absorb, color = day))+\n  geom_boxplot()+\n  theme_classic()+\n  facet_wrap(~induced)"
+  },
+  {
+    "objectID": "workshop4.html#anova-additive-model",
+    "href": "workshop4.html#anova-additive-model",
+    "title": "BIO00066I Workshop 4",
+    "section": "8.3 ANOVA (additive model)",
+    "text": "8.3 ANOVA (additive model)\nTo find out if there is evidence that the absorbance value affected by day, clone or media using an ANOVA, we can use the the R function aov().\n\n#we save the result in an object called aov.result.additive\naov.result.add &lt;- aov(absorb ~ day + clone + induced, data = ap.pivot)\n\nTo view the results, we do:\n\nsummary(aov.result.add)\n\n\n\n\n\n\n\nInterpretation\n\n\n\nWhen p-values are &lt; 0.05, this means we have a significant effect from this factor.  Do day, clone, and the induction media all have a significant effects?"
+  },
+  {
+    "objectID": "workshop4.html#anova-multiplicative-model",
+    "href": "workshop4.html#anova-multiplicative-model",
+    "title": "BIO00066I Workshop 4",
+    "section": "8.4 ANOVA (multiplicative model)",
+    "text": "8.4 ANOVA (multiplicative model)\nNow then examine a multiplicative (non additive) model. Here we examine whether interactions between the factors affect the pNP levels. To test this, we simple replace the plus symbol (+) with an asterisk (*) in our code:\n\n#run the ANOVA\naov.result.mult  &lt;- aov(absorb ~ day * clone * induced, data = ap.pivot)\n\n#to view the results\nsummary(aov.result.mult)\n\nInterpretation: The multiplicative model all single factors, all pairwise factors (eg: day:clone) and the interaction of all three factors(day:clone:induced). Where the p-values Pr(&gt;F) are &lt; 0.05, we have a significant effect of this factor (or factors) on the pNP level (and therefore osteogenesis)."
+  },
+  {
+    "objectID": "BIO00066I-template.html",
+    "href": "BIO00066I-template.html",
+    "title": "BIO00066I",
+    "section": "",
+    "text": "Greek letters: rho \\(\\rho\\)\nColour scheme\nIn these workshops, we highlight some elements in boxes like this:"
+  },
+  {
+    "objectID": "BIO00066I-template.html#technical-skills",
+    "href": "BIO00066I-template.html#technical-skills",
+    "title": "BIO00066I",
+    "section": "Technical skills",
+    "text": "Technical skills"
+  },
+  {
+    "objectID": "BIO00066I-template.html#thinking-like-a-data-scientist",
+    "href": "BIO00066I-template.html#thinking-like-a-data-scientist",
+    "title": "BIO00066I",
+    "section": "Thinking like a data scientist",
+    "text": "Thinking like a data scientist"
+  },
+  {
+    "objectID": "BIO00066I-template.html#the-biology",
+    "href": "BIO00066I-template.html#the-biology",
+    "title": "BIO00066I",
+    "section": "The biology",
+    "text": "The biology"
+  },
+  {
+    "objectID": "BIO00066I-template.html#research-questions",
+    "href": "BIO00066I-template.html#research-questions",
+    "title": "BIO00066I",
+    "section": "Research questions",
+    "text": "Research questions"
+  },
+  {
+    "objectID": "BIO00066I-template.html#the-data",
+    "href": "BIO00066I-template.html#the-data",
+    "title": "BIO00066I",
+    "section": "The data",
+    "text": "The data\nIn this workshop we bla bla"
+  },
+  {
+    "objectID": "BIO00066I-template.html#part-1",
+    "href": "BIO00066I-template.html#part-1",
+    "title": "BIO00066I",
+    "section": "Part 1",
+    "text": "Part 1"
+  },
+  {
+    "objectID": "BIO00066I-template.html#part-2",
+    "href": "BIO00066I-template.html#part-2",
+    "title": "BIO00066I",
+    "section": "Part 2",
+    "text": "Part 2"
+  },
+  {
+    "objectID": "BIO00066I-template.html#part-3",
+    "href": "BIO00066I-template.html#part-3",
+    "title": "BIO00066I",
+    "section": "Part 3",
+    "text": "Part 3"
+  },
+  {
+    "objectID": "BIO00066I-template.html#consolodation-exercises",
+    "href": "BIO00066I-template.html#consolodation-exercises",
+    "title": "BIO00066I",
+    "section": "Consolodation exercises",
+    "text": "Consolodation exercises\nOptional"
+  },
+  {
+    "objectID": "BIO00066I-template.html#planning-for-your-report",
+    "href": "BIO00066I-template.html#planning-for-your-report",
+    "title": "BIO00066I",
+    "section": "Planning for your report",
+    "text": "Planning for your report"
+  },
+  {
+    "objectID": "BIO00066I-template.html#basics-quarto-markdown",
+    "href": "BIO00066I-template.html#basics-quarto-markdown",
+    "title": "BIO00066I",
+    "section": "Basics quarto markdown",
+    "text": "Basics quarto markdown\nMarkdown Basics\nYAML header info\ncode Execution options"
+  },
+  {
+    "objectID": "BIO00066I-template.html#callouts",
+    "href": "BIO00066I-template.html#callouts",
+    "title": "BIO00066I",
+    "section": "Callouts:",
+    "text": "Callouts:\nSee this site for more info.\nThere are five different types of callouts available:\n\nnote\nwarning\nimportant\ntip\ncaution\n\n\n\n\n\n\n\nThis is a callout note block.\n\n\n\nText or code goes here.\n\nmean(rnorm(100))\n\n[1] -0.124495\n\n\n\n\n\n\n\n\n\n\nCallout warning\n\n\n\nwarning\n\n\n\n\n\n\n\n\nCallout important\n\n\n\nimportant\n\n\n\n\n\n\n\n\nCallout tip\n\n\n\ntip\n\n\n\n\n\n\n\n\nCallout caution\n\n\n\ncaution"
+  }
+]
