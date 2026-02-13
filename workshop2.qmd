@@ -689,6 +689,7 @@ Create a logical folder structure for your analysis. Your submission should incl
 ```{r}
 #| include: false
 #| eval: true
+#| purl: false
 
 knitr::purl("workshop2.qmd", 
             output = "workshop2.R", 

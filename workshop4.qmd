@@ -832,6 +832,7 @@ You can download all the R code from this workshop as a single script file:
 ```{r}
 #| include: false
 #| eval: true
+#| purl: false
 
 knitr::purl("workshop4.qmd", 
             output = "workshop4.R", 

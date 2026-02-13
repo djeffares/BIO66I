@@ -558,6 +558,7 @@ track.correlations <-read_tsv(url("https://djeffares.github.io/BIO66I/track.corr
 ```{r}
 #| include: false
 #| eval: true
+#| purl: false
 
 knitr::purl("workshop3.qmd", 
             output = "workshop3.R", 
