@@ -154,7 +154,6 @@ library(tidyverse)
 #| eval: true
 #| purl: true
 
-
 #load the ggpubr package for multi-part plots
 library(ggpubr)
 ```
@@ -175,7 +174,7 @@ In workshop 1, we showed you how to [import data from files](https://3mmarand.gi
 #| echo: true
 #| warning: false
 #| eval: true
-#| purl: false
+#| purl: true
 
 cells <-read_tsv(url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-02-22.tsv"),
     col_types = cols(

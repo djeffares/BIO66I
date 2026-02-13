@@ -92,6 +92,7 @@ First, install the `gganimate` package. We will use this to creating moving plot
 #| echo: true
 #| warning: false
 #| eval: false
+#| purl: true
 
 #install a new package
 install.packages("gganimate")
@@ -103,6 +104,7 @@ Then load all the libraries we'll need today.
 #| echo: true
 #| warning: false
 #| eval: true
+#| purl: true
 
 library(tidyverse)
 library(readxl)
@@ -124,6 +126,7 @@ Then read in the Excel file. Two important things to note about reading Excel fi
 #| echo: true
 #| warning: false
 #| eval: true
+#| purl: true
 ap<-read_excel("raw-data/example_alkaline_phosphatase_activity_assay_DNA_Lab.xlsx", sheet=1, skip=3)
 
 #check what we have
@@ -136,6 +139,7 @@ Then simplify the data with `pivot_longer`:
 #| echo: true
 #| warning: false
 #| eval: true
+#| purl: true
 ap.pivot <- 
   ap |> 
   select(-mean.abs, -standard.deviation) |>
@@ -149,6 +153,7 @@ Reorder the columns, so it is more intuitive for us using `relocate`:
 #| echo: true
 #| warning: false
 #| eval: true
+#| purl: true
  
 ap.pivot <- relocate(ap.pivot, absorb)
 
@@ -162,6 +167,7 @@ Let's make a simple plot, adding a line that shows the linear model with the lin
 #| echo: true
 #| warning: false
 #| eval: true
+#| purl: true
 
 #plot, saving thr plot in an object called 'pNP.plot'
 pNP.plot <- ap.pivot |>
@@ -179,6 +185,7 @@ Now save the plot:
 #| echo: true
 #| warning: false
 #| eval: true
+#| purl: true
 
 
 #save as a pdf
@@ -206,6 +213,7 @@ We can use the `lm` function to make a linear model. This is a simple model that
 #| echo: true
 #| warning: false
 #| eval: true
+#| purl: true
 
 linear_model <- lm(pNP.conc ~ absorb , data = ap.pivot)
 ```
@@ -216,6 +224,7 @@ Now we have the linear model, if we have some some pNP absorbance values, we can
 #| echo: true
 #| warning: false
 #| eval: true
+#| purl: true
 mock<-read_excel("raw-data/example_alkaline_phosphatase_activity_assay_DNA_Lab.xlsx", sheet=2, skip=1)
 
 #check what we have
@@ -229,6 +238,7 @@ Now we calculate the average for each of the three explicates using `mutate`. No
 #| echo: true
 #| warning: false
 #| eval: true
+#| purl: true
 mock <- mock |> 
   rowwise() |> 
   mutate(absorb=mean(c(absorb.rep1,absorb.rep2,absorb.rep3),na.rm=T)) 
@@ -250,6 +260,7 @@ Here is how do it, using the `predict` function:
 #| echo: true
 #| warning: false
 #| eval: true
+#| purl: true
 
 #calculate predicted pNP concentration using the linear model
 predictions.from.lm <- predict(linear_model,mock)
@@ -282,6 +293,7 @@ To achieve this, we can use the `mutate` function to create a new column in the 
 #| echo: true
 #| warning: false
 #| eval: true
+#| purl: true
 
 ##divide the predicted.pNP.concs column by the DNA_ug_per_ml column
 mock <- mock |> 
@@ -299,6 +311,7 @@ First, we need to ensure that the `day`, `clone` and `differentiated` columns ar
 #| echo: true
 #| warning: false
 #| eval: true
+#| purl: true
 
 mock$day <-as.factor(mock$day)
 mock$clone <-as.factor(mock$clone)
@@ -311,6 +324,7 @@ Then we can make a plot (with the **un-normalised** data).
 #| echo: true
 #| warning: false
 #| eval: true
+#| purl: true
 
 #make the plot
 ggplot(data=mock, aes(x=day, y=predicted.pNP.concs,fill=clone:differentiated)) +
@@ -328,6 +342,7 @@ Noe let's make a plot (with the **normalised** data). This will account for diff
 #| echo: true
 #| warning: false
 #| eval: true
+#| purl: true
 
 # first check that data columns we have 
 names(mock)
@@ -354,6 +369,7 @@ First, load the data from the website, and check what you have:
 #| echo: true
 #| warning: false
 #| eval: false
+#| purl: true
 
 #load data from a URL
 points<-read_csv(url("https://djeffares.github.io/BIO66I/points.data.2024-03-16.csv"),
@@ -397,6 +413,7 @@ You'll notice that this file has velocity, just like the last file we used in wo
 #| echo: true
 #| warning: false
 #| eval: false
+#| purl: true
 points |>
   ggplot(aes(x=clone,y=log10(velocity)))+
   geom_violin()+
@@ -412,6 +429,7 @@ To find out what any function does, type `?function` in the RStudio Console. For
 #| echo: true
 #| warning: false
 #| eval: false
+#| purl: true
 
 ?glimpse
 ```
@@ -427,6 +445,7 @@ To keep our image simple, we allow clone A and clone B to be on the same panels.
 #| echo: true
 #| warning: false
 #| eval: false
+#| purl: true
 
 points |>
   ggplot(aes(x=x.position,y=y.position,colour=clone))+
@@ -443,6 +462,7 @@ We can see that they wriggle about a lot. They do not move in straight lines. To
 #| echo: true
 #| warning: false
 #| eval: false
+#| purl: true
 
 
 points |>
@@ -466,6 +486,7 @@ We can use some simple math and the `mutate` function to achieve this:
 #| echo: true
 #| warning: false
 #| eval: false
+#| purl: true
 
 #use mutate to make new columns
 points2<- points |> 
@@ -485,6 +506,7 @@ Plot the 'centralised' (x=0,y=0) cell positions. We use `facet_wrap` to show eac
 #| echo: true
 #| warning: false
 #| eval: false
+#| purl: true
 points2 |>  
   ggplot(aes(x=adjusted.x,y=adjusted.y,colour = time))+
   geom_point(alpha=0.5, size=3)+
@@ -507,6 +529,7 @@ Make a static plot:
 #| echo: true
 #| warning: false
 #| eval: false
+#| purl: true
 static.plot <-points |>
   filter(clone == "B", LID == 1) |>
   ggplot(aes(x=x.position,y=y.position, colour=TID))+
@@ -532,6 +555,7 @@ Animate the plot:
 #| echo: true
 #| warning: false
 #| eval: false
+#| purl: true
 
 #set up the animation code
 animated.plot <- static.plot +
@@ -550,6 +574,7 @@ Save the animation as a GIF:
 #| echo: true
 #| warning: false
 #| eval: false
+#| purl: true
 
 #save the animation as a gif
 #make sure you use a sensible file name
@@ -629,6 +654,7 @@ To find out what any function does, type `?function` in the RStudio Console. For
 #| echo: true
 #| warning: false
 #| eval: false
+#| purl: true
 
 ?glimpse
 ```
@@ -702,6 +728,7 @@ First, we load the data. Your data file might have a different name. This code w
 #| echo: true
 #| warning: false
 #| eval: false
+#| purl: true
 
 #load the data
 ap<-read_excel("raw-data/alkaline-phosphatase-activity-assay-real-data.xlsx",sheet=2)
@@ -718,6 +745,7 @@ Then we need to set some columns to be factors:
 #| echo: true
 #| warning: false
 #| eval: false
+#| purl: true
 
 #set day, clone and induced columns to be factors
 ap$day <-as.factor(ap$day)
@@ -734,6 +762,7 @@ Now we use `pivot_longer` to reformat the data, so we can use all the repeats. T
 #| echo: true
 #| warning: false
 #| eval: false
+#| purl: true
 ap.pivot<-ap |> 
   pivot_longer(cols=!c(day,clone,induced), names_to = "rep", values_to = "absorb")
 
@@ -750,6 +779,7 @@ If we look at the absorbance by day, we can see that absorbance goes up each day
 #| echo: true
 #| warning: false
 #| eval: false
+#| purl: true
 
 ggplot(ap.pivot, aes(x = clone, y = absorb, color = day))+
   geom_boxplot()+
@@ -762,6 +792,7 @@ Then we can use `facet_wrap` to examine the data by day *and* by media. We can s
 #| echo: true
 #| warning: false
 #| eval: false
+#| purl: true
 
 ggplot(ap.pivot, aes(x = clone, y = absorb, color = day))+
   geom_boxplot()+
@@ -778,6 +809,7 @@ To find out if there is evidence that the absorbance value affected by day, clon
 #| echo: true
 #| warning: false
 #| eval: false
+#| purl: true
 
 #we save the result in an object called aov.result.additive
 aov.result.add <- aov(absorb ~ day + clone + induced, data = ap.pivot)
@@ -789,6 +821,7 @@ To view the results, we do:
 #| echo: true
 #| warning: false
 #| eval: false
+#| purl: true
 
 summary(aov.result.add)
 ```
@@ -807,6 +840,7 @@ Now then examine a multiplicative (non additive) model. Here we examine whether 
 #| echo: true
 #| warning: false
 #| eval: false
+#| purl: true
 
 
 #run the ANOVA

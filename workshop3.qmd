@@ -609,10 +609,10 @@ If `install.packages("corrr")` fails, you can obtain the `track.correlations` da
 ```{r}
 #| echo: true
 #| warning: false
-#| eval: false
+#| eval: true
 #| purl: true
 
-track.correlations <-read_tsv(url("https://djeffares.github.io/BIO66I/track.correlations.tsv"))
+track.correlations <-read_tsv(url("https://djeffares.github.io/BIO66I/data/track.correlations.tsv"))
 ```
 
 

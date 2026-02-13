@@ -9,11 +9,17 @@ rm(list=ls())
 library(tidyverse)
 
 
-
 #load the ggpubr package for multi-part plots
 library(ggpubr)
 
-
+cells <-read_tsv(url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-02-22.tsv"),
+    col_types = cols(
+        clone = col_factor(),
+        replicate = col_factor(),
+        tracking.id=col_factor(),
+        lineage.id=col_factor()
+    )
+)
 
 #look at the data, like an excel table:
 view(cells)

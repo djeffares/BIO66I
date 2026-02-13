@@ -3,6 +3,7 @@
 ########################################################
 
 
+
 #clear previous data
 rm(list=ls())
 
@@ -38,7 +39,7 @@ cells <-read_tsv("data/all-cell-data-FFT.filtered.2024-02-22.tsv",
 
 names(cells)
 
-
+names(cells)
 #select only the columns we need
 cell.move.data <- select(cells,
         clone,
@@ -97,8 +98,6 @@ track.correlations <-
   correlate(method="spearman")
 #see what we have
 head(track.correlations)
-
-write_tsv(track.correlations, "track.correlations.tsv")
 
 #Adjust the name of the first column to "Variable1"
 names(track.correlations)[1]="Variable1"
@@ -166,4 +165,4 @@ track.correlations.pivot |>
   scale_fill_gradient(low = "white", high = "red")+
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
-# track.correlations <-read_tsv(url("https://djeffares.github.io/BIO66I/track.correlations.tsv"))
+track.correlations <-read_tsv(url("https://djeffares.github.io/BIO66I/data/track.correlations.tsv"))
