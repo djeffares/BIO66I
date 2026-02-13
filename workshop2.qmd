@@ -122,6 +122,9 @@ In R scripts, lines that start with the hash symbol (`#`) are comments. Add comm
 4.  Add a comment to the script so you know what it is about, for example
 
 ```{r}
+#| eval: true
+#| purl: true
+
 #Data Analysis 2: Cell Biology
 #Date 2026-02-13
 ```
@@ -132,6 +135,8 @@ In R scripts, lines that start with the hash symbol (`#`) are comments. Add comm
 #| echo: true
 #| warning: false
 #| eval: true
+#| purl: true
+
 
 #clear previous data
 rm(list=ls())
@@ -147,6 +152,8 @@ library(tidyverse)
 #| echo: true
 #| warning: false
 #| eval: true
+#| purl: true
+
 
 #load the ggpubr package for multi-part plots
 library(ggpubr)
@@ -167,23 +174,10 @@ In workshop 1, we showed you how to [import data from files](https://3mmarand.gi
 ```{r}
 #| echo: true
 #| warning: false
-#| eval: false
-cells <-read_tsv(url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-02-22.tsv"),
-    col_types = cols(
-        clone = col_factor(),
-        replicate = col_factor(),
-        tracking.id=col_factor(),
-        lineage.id=col_factor()
-    )
-)
-```
-
-```{r}
-#| echo: false
-#| warning: false
 #| eval: true
-#Load from local file for rendering
-cells <-read_tsv("data/all-cell-data-FFT.filtered.2024-02-22.tsv",
+#| purl: false
+
+cells <-read_tsv(url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-02-22.tsv"),
     col_types = cols(
         clone = col_factor(),
         replicate = col_factor(),
@@ -210,6 +204,8 @@ It is important to know what data you have. How many rows and columns *etc*. The
 #| echo: true
 #| warning: false
 #| output: false
+#| eval: true
+#| purl: true
 
 #look at the data, like an excel table:
 view(cells)
@@ -243,7 +239,8 @@ When you ran `names(cells)` you will have seen *many* metrics from the Livecyte 
 #| echo: true
 #| warning: false
 #| output: false
-#| eval: false
+#| eval: true
+#| purl: true
 
 #see what we have
 names(cells)
@@ -276,6 +273,8 @@ In the `select` function, using the minus sign `-` before a column name *removes
 #| echo: true
 #| warning: false
 #| output: false
+#| eval: true
+#| purl: true
 #save all my stuff
 save.image("BIO00066I-workshop2.Rda")
 ```
@@ -286,7 +285,9 @@ You can load all the data again with:
 #| echo: true
 #| warning: false
 #| output: false
-#| eval: false
+#| eval: true
+#| purl: true
+
 #load all my stuff from last time
 load("BIO00066I-workshop2.Rda")
 ```
@@ -310,6 +311,8 @@ Here is the command. I will explain it below.
 #| warning: false
 #| output: false
 #| eval: true
+#| purl: true
+
 summary.table <- cells |> 
     group_by(clone, replicate) |> 
     summarise(
@@ -340,7 +343,8 @@ Have a look at the information we generated with:
 #| echo: true
 #| warning: false
 #| output: false
-#| eval: false
+#| eval: true
+#| purl: true
 
 view(summary.table)
 ```
@@ -359,6 +363,9 @@ view(summary.table)
 It looks like many of the cell shape metrics from above might differ between clones. So let's look deeper, starting with `cell width`. We will make a box and whisker plot. We use a small 'trick' here: by including `fill=replicate` we force R to make different plots for each replicate.
 
 ```{r}
+#| eval: true
+#| purl: true
+
 ggplot(cells,aes(x=clone,y=width,fill=replicate))+
     geom_boxplot()
 ```
@@ -386,7 +393,8 @@ We can test this approximately by plotting data, as below. It doesn't look perfe
 #| echo: true
 #| warning: false
 #| output: false
-#| eval: false
+#| eval: true
+#| purl: true
 
 ggplot(cells, aes(x = width)) +
   geom_density()
@@ -397,6 +405,9 @@ The nonparametric equivalent of a t-Test is a **Wilcoxon rank sum test**. There 
 But does does not suit `tidyverse` data frames very well. So we will use the `wilcox.test(numeric_values ~ category_name, data = some_data_frame)` method, like so:
 
 ```{r}
+#| eval: true
+#| purl: true
+
 #Wilcoxon rank sum test
 #To test if cloneA and cloneB have statistically different widths
 wilcox.test(width ~ clone, data = cells)
@@ -418,7 +429,8 @@ Fortunately, you can add the results of nonparametric tests to ggplot, by adding
 #| echo: true
 #| warning: false
 #| output: false
-#| eval: false
+#| eval: true
+#| purl: true
 
 ggplot(cells,aes(x=clone,y=width))+
     geom_boxplot()+
@@ -437,7 +449,8 @@ To increase your understanding, run through all the plots in section 3.5 with so
 #| echo: true
 #| warning: false
 #| output: false
-#| eval: false
+#| eval: true
+#| purl: true
 
 names(cells)
 ```
@@ -464,7 +477,8 @@ First, read in the small data set we prepared, and have a quick look, to check w
 #| echo: true
 #| warning: false
 #| output: false
-#| eval: false
+#| eval: true
+#| purl: true
 
 #read in some data from a website
 small.tracking.data <-read_tsv(url("https://djeffares.github.io/BIO66I/data/trackingid.small.data.tsv"),
@@ -486,6 +500,8 @@ summary(small.tracking.data)
 #| warning: false
 #| output: false
 #| eval: true
+#| purl: true
+
 #Load from local file for rendering
 small.tracking.data <-read_tsv("data/trackingid.small.data.tsv",
     col_types = cols(
@@ -508,7 +524,8 @@ Previously we used `geom_boxplot()` to compare clone A and clone B. Box and whis
 #| echo: true
 #| warning: false
 #| output: false
-#| eval: false
+#| eval: true
+#| purl: true
 
 ggplot(small.tracking.data, aes(x=clone, y=width))+
     geom_boxplot(fill=NA)+
@@ -536,6 +553,9 @@ We can prove that to ourselves by comparing a Wilcox test results from the `smal
 
 
 ```{r}
+#| eval: true
+#| purl: true
+
 #test with small.tracking.data
 wilcox.test(width ~ clone, data = small.tracking.data)
 
@@ -559,6 +579,7 @@ Now, lets look plotting the small and large data sets side by side. Sometimes, a
 #| warning: false
 #| output: false
 #| eval: true
+#| purl: true
 
 #plot with the large data
 #storing the plot in an object called large.data.plot
@@ -624,7 +645,8 @@ Look at your script again. Add some comments, so that the next time you look at 
 #| echo: true
 #| warning: false
 #| output: false
-#| eval: false
+#| eval: true
+#| purl: true
 
 ggplot(cells,aes(x=clone,y=width,fill=replicate))+
     geom_violin()
@@ -636,7 +658,9 @@ ggplot(cells,aes(x=clone,y=width,fill=replicate))+
 #| echo: true
 #| warning: false
 #| output: false
-#| eval: false
+#| eval: true
+#| purl: true
+
 
 ggplot(cells,aes(x=clone,y=length,fill=replicate))+
     geom_violin()+
@@ -655,6 +679,9 @@ This is how we made the small data set `trackingid.small.data`. Reading through 
 Use the `dplyr` tools `group_by` and `summarise` to calculate the average of all the cell shape measurements for each cell. Each cell is marked by the Livecyte software with a tracking id (`tracking.id`), so we group cells by this. The code `group_by(clone, replicate, tracking.id)` will group each measurement by the clone, replicate **and** tracking id, then the `summarise` part calculates the mean values for all our metrics:
 
 ```{r}
+#| eval: true
+#| purl: true
+
 #take the mean of each unique tracking id
 trackingid.summary.table<-cells |>
     group_by(clone, replicate, tracking.id) |>
@@ -680,6 +707,8 @@ Then we use the `dplyr` function `sample_n`, which samples a number of rows from
 #| warning: false
 #| output: false
 #| eval: true
+#| purl: true
+
 
 #collect a random subset, of 5 rows for each tracking id
 trackingid.small.data <- sample_n(trackingid.summary.table, 5)
@@ -692,6 +721,9 @@ glimpse(trackingid.small.data)
 We write the output to a file:
 
 ```{r}
+#| eval: true
+#| purl: true
+
 #output trackingid.small.data as a tab-separated value (tsv) file
 write_tsv(trackingid.small.data, file ="/Users/dj757/gd/modules/BIO66I/data/trackingid.small.data.tsv")
 ```
@@ -702,7 +734,8 @@ Look at the `trackingid.small.data` data frame, so we know what we have:
 #| echo: true
 #| warning: false
 #| output: false
-#| eval: false
+#| eval: true
+#| purl: true
 
 #how many rows do we have?
 nrow(trackingid.small.data)

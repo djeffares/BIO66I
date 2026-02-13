@@ -5,6 +5,7 @@ project:
     - data/all-cell-data-FFT.filtered.2024-02-22.tsv
     - data/trackingid.small.data.tsv
     - data/A1-and-B2-tracking.data.2025-02-27.tsv
+    - data/track.correlations.tsv
 
 website:
   title: "BIO00066I"

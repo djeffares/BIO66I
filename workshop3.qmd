@@ -95,6 +95,9 @@ This work transforms intuitions into evidence.
 We will keep working on this script. We advise you to mark clearly where workshop 1, workshop 2 and workshop 3 are. Something like this will help:
 
 ```{r}
+#| eval: true
+#| purl: true
+
 ########################################################
 #WORKSHOP 3: CELL MOVEMENT DATA
 ########################################################
@@ -106,6 +109,7 @@ First we will install the `corrr` package. Do do this, we do:
 #| echo: true
 #| warning: false
 #| eval: false
+#| purl: false
 
 install.packages("corrr")
 ```
@@ -124,6 +128,7 @@ Then clear the previous work, and load the libraries we need:
 #| echo: true
 #| warning: false
 #| eval: true
+#| purl: true
 
 #clear previous data
 rm(list=ls())
@@ -146,7 +151,8 @@ Now read in the data from the file **all-cell-data-FFT.filtered.2024-02-22.tsv**
 ```{r}
 #| echo: true
 #| warning: false
-#| eval: false
+#| eval: true
+#| purl: true
 
 # Read the automated Livecyte data
 cells <-read_tsv(url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-02-22.tsv"),
@@ -163,6 +169,7 @@ cells <-read_tsv(url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.
 #| echo: false
 #| warning: false
 #| eval: true
+#| purl: true
 #Load from local file for rendering
 cells <-read_tsv("data/all-cell-data-FFT.filtered.2024-02-22.tsv",
                  col_types = cols(
@@ -179,7 +186,8 @@ Lets see what data we have:
 ```{r}
 #| echo: true
 #| warning: false
-#| eval: false
+#| eval: true
+#| purl: true
 
 names(cells)
 ```
@@ -196,6 +204,7 @@ In the spirit of **keeping it simple**, let's retain only the columns in this da
 #| echo: true
 #| warning: false
 #| eval: true
+#| purl: true
 
 names(cells)
 #select only the columns we need
@@ -218,6 +227,9 @@ glimpse(cell.move.data)
 Now save your working data:
 
 ```{r}
+#| eval: true
+#| purl: true
+
 #lets save our data
 save.image("BIO00066I-workshop3-cell-movement-metrics.Rda")
 
@@ -233,6 +245,7 @@ let's see how clone A and clone B move. First, we'll plot the `instantaneous.vel
 #| echo: true
 #| warning: false
 #| eval: true
+#| purl: true
 
 #instantaneous.velocity - geom_violin
 ggplot(cell.move.data,aes(x=clone,y=instantaneous.velocity,colour=clone))+
@@ -265,6 +278,7 @@ If these adjustments to the code worked, you will end up with a plot like this. 
 #| echo: false
 #| warning: false
 #| eval: true
+#| purl: true
 
 ggplot(cell.move.data,aes(x=clone,y=log10(instantaneous.velocity),colour=clone))+
     geom_violin(alpha=0.5)+
@@ -287,7 +301,8 @@ So Amanda spent many hours *manually* tracking cells. These results were process
 ```{r}
 #| echo: true
 #| warning: false
-#| eval: false
+#| eval: true
+#| purl: true
 
 #load the manual tracking data
 track <-read_tsv(url("https://djeffares.github.io/BIO66I/data/A1-and-B2-tracking.data.2025-02-27.tsv"))
@@ -301,6 +316,7 @@ names(track)
 #| echo: false
 #| warning: false
 #| eval: true
+#| purl: true
 #Load from local file for rendering
 track <-read_tsv("data/A1-and-B2-tracking.data.2025-02-27.tsv")
 glimpse(track)
@@ -322,6 +338,9 @@ Note that different analysis software can use different terminologies to define 
 Let's start by looking at the **speed** that each cell moves at during the experiment. This is recorded as `mean.speed` in this data set (the same as the `instantenous.velocity` in the `cells` data set). We can compare the clones (`cell.line`) like so:
 
 ```{r}
+#| eval: true
+#| purl: true
+
 #compare mean.speed between cell lines
 ggplot(track, aes(x=cell.line,y=mean.speed))+
   geom_boxplot()+
@@ -348,6 +367,9 @@ With biological data (and data from many other sources), different measurements 
 We *could* examine each correlation one by one, like so:
 
 ```{r}
+#| eval: true
+#| purl: true
+
 #examine whether track.length and mean.speed are correlated
 cor.test(track$track.length,track$mean.speed,method="spearman")
 ```
@@ -363,6 +385,9 @@ But since there are 11 cell movment metrics, this would quickly become boring. A
 **Fortunately, there is an easier way.** First we use the `correlate` function to calculate all pairwise correlations. We save the correlation coefficients in the `track.correlations` data frame.
 
 ```{r}
+#| eval: true
+#| purl: true
+
 #calculate all pairwise correlations
 track.correlations <- 
   track |>
@@ -378,6 +403,9 @@ Then we use `pivot_longer` ass we did in [BIO00066I core workshop 1](https://3mm
 We will use `pivot_longer` this way:
 
 ```{r}
+#| eval: true
+#| purl: true
+
 #Adjust the name of the first column to "Variable1"
 names(track.correlations)[1]="Variable1"
 
@@ -393,6 +421,9 @@ head(track.correlations.pivot)
 Finally, we can show all the correlation coefficients in one plot. This gives us a unique and revealing sense of the data.
 
 ```{r}
+#| eval: true
+#| purl: true
+
 #plot data in the track.correlations.pivot table
 #using geom_tile (for coloured boxes) and geom_text (to show the correlation coefficient values) 
 ggplot(track.correlations.pivot, aes(Variable1, Variable2)) +
@@ -412,6 +443,8 @@ Luckily, we don't have to do all our analysis again. We can just remove these co
 
 
 ```{r}
+#| eval: true
+#| purl: true
 
 #pipe track.correlations.pivot data frame into filter
 track.correlations.pivot |>
@@ -499,7 +532,8 @@ So we can filter out these lines by putting `filter(track.present.at.start.or.en
 ```{r}
 #| echo: true
 #| warning: false
-#| eval: false
+#| eval: true
+#| purl: true
 
 #track.length without the filter
 no.filter.plot<- track |> 
@@ -540,7 +574,8 @@ What if we wanted to show only the correlations where the absolute value of $\rh
 ```{r}
 #| echo: true
 #| warning: false
-#| eval: false
+#| eval: true
+#| purl: true
 
 #filter the data
 track.correlations.pivot |>
@@ -575,6 +610,7 @@ If `install.packages("corrr")` fails, you can obtain the `track.correlations` da
 #| echo: true
 #| warning: false
 #| eval: false
+#| purl: true
 
 track.correlations <-read_tsv(url("https://djeffares.github.io/BIO66I/track.correlations.tsv"))
 ```
@@ -589,5 +625,4 @@ knitr::purl("workshop3.qmd",
             output = "workshop3.R", 
             documentation = 0)
 ```
-
 
