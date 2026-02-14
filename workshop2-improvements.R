@@ -80,17 +80,14 @@ ggplot(cells,aes(x=clone,y=width,fill=replicate))+
     geom_boxplot()
 
 names(cells)
+
+##better: show density
 ggplot(cells, aes(x = width,colour = replicate)) +
   geom_density()+
   facet_wrap(~clone)
 
-ggplot(cells, aes(x = mean.thickness,y=sphericity,colour = clone)) +
-  geom_point()+
-  facet_wrap(~clone)
-  
 
-
-#
+##better: show density
 ggplot(cells, aes(x = mean.thickness,colour = replicate)) +
   geom_density()+
   facet_wrap(~clone)+
@@ -211,3 +208,93 @@ nrow(trackingid.small.data)
 
 #what does the data look like?
 view(trackingid.small.data)
+
+
+# Prepare data for PCA
+# Select numeric columns and remove any rows with NA values
+cells_for_pca <- cells |>
+  select(clone, replicate, volume, mean.thickness, radius, area, 
+         sphericity, length, width, orientation, dry.mass, length.to.width) |>
+  drop_na()
+
+# Perform PCA on scaled numeric data
+pca_result <- cells_for_pca |>
+  select(-clone, -replicate) |>  # Remove grouping variables
+  scale() |>                      # Scale/standardize the data
+  prcomp()
+
+# View summary of PCA
+summary(pca_result)
+
+# Extract PC scores and combine with clone information
+pca_scores <- as.data.frame(pca_result$x) |>
+  bind_cols(cells_for_pca |> select(clone, replicate))
+
+# Plot PC1 vs PC2 colored by clone
+ggplot(pca_scores, aes(x = PC1, y = PC2, color = clone)) +
+  geom_point(alpha = 0.1, size = 1) +
+  stat_ellipse() +  # Add confidence ellipses
+  theme_classic() +
+  labs(title = "PCA: Clone A vs Clone B",
+       x = paste0("PC1 (", round(summary(pca_result)$importance[2,1]*100, 1), "%)"),
+       y = paste0("PC2 (", round(summary(pca_result)$importance[2,2]*100, 1), "%)"))
+
+## better: plot PCAs
+ggplot(pca_scores, aes(x = PC1, y = PC2, color = clone, fill = clone)) +
+  geom_point(alpha = 0.4, size = 2) +
+  stat_ellipse(geom = "polygon", alpha = 0.1, linewidth = 1.2) +
+  scale_color_manual(values = c("cloneA" = "#E41A1C", "cloneB" = "#377EB8")) +
+  scale_fill_manual(values = c("cloneA" = "#E41A1C", "cloneB" = "#377EB8")) +
+  theme_classic() +
+  theme(legend.position = "top") +
+  labs(title = "PCA: Clone A vs Clone B (3000 cells each)",
+       x = paste0("PC1 (", round(summary(pca_result)$importance[2,1]*100, 1), "%)"),
+       y = paste0("PC2 (", round(summary(pca_result)$importance[2,2]*100, 1), "%)"))
+
+#but terrible plot, so downsample:
+
+# Downsample to 3000 cells per clone for better visualization
+pca_scores_sample <- pca_scores |>
+  group_by(clone) |>
+  slice_sample(n = 3000) |>
+  ungroup()
+
+#plot again
+ggplot(pca_scores_sample, aes(x = PC1, y = PC2, color = clone, fill = clone)) +
+  geom_point(alpha = 0.4, size = 2) +
+  stat_ellipse(geom = "polygon", alpha = 0.1, linewidth = 1.2) +
+  scale_color_manual(values = c("cloneA" = "#E41A1C", "cloneB" = "#377EB8")) +
+  scale_fill_manual(values = c("cloneA" = "#E41A1C", "cloneB" = "#377EB8")) +
+  theme_classic() +
+  theme(legend.position = "top") +
+  labs(title = "PCA: Clone A vs Clone B (3000 cells each)",
+       x = paste0("PC1 (", round(summary(pca_result)$importance[2,1]*100, 1), "%)"),
+       y = paste0("PC2 (", round(summary(pca_result)$importance[2,2]*100, 1), "%)"))
+
+# View variable loadings (which variables contribute most to separation)
+pca_loadings <- as.data.frame(pca_result$rotation[, 1:2]) |>
+  rownames_to_column("variable")
+
+ggplot(pca_loadings, aes(x = PC1, y = PC2)) +
+  geom_segment(aes(xend = PC1, yend = PC2), 
+               x = 0, y = 0, arrow = arrow(length = unit(0.3, "cm"))) +
+  geom_text(aes(label = variable), hjust = 0, nudge_x = 0.01) +
+  theme_classic() +
+  labs(title = "PCA Loadings - Variable Contributions")
+
+
+pca_scores_sample <- pca_scores |>
+  group_by(clone) |>
+  slice_sample(n = 3000) |>
+  ungroup()
+
+ggplot(pca_scores_sample, aes(x = PC1, y = PC2, color = clone, fill = clone)) +
+  geom_point(alpha = 0.4, size = 2) +
+  stat_ellipse(geom = "polygon", alpha = 0.1, linewidth = 1.2) +
+  scale_color_manual(values = c("cloneA" = "#E41A1C", "cloneB" = "#377EB8")) +
+  scale_fill_manual(values = c("cloneA" = "#E41A1C", "cloneB" = "#377EB8")) +
+  theme_classic() +
+  theme(legend.position = "top") +
+  labs(title = "PCA: Clone A vs Clone B (3000 cells each)",
+       x = paste0("PC1 (", round(summary(pca_result)$importance[2,1]*100, 1), "%)"),
+       y = paste0("PC2 (", round(summary(pca_result)$importance[2,2]*100, 1), "%)"))
