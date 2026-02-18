@@ -811,20 +811,97 @@ ggsave("BIO00066I-workshop3-combined-livecyte-plot.png",
 
 #### PCA with Livecyte cell shape and cell movement data together
 
-Start by preparing the data for PCA, by selecting the numeric columns from both the cell shape and cell movement data, and removing rows with NA values.
+Very briefly, you can run PCA with both cell shape and cell movement data together, by including all the relevant columns in the data frame that you use for PCA. For example, you could use this code to prepare the data for PCA:
 
 ```{r}
 #| echo: true
 #| warning: false
-#| eval: true
+#| eval: false
 #| purl: true
 
-# prepare data for PCA
-pca.data <- cells |>
-  select(where(is.numeric)) |>
+# Read the automated Livecyte data
+cells <-read_tsv(url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-02-22.tsv"),
+                 col_types = cols(
+                   clone = col_factor(),
+                   replicate = col_factor(),
+                   tracking.id=col_factor(),
+                   lineage.id=col_factor()
+                 )
+)
+
+# prepare data for PCA with both cell shape and movement data
+cells.for.pca.alldata <- cells |>
+  #select the numeric columns, including the cell shape data and also the cell movement data
+  select(clone, replicate, 
+      # shape data
+      volume, mean.thickness, radius, area, sphericity, length, width, orientation, dry.mass, 
+      # movement data
+      length.to.width, displacement, track.length, instantaneous.velocity) |>
+  # remove rows with NA values
   drop_na()
 
+
+#run PCA
+pca.result <- cells.for.pca.alldata  |>
+  select(-clone, -replicate) |>  # remove the group categories
+  prcomp()                        # performs the PCA
+
+# extract PCA scores and combine with clone and replicate info
+pca.scores <- as.data.frame(pca.result$x) |>
+  bind_cols(cells.for.pca.alldata |> select(clone, replicate))
+
+# down sample the PCA scores to 3000 cells per clone
+pca.scores.sample <- pca.scores |>
+  group_by(clone) |>
+  slice_sample(n = 3000) |>
+  ungroup()
+
+# create PCA1, PC2 plot
+pca.plot <- ggplot(pca.scores.sample, 
+  aes(x = PC1, y = PC2, color = clone, fill = clone)) +
+  geom_point(alpha = 0.5, size = 2)+
+  stat_ellipse(geom = "polygon", alpha = 0.05, linewidth = 1.2)+
+  theme_classic2()
+
+# view and save the plot  
+pca.plot
+ggsave("BIO00066I-workshop3-pca-alldata-plot.png", width = 6, height = 4)
 ```
+
+
+#### Exploring PCA results
+
+There is more to PCA than just plotting the PCA scores. It can be interesting to know how much of total variance in the data is explained by each principal component. This is often shown in a scree plot, but we can also calculate it manually from the PCA results. Here is the code to do both:
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+#| purl: true
+
+# make a scree plot from pca.result
+screeplot(pca.result.track, type = "lines")
+
+# Calculate manually from standard deviations
+variance <- pca.result.track$sdev^2
+percent.variance <- variance / sum(variance) * 100
+
+# Or create a nice data frame
+variance.explained <- data.frame(
+  PC = paste0("PC", 1:length(percent.variance)),
+  Variance = variance,
+  Percent = percent.variance,
+  Cumulative = cumsum(percent.variance)
+)
+
+# Visualize with a scree plot
+barplot(percent.variance, 
+        names.arg = paste0("PC", 1:length(percent.variance)),
+        xlab = "Principal Component",
+        ylab = "% Variance Explained")
+```
+
+
 
 ## Planning for your report
 
@@ -840,18 +917,6 @@ The aim of all this is to make the code and the data analysis clear and readable
 
 So spending just **10 minutes** tidying your code now will make your future life easier. For example, look at your variable names, and make them clearer. 
 
-## In case install.packages fails
-
-If `install.packages("corrr")` fails, you can obtain the `track.correlations` data frame like this:
-
-```{r}
-#| echo: true
-#| warning: false
-#| eval: true
-#| purl: true
-
-track.correlations <-read_tsv(url("https://djeffares.github.io/BIO66I/data/track.correlations.tsv"))
-```
 
 
 ```{r}

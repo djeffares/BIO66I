@@ -20,7 +20,7 @@ editor: source
 ::: callout-important
 ## Philosophy
 
-Workshops are not a test. You may make a lot of mistakes - that is fine. It's OK to need help. The staff are here to help you, so don't be afraid to ask us anything :-)
+Workshops are not a test. You may make a lot of mistakes - that is fine. It's OK to need help. The staff are here to help you, so don't be afraid to ask us anything.
 :::
 
 ::: callout-tip
@@ -31,9 +31,16 @@ Workshops are not a test. You may make a lot of mistakes - that is fine. It's OK
 
 ## Technical skills
 
-Today we will work with plotting movement data from the Livecyte microscope.
+Today we will work with **cell movement data**. We'll use cell movement metrics that were automatically data collected in the Livecyte microscope and also manually tracked data. We will use R to explore these data, and to test our intuitions about how the two clones of mesenchymal stromal cells move.
 
-We will learn some new R plotting skills:
+
+We will continue to use plotting and data summarising skills we developed in [workshop 2](https://djeffares.github.io/BIO66I/workshop2.html):
+
+- creating simple plots with ggplot2
+- making a summary table, showing which numeric metrics differ betwen clones A and B
+- making a principle component analysis (PCA) plot 
+
+And we will learn some new R plotting skills
 
 -   `facet_wrap` a method to plot one variable split up over different treatments (or chromosomes, or days, or replicates)
 -   how to create a **correlation data frame** using the `correlate` function. This allows us to explore many correlations between different metrics. Typically, these metrics are stored in the *columns* of our data frames.
@@ -59,21 +66,16 @@ Today, we will continue our quest to understand **mesenchymal stromal cells (MSC
 
 In [workshop 2](https://djeffares.github.io/BIO66I/workshop2.html), we saw that these two clones were different shapes. This time, we examine how they *move*.
 
-::: callout-tip
-## Sometimes, asking a good question is the most important step!
-
-Why do these clones maintain different shapes after growing in the lab for so long? Why don't they revert to being the same?
-:::
 
 ## The data
 
-In this workshop, we first examine cell movement data that was collected in an automated way by the Livecyte microscope. This shows something interesting, but it is not very reliable, because the Livecyte is *not perfect* at tracking individual cells.
+In this workshop, we first examine cell movement data that was collected in an automated way by the Livecyte microscope. This shows something interesting, but it is not very reliable, because the Livecyte is not perfect at tracking individual cells.
 
-People are better at tracking individual cells. So we then look at some *manual* tracking data. We will se such metrics as `euclidean.distance` (how far the cells have moved), `mean.speed` (how fast they go), and `meandering.index` (how much they *meander* and change their minds about where they are going!).
+People are better at tracking individual cells. So we then look at some **manual tracking data**. We will see such metrics as `euclidean.distance` (how far the cells have moved), `mean.speed` (how fast they go), and `meandering.index` (how much they *meander* and change their minds about where they are going!).
 
 While we could *guess* how the cells differ from looking down the microscope, we can use our data science skills in two ways to enrich our perception, by:
 
--   showing metrics with plots - this will enhance out intuition
+-   showing metrics with plots - this will enhance our intuition
 -   using statistical tests to test our intuitions
 -   the tests will determine which metrics (if any) are **significantly different** between the clones
 
@@ -81,9 +83,10 @@ This work transforms intuitions into evidence.
 
 ## Research questions
 
--   Do the two mesenchymal stromal cell clones move differently?
--   What data set(s) are most reliable?
--   What are the best parameters to distinguish the clones?
+- Do the two mesenchymal stromal cell clones move differently?
+- What data set(s) are most reliable?
+- What are the best parameters to distinguish the clones?
+- What is th best way to summarise this complex data to distinguish the clones?
 
 # Exercises
 
@@ -98,12 +101,20 @@ We will keep working on this script. We advise you to mark clearly where worksho
 #| eval: true
 #| purl: true
 
-########################################################
-#WORKSHOP 3: CELL MOVEMENT DATA
-########################################################
+
+# WORKSHOP 3: CELL MOVEMENT DATA ----
+
 ```
 
-First we will install the `corrr` package. Do do this, we do:
+Notice that placing at least four dashes `----` after the line of text creates a section in RStudio. This is a good way to keep your script organised, and to find your way around it later.
+
+:::callout-important
+# Save your R script often!
+On a PC, use `Ctrl+S` to save your script. On a Mac, use `Cmd+S`.
+:::
+
+
+First we will install the `corrr` package. To do this, we do:
 
 ```{r}
 #| echo: true
@@ -130,6 +141,8 @@ Then clear the previous work, and load the libraries we need:
 #| eval: true
 #| purl: true
 
+# SET UP AND LIBRARY LOADING ----
+
 #clear previous data
 rm(list=ls())
 
@@ -144,9 +157,9 @@ library(ggpubr)
 
 ```
 
-## Automated Livecyte cell movment data
+## Automated Livecyte cell movement data
 
-Now read in the data from the file **all-cell-data-FFT.filtered.2024-02-22.tsv**. This contains some cell movment data.
+Now read in the data from the file **all-cell-data-FFT.filtered.2024-02-22.tsv**. This contains the cell shape data we looked at lasst time, and some cell moment data.
 
 ```{r}
 #| echo: true
@@ -154,24 +167,10 @@ Now read in the data from the file **all-cell-data-FFT.filtered.2024-02-22.tsv**
 #| eval: true
 #| purl: true
 
+# LOADING LIVECYTE DATA ----
+
 # Read the automated Livecyte data
 cells <-read_tsv(url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-02-22.tsv"),
-                 col_types = cols(
-                   clone = col_factor(),
-                   replicate = col_factor(),
-                   tracking.id=col_factor(),
-                   lineage.id=col_factor()
-                 )
-)
-```
-
-```{r}
-#| echo: false
-#| warning: false
-#| eval: true
-#| purl: true
-#Load from local file for rendering
-cells <-read_tsv("data/all-cell-data-FFT.filtered.2024-02-22.tsv",
                  col_types = cols(
                    clone = col_factor(),
                    replicate = col_factor(),
@@ -186,7 +185,7 @@ Lets see what data we have:
 ```{r}
 #| echo: true
 #| warning: false
-#| eval: true
+#| eval: false
 #| purl: true
 
 names(cells)
@@ -194,11 +193,10 @@ names(cells)
 
 ::: callout-important
 ## Keep it simple
-
 In data science, we can easily get confused. keep the data as simple as you can (but no simpler).
 :::
 
-In the spirit of **keeping it simple**, let's retain only the columns in this data frame that we need, using the `select` function. The `cells` data framt still have all the data, so it is not lost.
+In the spirit of **keeping it simple**, let's retain only the columns in this data frame that we need, using the `select` function. The `cells` data frame still has all the data, so it is not lost.
 
 ```{r}
 #| echo: true
@@ -206,38 +204,42 @@ In the spirit of **keeping it simple**, let's retain only the columns in this da
 #| eval: true
 #| purl: true
 
+#examine what we have in the data frame
 names(cells)
+
 #select only the columns we need
-cell.move.data <- select(cells,
+cell.movement.data <- select(cells,
         clone,
         replicate,
         displacement, 
         track.length, 
         instantaneous.velocity
 )
-#check that we have
-names(cell.move.data)
-
-#get a simple summaru, using summary and also glimpse
-summary(cell.move.data)
-glimpse(cell.move.data)
 ```
 
-
-Now save your working data:
+And then check what we have in `cell.movement.data` now:
 
 ```{r}
-#| eval: true
+#| echo: true
+#| warning: false
+#| eval: false
 #| purl: true
 
-#lets save our data
-save.image("BIO00066I-workshop3-cell-movement-metrics.Rda")
+#check that we have
+names(cell.movement.data)
 
-#you can load this any time later with:
-load("BIO00066I-workshop3-cell-movement-metrics.Rda")
+#get a simple summary, using summary and also glimpse
+summary(cell.movement.data)
+glimpse(cell.movement.data)
 ```
 
-## Making plots
+
+:::callout-important
+# Save your R script often!
+On a PC, use `Ctrl+S` to save your script. On a Mac, use `Cmd+S`.
+:::
+
+### Making plots with Livecyte movement data
 
 let's see how clone A and clone B move. First, we'll plot the `instantaneous.velocity`:
 
@@ -247,8 +249,10 @@ let's see how clone A and clone B move. First, we'll plot the `instantaneous.vel
 #| eval: true
 #| purl: true
 
+# PLOTTING LIVECYTE DATA ----
+
 #instantaneous.velocity - geom_violin
-ggplot(cell.move.data,aes(x=clone,y=instantaneous.velocity,colour=clone))+
+ggplot(cell.movement.data,aes(x=clone,y=instantaneous.velocity,colour=clone))+
     geom_violin(alpha=0.5)+
     stat_compare_means()
 
@@ -257,13 +261,14 @@ ggplot(cell.move.data,aes(x=clone,y=instantaneous.velocity,colour=clone))+
 This plot isn't very revealing is it? That is because most of the `instantaneous.velocity` values are very low, and the data are certainly not *normally distributed*. Biological data is often like this. Plotting metrics on a **log scale** is often the solution. Log^2^ or log^10^ scales are commonly used.
 
 ::: callout-tip
-## Adjust this plot yourself
+# Adjust this plot yourself
 
 So that you plot `y=log10(instantaneous.velocity)`. Does it look better?
 :::
 
 ::: callout-tip
-## Enhance the plot with facet_wrap
+
+### Enhance the plot with facet_wrap
 
 This time, show the repeats by adding a new line to the plot code:
 
@@ -280,7 +285,7 @@ If these adjustments to the code worked, you will end up with a plot like this. 
 #| eval: true
 #| purl: true
 
-ggplot(cell.move.data,aes(x=clone,y=log10(instantaneous.velocity),colour=clone))+
+ggplot(cell.movement.data,aes(x=clone,y=log10(instantaneous.velocity),colour=clone))+
     geom_violin(alpha=0.5)+
     facet_wrap(~replicate)+
     stat_compare_means()
@@ -291,6 +296,188 @@ ggplot(cell.move.data,aes(x=clone,y=log10(instantaneous.velocity),colour=clone))
 
 Use your plot code to explore, `displacement`, `track.length` and/or `instantaneous.velocity`.
 :::
+
+### Summarising the Livecyte data
+
+In the last workshop, we made a summary table to show which cell shape metrics were different between the two clones. We can do the same thing for the cell movement data. This will give us a clear summary of which metrics are different between the clones, and how different they are.
+
+We start by making clone A and clone B data frames:
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: true
+#| purl: true
+
+# SUMMARY OF LIVECYTE DATA ----
+
+# make clone A and clone B data frames
+cloneA.data <- cell.movement.data |> filter(clone == "cloneA")
+cloneB.data <- cell.movement.data |> filter(clone == "cloneB")
+```
+
+And then collecting a list of the numeric columns in the data frame, so we can loop through them and compare them between the clones.
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: true
+#| purl: true
+
+#get the names of the numeric columns
+numeric.columns <- cell.movement.data |> 
+  select(where(is.numeric)) |> 
+  names()
+
+#see what we have
+numeric.columns
+```
+
+Then we create an empty data frame tos ave the results in:
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: true
+#| purl: true
+
+#create empty data frame
+clone.comparisons <- data.frame(
+  variable = character(),
+  cloneA.median = numeric(),
+  cloneB.median = numeric(),
+  median.ratio = numeric(),
+  p.value = numeric()
+)
+```
+
+Finally, we run this loop to compare the clones for each numeric variable, and save the results in the `clone.comparisons` data frame. Again **it is important to run the loop code all at once**.
+
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: true
+#| purl: true
+
+#loop through each numeric column
+for(column.name in numeric.columns) {
+  
+  #calculate median for clone A
+  cloneA.median <- median(cloneA.data[[column.name]], na.rm = TRUE)
+  
+  #calculate median for clone B  
+  cloneB.median <- median(cloneB.data[[column.name]], na.rm = TRUE)
+  
+  #calculate the median ratio (cloneA.median / cloneB.median)
+  ratio <- cloneA.median / cloneB.median
+  
+  #run wilcox test comparing the two clones for this variable
+  test.result <- wilcox.test(cells[[column.name]] ~ cells$clone)
+  
+  #extract the p-value
+  p.val <- test.result$p.value
+  
+  #add this row to our results table
+  new.row <- data.frame(
+    variable = column.name,
+    cloneA.median = signif(cloneA.median,2),
+    cloneB.median = signif(cloneB.median,2),
+    median.ratio = signif(ratio,2),
+    p.value = p.val
+  )
+  
+  #add the new.row to the clone.comparisons data frame
+  clone.comparisons <- rbind(clone.comparisons, new.row)
+}
+```
+
+When this is done, examine the output data frame with `view(clone.comparisons)`. This 
+
+:::callout-tip
+In your report, you could make one table for cell shape and movement data, or keep the tables separate. One table would be a more comprehensive summary. All you need to do to acheive this, is to run the loop code above with a data frame that contains **both** the cell shape and movement data.
+:::
+
+### PCA with Livecyte movement data
+
+We saw in [Workshop 2](https://djeffares.github.io/BIO66I/workshop2.html) that PCA is a powerful way to summarise complex data, and to show how the clones differ in a single plot.
+
+So let's try a PCA plot with only the cell movement data, `displacement`, `track.length` and `instantaneous.velocity`
+
+We'll prepare the data for PCA and then calculate PCA coordinates with the `prcomp()` function:
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: true
+#| purl: true
+
+# PCA WITH LIVECYTE DATA ----
+
+# prepare data for PCA
+
+cell.data.for.pca <- cell.movement.data |>
+  drop_na() # remove rows with NA values
+
+# calculate PCA coordinates 
+pca.result <- cell.data.for.pca |>
+  select(-clone, -replicate) |>   # removes the group categories
+  prcomp()                        # performs the PCA
+```
+
+
+To examine a summary of PCA results, we can use the `summary(pca.result)`, this will show us how much of the variance (range of values) in the data is explained by each PCA coordinate. We can also use `screeplot(pca.result)` to visualise this. You will see that almost all the variance is explained by the first PCA coordinate (PC1). Note that there are only 3 possible PCA coordinates with this data.
+
+Then we extract PCA scores and combine with clone and replicate info, and down sample the data so we can make a clearer plot. You may chose to show more or less of the data in the PCA plot. YOU can do this by changing this line of code, that currently selects 300 rows of the fata at random `slice_sample(n = 300)`.
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: true
+#| purl: true
+
+# extract PCA scores and combine with clone and replicate info
+pca.scores <- as.data.frame(pca.result$x) |>
+  bind_cols(cell.data.for.pca |> select(clone, replicate))
+
+# downsample the PCA scores to 3000 cells per clone
+pca.scores.sample <- pca.scores |>
+  group_by(clone) |>
+  slice_sample(n = 300) |>
+  ungroup()
+```
+
+Finally, generate the PCA plot:
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: true
+#| purl: true
+
+# make the plot
+pca.plot <- ggplot(pca.scores.sample, 
+  aes(x = PC1, y = PC2, color = clone, fill = clone)) +
+  geom_point(alpha = 0.1, size = 4)+
+  stat_ellipse(geom = "polygon", alpha = 0.1, linewidth = 1.2) +
+  scale_color_manual(values = c("cloneA" = "red", "cloneB" = "blue"))+
+  facet_wrap(~replicate)+
+  theme_classic2()
+
+
+# view the plot
+pca.plot
+```
+
+At this stage, we could save this plot with `ggsave("BIO00066I-workshop3-movement-pca-plot.png", width = 6, height = 4)` if we like, but this PCA does not distingish clone A from clone B well at all.
+
+:::callout-note
+- Why do you think this PCA does not work so well? 
+- Should we run a PCA analysis with only 3 movement metrics?
+- Perhaps we should run PCA with cell movement and cell shape data together?
+:::
+
+----------
 
 ## Manual tracking data
 
@@ -304,24 +491,13 @@ So Amanda spent many hours *manually* tracking cells. These results were process
 #| eval: true
 #| purl: true
 
+# LOAD MANUAL TRACKING DATA ----
+
 #load the manual tracking data
 track <-read_tsv(url("https://djeffares.github.io/BIO66I/data/A1-and-B2-tracking.data.2025-02-27.tsv"))
-
-#check it out
-glimpse(track)
-names(track)
 ```
 
-```{r}
-#| echo: false
-#| warning: false
-#| eval: true
-#| purl: true
-#Load from local file for rendering
-track <-read_tsv("data/A1-and-B2-tracking.data.2025-02-27.tsv")
-glimpse(track)
-names(track)
-```
+As usual, it is wise to check what is in our data frame with `names()` and/or `glimpse()` or `summary(track)`.
 
 In this data, `TID` is the Livecyte **tracking ID**, a unique number that the microscope gives to each 'object' it can identify. `LID` is the Livecyte **lineage ID**. This keeps track of the cell lineage (ie: the initial cells, and the subsequent daughter cells that are derived from it as it divides). When a cell divides, both 'daughter cells' keep the same **lineage ID**, but each is assigned a new unique **tracking ID**.
 
@@ -331,15 +507,17 @@ Note that different analysis software can use different terminologies to define 
 :::
 
 
-![**Figure 1.** The **tracking ID (TID)** is a unique ID that the microscope assigned to each object (cell), as it tracks it through time. The **lineage ID (LID)** is a number assigned to the ‘family’ of cells that derived by cell division during the the experiment. When a cell divides, each daughter cell is given a new tracking ID, but they keep their lineage ID, because they are still part of the same family.](docs/data/figure1.jpg)
+![**Figure 1.** The **tracking ID (TID)** is a unique ID that the microscope assigned to each object (cell), as it tracks it through time. The **lineage ID (LID)** is a number assigned to the ‘family’ of cells that derived by cell division during the the experiment. When a cell divides, each daughter cell is given a new tracking ID, but they keep their lineage ID, because they are still part of the same family.](data/figure1.jpg)
 
-## Plotting manual tracking data
+### Plotting manual tracking data
 
 Let's start by looking at the **speed** that each cell moves at during the experiment. This is recorded as `mean.speed` in this data set (the same as the `instantenous.velocity` in the `cells` data set). We can compare the clones (`cell.line`) like so:
 
 ```{r}
 #| eval: true
 #| purl: true
+
+# PLOTTING MANUAL TRACKING DATA ----
 
 #compare mean.speed between cell lines
 ggplot(track, aes(x=cell.line,y=mean.speed))+
@@ -360,7 +538,7 @@ Try these things to improve this plot:
 
 After the workshop, we advise you to plot some other movement metrics from the `tracking` data.
 
-## Correlations abound!
+### Correlations abound!
 
 With biological data (and data from many other sources), different measurements of the same set of 'things' are often correlated. For example, human height and weight are strongly correlated. So it is with cells.
 
@@ -380,13 +558,15 @@ cor.test(track$track.length,track$mean.speed,method="spearman")
 Here we use the non parametric test `method="spearman"` to calculate correlations, because we know from looking at the data that the `track.length` and probably `mean.speed` are not normally distributed. In a [Spearman rank correlation](https://en.wikipedia.org/wiki/Spearman%27s_rank_correlation_coefficient), `rho` is the correlation coefficient (sometimes rho is written using the Greek symbol **$\rho$**).
 :::
 
-But since there are 11 cell movment metrics, this would quickly become boring. And (just as importantly) the data would be a challenge to understand.
+But since there are 11 cell movement metrics, this would quickly become boring. And (just as importantly) the data would be a challenge to understand.
 
 **Fortunately, there is an easier way.** First we use the `correlate` function to calculate all pairwise correlations. We save the correlation coefficients in the `track.correlations` data frame.
 
 ```{r}
 #| eval: true
 #| purl: true
+
+# CORRELATIONS WITHIN MANUAL TRACKING DATA ----
 
 #calculate all pairwise correlations
 track.correlations <- 
@@ -398,7 +578,7 @@ head(track.correlations)
 
 Then we use `pivot_longer` ass we did in [BIO00066I core workshop 1](https://3mmarand.github.io/R4BABS/r4babs4/week-1/workshop.html#visualisation), to simplify the data format.
 
-![**Figure 2.** How `pivot_longer` reshapes data. Notice that no data is lost. does.](https://www.fromthebottomoftheheap.net/assets/img/posts/tidyr-longer-wider.gif)
+![**Figure 2.** How `pivot_longer` reshapes data. Notice that no data is lost.](https://www.fromthebottomoftheheap.net/assets/img/posts/tidyr-longer-wider.gif)
 
 We will use `pivot_longer` this way:
 
@@ -433,7 +613,7 @@ ggplot(track.correlations.pivot, aes(Variable1, Variable2)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 ```
 
-### Removing unneeded columns
+#### Removing unhelpful columns
 
 OK, this is a useful plot. If you have got this far in the workshop, **you are doing well!**
 
@@ -467,6 +647,7 @@ track.correlations.pivot |>
 
 
 
+
 ### Relate the maths to the biology
 
 -   **Positive correlations** mean that when one metric is high, the other is high too. For example, `track.length` and `mean.speed` are positively correlated. This makes sense, because a cell that has managed to travel a long way, is probably a fast mover.
@@ -487,11 +668,66 @@ track.correlations.pivot |>
 
 
 
+### PCA with manual tracking data
+
+As with the Livecyte cell shape and cell movement data, we can also run a PCA analysis with the manual tracking data. This will show us how well the clones are separated by the PCA coordinates, and which metrics contribute to this separation.
+
+This time, we can bundle all the code to one block, because it is not very long, and it is easier to understand if we see it all together. You can run this code block all at once, and then examine the PCA plot that it produces.
+
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: true
+#| purl: true
+
+# prepare data for PCA
+track.data.for.pca <- track |>
+  #select the numeric columns
+  select(cell.line, track.duration, track.length, euclidean.distance, meandering.index, mean.speed) |>
+  # remove rows with NA values
+  drop_na()
+
+
+# calculate PCA coordinates
+pca.result.track <- track.data.for.pca |>
+  select(-cell.line) |>  # remove the group categories
+  prcomp()               # performs the PCA
+
+# extract PCA scores and combine with clone and replicate info
+pca.scores.track <- as.data.frame(pca.result.track$x) |>
+  bind_cols(track.data.for.pca |> select(cell.line))
+
+# make the plot
+pca.plot.track <- ggplot(pca.scores.track, 
+  aes(x = PC1, y = PC2, color = cell.line, fill = cell.line)) +
+  geom_point(size = 4)+
+  stat_ellipse(geom = "polygon", alpha = 0.1, linewidth = 1.2) +
+  theme_classic2()
+
+# view and then save the plot
+pca.plot.track
+ggsave("BIO00066I-workshop3-track-pca-plot.png", width = 6, height = 4)
+```
+
+In this case, the elipses arund the points are not too helpful in my opinion. So you can remove these by removing the line `stat_ellipse(geom = "polygon", alpha = 0.1, linewidth = 1.2) +`.
+
+
+
+
 # Reflection
 
+Today you have learned some data handling and plotting skills, and explored many facets of these mesenchymal stromal cells. You have learned:
+
+- How to use `facet_wrap` to split plots by a second category
+- How to plot values on a `log10()` scale
+- How to 'lengthen' and simplify data using `pivot_longer`
+- How to calculate and display numerous correlations in a grid with `geom_tile`
+- That PCA analysis lacks explanatory power if we have few metrics, but is powerful when we have many metrics
+
+
 ::: callout-important
-## It is critical to think about what our analysis shows aout the biology
-**Do this now.** 
+## Some things to think about
 
 - What do we know about the clones now?
 - What do you know about how they move?
@@ -500,14 +736,11 @@ track.correlations.pivot |>
 :::
 
 
-Today you have learned some data handling and plotting skills. These are:
-
-- How to use `facet_wrap` to split plots by a second category
-- How to plot values on a `log10()` scale
-- How to 'lengthen' and simplify data using `pivot_longer`
-- How to calculate and display numerous correlations in a grid with `geom_tile`
 
 # The end
+
+That is the end for today.
+
 
 ::: callout-tip
 ## Download Code
@@ -521,55 +754,13 @@ You can download all the R code from this workshop as a single script file:
 
 ### Explore the data
 
-Use the code from section **3.5 Plotting manual tracking data** to plot other features of the manual tracking data. We advise you to plot: `track.length`, `track.duration`, `meandering.index`, and `euclidean.distance`.
+There are various ways you could explore this data further for your report. here, I will show how to make multi-part plots with `ggarrange`, show how to make a PCA plot with both cell shape and cell movement data together, and show how to extract more information from PCA results.
 
-Sometimes, we need to be careful with the data. For `track.length`, `track.duration`, we want to choose tracking data *only* for cells that we have observed it's entire life - from when it is 'born' from the parental cell, to when it divides again.
+#### Making multi-part plots
 
-Fortunately, this information in the data already. We do *not* see the entire 'lifetime' of any cell tracked object that have the value `TRUE` in in the column `track.present.at.start.or.end`, because we starting tracking them some time after they were born, or stopped tracking them before they divided again.
+You can use the `ggarrange` function from the `ggpubr` package to arrange multiple ggplot objects into a single figure. This is useful for comparing different plots side by side.
 
-So we can filter out these lines by putting `filter(track.present.at.start.or.end != TRUE)` in our code. Let's check if this makes any difference by comparing `track.length`without the filter, and then with the filter:
-
-```{r}
-#| echo: true
-#| warning: false
-#| eval: true
-#| purl: true
-
-#track.length without the filter
-no.filter.plot<- track |> 
-  ggplot(aes(x=cell.line, y = track.length))+
-  geom_violin()+
-  stat_compare_means()+
-  ggtitle("no filter")
-
-#track.length WITH the filter
-filter.plot<- track |> 
-  filter(track.present.at.start.or.end != TRUE) |> 
-  ggplot(aes(x=cell.line, y = track.length))+
-  geom_violin()+
-  stat_compare_means()+
-  ggtitle("with filter")
-
-#show plots side by side
-ggarrange(no.filter.plot,filter.plot)
-
-```
-
-::: callout-note
-# Did this make a difference?
-- Did we get a different result after this 'cleaning up', with this large data set?
-- Might we have a different result after this cleaning up, with a small data set?
-:::
-
-
-#### Explore other metrics
-
-Try using the code above to explore other metrics in the `track` data other than `track.length`. Options include `track.duration`, track.duration.total.time`, `euclidean.distance` and `euclidean.distance`.
-
-### Improve the correlation heat map
-
-What if we wanted to show only the correlations where the absolute value of $\rho$ was greater than 0.25? Try using the pipe operator `|>` to filter the `track.correlations.pivot` data before plotting, with: 
-
+To do this you'll need to save each plot in an object, like so:
 
 ```{r}
 #| echo: true
@@ -577,20 +768,144 @@ What if we wanted to show only the correlations where the absolute value of $\rh
 #| eval: true
 #| purl: true
 
-#filter the data
-track.correlations.pivot |>
-  filter(abs(corr.coeff) > 0.25) |>
-#now we put the plotting code here 
-  ggplot(aes(Variable1, Variable2)) +
-  geom_tile(aes(fill = corr.coeff)) +
-  geom_text(aes(label = round(corr.coeff, 1))) +
-  scale_fill_gradient(low = "white", high = "red")+
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+# multi part livecyte data plot
+# plot 1: displacement
+displacement.plot <- cells |> 
+  ggplot(aes(x=clone,y=log10(displacement)))+
+  geom_violin(alpha=0.5)+
+  stat_compare_means()
+
+# plot 2: track.length
+track.length.plot <- cells |> 
+  ggplot(aes(x=clone,y=log10(track.length)))+
+  geom_violin(alpha=0.5)+
+  stat_compare_means()
+
+# plot 3: width
+width.plot <- cells |> 
+  ggplot(aes(x=clone,y=log10(width)))+
+  geom_violin(alpha=0.5)+
+  stat_compare_means()
+
+# plot 4: sphericity
+sphericity.plot <- cells |> 
+  ggplot(aes(x=clone,y=log10(sphericity)))+
+  geom_violin(alpha=0.5)+
+  stat_compare_means()
+
+# arrange the plots into a 2x2 grid
+combined.livecyte.plot <- ggarrange(
+  displacement.plot, 
+  track.length.plot, 
+  width.plot, 
+  sphericity.plot, 
+  ncol=2, nrow=2,
+  labels = c("A", "B", "C", "D"))
+
+# save the combined plot
+ggsave("BIO00066I-workshop3-combined-livecyte-plot.png", 
+       combined.livecyte.plot, width = 8, height = 6)
+
 ```
+
+
+#### PCA with Livecyte cell shape and cell movement data together
+
+Very briefly, you can run PCA with both cell shape and cell movement data together, by including all the relevant columns in the data frame that you use for PCA. For example, you could use this code to prepare the data for PCA:
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+#| purl: true
+
+# Read the automated Livecyte data
+cells <-read_tsv(url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-02-22.tsv"),
+                 col_types = cols(
+                   clone = col_factor(),
+                   replicate = col_factor(),
+                   tracking.id=col_factor(),
+                   lineage.id=col_factor()
+                 )
+)
+
+# prepare data for PCA with both cell shape and movement data
+cells.for.pca.alldata <- cells |>
+  #select the numeric columns, including the cell shape data and also the cell movement data
+  select(clone, replicate, 
+      # shape data
+      volume, mean.thickness, radius, area, sphericity, length, width, orientation, dry.mass, 
+      # movement data
+      length.to.width, displacement, track.length, instantaneous.velocity) |>
+  # remove rows with NA values
+  drop_na()
+
+
+#run PCA
+pca.result <- cells.for.pca.alldata  |>
+  select(-clone, -replicate) |>  # remove the group categories
+  prcomp()                        # performs the PCA
+
+# extract PCA scores and combine with clone and replicate info
+pca.scores <- as.data.frame(pca.result$x) |>
+  bind_cols(cells.for.pca.alldata |> select(clone, replicate))
+
+# down sample the PCA scores to 3000 cells per clone
+pca.scores.sample <- pca.scores |>
+  group_by(clone) |>
+  slice_sample(n = 3000) |>
+  ungroup()
+
+# create PCA1, PC2 plot
+pca.plot <- ggplot(pca.scores.sample, 
+  aes(x = PC1, y = PC2, color = clone, fill = clone)) +
+  geom_point(alpha = 0.5, size = 2)+
+  stat_ellipse(geom = "polygon", alpha = 0.05, linewidth = 1.2)+
+  theme_classic2()
+
+# view and save the plot  
+pca.plot
+ggsave("BIO00066I-workshop3-pca-alldata-plot.png", width = 6, height = 4)
+```
+
+
+#### Exploring PCA results
+
+There is more to PCA than just plotting the PCA scores. It can be interesting to know how much of total variance in the data is explained by each principal component. This is often shown in a scree plot, but we can also calculate it manually from the PCA results. Here is the code to do both:
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+#| purl: true
+
+# make a scree plot from pca.result
+screeplot(pca.result.track, type = "lines")
+
+# Calculate manually from standard deviations
+variance <- pca.result.track$sdev^2
+percent.variance <- variance / sum(variance) * 100
+
+# Or create a nice data frame
+variance.explained <- data.frame(
+  PC = paste0("PC", 1:length(percent.variance)),
+  Variance = variance,
+  Percent = percent.variance,
+  Cumulative = cumsum(percent.variance)
+)
+
+# Visualize with a scree plot
+barplot(percent.variance, 
+        names.arg = paste0("PC", 1:length(percent.variance)),
+        xlab = "Principal Component",
+        ylab = "% Variance Explained")
+```
+
+
 
 ## Planning for your report
 
-The RStudio project is worth 30% of this module. The submission of your RStudio project should:
+The RStudio project is worth 20% of this module. The submission of your RStudio project should:
 
 - have a logical folder structure for your analysis
 - contain a well-commented script
@@ -602,18 +917,6 @@ The aim of all this is to make the code and the data analysis clear and readable
 
 So spending just **10 minutes** tidying your code now will make your future life easier. For example, look at your variable names, and make them clearer. 
 
-## In case install.packages fails
-
-If `install.packages("corrr")` fails, you can obtain the `track.correlations` data frame like this:
-
-```{r}
-#| echo: true
-#| warning: false
-#| eval: true
-#| purl: true
-
-track.correlations <-read_tsv(url("https://djeffares.github.io/BIO66I/data/track.correlations.tsv"))
-```
 
 
 ```{r}

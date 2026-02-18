@@ -46,6 +46,7 @@ cell.movement.data <- select(cells,
 )
 
 
+
 ## SUMMARY TABLE FOR CELL MOVEMENT AND SHAPE DATA ----
 
 #this is exactly the same method we used for the cell shape data
@@ -430,3 +431,62 @@ combined.livecyte.plot <- ggarrange(
 
 ggsave("BIO00066I-workshop3-combined-livecyte-plot.png", 
        combined.livecyte.plot, width = 8, height = 6)
+
+
+# pca with all the cells data
+
+# prepare data for PCA
+
+names(cells)
+  
+# prepare data for PCA
+
+# Read the automated Livecyte data
+cells <-read_tsv(url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-02-22.tsv"),
+                 col_types = cols(
+                   clone = col_factor(),
+                   replicate = col_factor(),
+                   tracking.id=col_factor(),
+                   lineage.id=col_factor()
+                 )
+)
+cells.for.pca.alldata <- cells |>
+  #select the numeric columns, including the cell shape data and also the cell movement data
+  select(clone, replicate, 
+         # shape data
+         volume, mean.thickness, radius, area, sphericity, length, width, orientation, dry.mass, 
+         # movement data
+        length.to.width, displacement, track.length, instantaneous.velocity) |>
+  # remove rows with NA values
+  drop_na()
+
+#displacement, track.length, instantaneous.velocity
+
+#do PCA analysis
+
+pca.result <- cells.for.pca.alldata  |>
+  select(-clone, -replicate) |>  # remove the group categories
+  prcomp()                        # performs the PCA
+
+# extract PCA scores and combine with clone and replicate info
+pca.scores <- as.data.frame(pca.result$x) |>
+  bind_cols(cells.for.pca.alldata |> select(clone, replicate))
+
+# downsample the PCA scores to 3000 cells per clone
+pca.scores.sample <- pca.scores |>
+  group_by(clone) |>
+  slice_sample(n = 3000) |>
+  ungroup()
+
+pca.plot <- ggplot(pca.scores.sample, 
+  aes(x = PC1, y = PC2, color = clone, fill = clone)) +
+  geom_point(alpha = 0.5, size = 2)+
+  stat_ellipse(geom = "polygon", alpha = 0.05, linewidth = 1.2)+
+  theme_classic2()
+  
+pca.plot
+
+
+
+# View summary of PCA
+summary(pca_result)
