@@ -1,9 +1,5 @@
 # WORKSHOP 3: CELL MOVEMENT DATA ----
 
-TO DO: ADD NEW CODE
-
-
-TO DO: SCALE DATA FOR PCA?
 
 # SET UP ----
 
@@ -31,23 +27,15 @@ cells <-read_tsv(url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.
                  )
 )
 
-#Load from local file for rendering
-cells <-read_tsv("data/all-cell-data-FFT.filtered.2024-02-22.tsv",
-                 col_types = cols(
-                   clone = col_factor(),
-                   replicate = col_factor(),
-                   tracking.id=col_factor(),
-                   lineage.id=col_factor()
-                 )
-)
+
 
 
 # select only the columns we need
 # including the cell shape data and also the cell movement data
-# frmo cell movement data, we keep displacement, track.length and instantaneous.velocity
+# from cell movement data, we keep displacement, track.length and instantaneous.velocity
 # simplest to do this by removing some columns
 
-cells.selected.data <- select(cells, 
+cell.movement.data <- select(cells, 
                 -position.x,
                 -position.y, 
                 -pixel.position.x, 
@@ -60,14 +48,14 @@ cells.selected.data <- select(cells,
 
 ## SUMMARY TABLE FOR CELL MOVEMENT AND SHAPE DATA ----
 
-#this is exactly the same method we useed for the cell shape data
+#this is exactly the same method we used for the cell shape data
 
 # make cloneA and cloneB data frames
-cloneA.data <- cells.selected.data |> filter(clone == "cloneA")
-cloneB.data <- cells.selected.data |> filter(clone == "cloneB")
+cloneA.data <- cell.movement.data |> filter(clone == "cloneA")
+cloneB.data <- cell.movement.data |> filter(clone == "cloneB")
 
 #get the names of the numeric columns
-numeric.columns <- cells.selected.data |> 
+numeric.columns <- cell.movement.data |> 
   select(where(is.numeric)) |> 
   names()
 
@@ -124,7 +112,7 @@ view(clone.comparisons)
 # EXAMPLE PLOT FOR MOVEMENT DATA ----
 
 #check that we have
-names(cells.selected.data)
+names(cell.movement.data)
 
 #lets save our data
 save.image("BIO00066I-workshop3.Rda")
@@ -133,12 +121,12 @@ save.image("BIO00066I-workshop3.Rda")
 load("BIO00066I-workshop3.Rda")
 
 #track.length- geom_boxplot
-ggplot(cells.selected.data,aes(x=clone,y=track.length,colour=clone))+
+ggplot(cell.movement.data,aes(x=clone,y=track.length,colour=clone))+
     geom_boxplot()+
     stat_compare_means()
 
 #imrpoved plot
-ggplot(cells.selected.data,aes(x=clone,y=log10(track.length),colour=clone))+
+ggplot(cell.movement.data,aes(x=clone,y=log10(track.length),colour=clone))+
     geom_boxplot()+
     facet_wrap(~replicate)+
     stat_compare_means()

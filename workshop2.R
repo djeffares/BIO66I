@@ -79,23 +79,8 @@ view(summary.table)
 ggplot(cells,aes(x=clone,y=width,fill=replicate))+
     geom_boxplot()
 
-names(cells)
-ggplot(cells, aes(x = width,colour = replicate)) +
-  geom_density()+
-  facet_wrap(~clone)
-
-ggplot(cells, aes(x = mean.thickness,y=sphericity,colour = clone)) +
-  geom_point()+
-  facet_wrap(~clone)
-  
-
-
-#
-ggplot(cells, aes(x = mean.thickness,colour = replicate)) +
-  geom_density()+
-  facet_wrap(~clone)+
-  scale_x_log10()+
-  geom_vline(xintercept = median(cells$mean.thickness), linetype = "dashed", color = "red")
+ggplot(cells, aes(x = width)) +
+  geom_density()
 
 #Wilcoxon rank sum test
 #To test if cloneA and cloneB have statistically different widths
