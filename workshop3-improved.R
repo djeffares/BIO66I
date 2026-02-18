@@ -400,7 +400,33 @@ loadings.plot
 summary(pca.result.track)
 
 
+displacement.plot <- cells |> 
+  ggplot(aes(x=clone,y=log10(displacement)))+
+  geom_violin(alpha=0.5)+
+  stat_compare_means()
 
+track.length.plot <- cells |> 
+  ggplot(aes(x=clone,y=log10(track.length)))+
+  geom_violin(alpha=0.5)+
+  stat_compare_means()
 
+width.plot <- cells |> 
+  ggplot(aes(x=clone,y=log10(width)))+
+  geom_violin(alpha=0.5)+
+  stat_compare_means()
 
+sphericity.plot <- cells |> 
+  ggplot(aes(x=clone,y=log10(sphericity)))+
+  geom_violin(alpha=0.5)+
+  stat_compare_means()
 
+combined.livecyte.plot <- ggarrange(
+  displacement.plot, 
+  track.length.plot, 
+  width.plot, 
+  sphericity.plot, 
+  ncol=2, nrow=2,
+  labels = c("A", "B", "C", "D"))
+
+ggsave("BIO00066I-workshop3-combined-livecyte-plot.png", 
+       combined.livecyte.plot, width = 8, height = 6)

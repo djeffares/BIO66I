@@ -201,8 +201,6 @@ window.Quarto = {
   <li><a href="#setting-up" id="toc-setting-up" class="nav-link" data-scroll-target="#setting-up"><span class="header-section-number">3.1</span> Setting up</a></li>
   <li><a href="#automated-livecyte-cell-movement-data" id="toc-automated-livecyte-cell-movement-data" class="nav-link" data-scroll-target="#automated-livecyte-cell-movement-data"><span class="header-section-number">3.2</span> Automated Livecyte cell movement data</a></li>
   <li><a href="#manual-tracking-data" id="toc-manual-tracking-data" class="nav-link" data-scroll-target="#manual-tracking-data"><span class="header-section-number">3.3</span> Manual tracking data</a></li>
-  <li><a href="#plotting-manual-tracking-data" id="toc-plotting-manual-tracking-data" class="nav-link" data-scroll-target="#plotting-manual-tracking-data"><span class="header-section-number">3.4</span> Plotting manual tracking data</a></li>
-  <li><a href="#correlations-abound" id="toc-correlations-abound" class="nav-link" data-scroll-target="#correlations-abound"><span class="header-section-number">3.5</span> Correlations abound!</a></li>
   </ul></li>
   <li><a href="#reflection" id="toc-reflection" class="nav-link" data-scroll-target="#reflection"><span class="header-section-number">4</span> Reflection</a></li>
   <li><a href="#the-end" id="toc-the-end" class="nav-link" data-scroll-target="#the-end"><span class="header-section-number">5</span> The end</a></li>
@@ -409,15 +407,17 @@ install.packages is like installing an app on your phone.
 <h2 data-number="3.2" class="anchored" data-anchor-id="automated-livecyte-cell-movement-data"><span class="header-section-number">3.2</span> Automated Livecyte cell movement data</h2>
 <p>Now read in the data from the file <strong>all-cell-data-FFT.filtered.2024-02-22.tsv</strong>. This contains the cell shape data we looked at lasst time, and some cell moment data.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the automated Livecyte data</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>cells <span class="ot">&lt;-</span><span class="fu">read_tsv</span>(<span class="fu">url</span>(<span class="st">"https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-02-22.tsv"</span>),</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">col_types =</span> <span class="fu">cols</span>(</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">clone =</span> <span class="fu">col_factor</span>(),</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">replicate =</span> <span class="fu">col_factor</span>(),</span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">tracking.id=</span><span class="fu">col_factor</span>(),</span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">lineage.id=</span><span class="fu">col_factor</span>()</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                 )</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># LOADING LIVECYTE DATA ----</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Read the automated Livecyte data</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>cells <span class="ot">&lt;-</span><span class="fu">read_tsv</span>(<span class="fu">url</span>(<span class="st">"https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-02-22.tsv"</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">col_types =</span> <span class="fu">cols</span>(</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>                   <span class="at">clone =</span> <span class="fu">col_factor</span>(),</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>                   <span class="at">replicate =</span> <span class="fu">col_factor</span>(),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">tracking.id=</span><span class="fu">col_factor</span>(),</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                   <span class="at">lineage.id=</span><span class="fu">col_factor</span>()</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                 )</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Lets see what data we have:</p>
 <div class="cell">
@@ -489,10 +489,12 @@ Save your R script often!
 <h3 data-number="3.2.1" class="anchored" data-anchor-id="making-plots-with-livecyte-movement-data"><span class="header-section-number">3.2.1</span> Making plots with Livecyte movement data</h3>
 <p>let’s see how clone A and clone B move. First, we’ll plot the <code>instantaneous.velocity</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#instantaneous.velocity - geom_violin</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cell.movement.data,<span class="fu">aes</span>(<span class="at">x=</span>clone,<span class="at">y=</span>instantaneous.velocity,<span class="at">colour=</span>clone))<span class="sc">+</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_violin</span>(<span class="at">alpha=</span><span class="fl">0.5</span>)<span class="sc">+</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stat_compare_means</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># PLOTTING LIVECYTE DATA ----</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#instantaneous.velocity - geom_violin</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cell.movement.data,<span class="fu">aes</span>(<span class="at">x=</span>clone,<span class="at">y=</span>instantaneous.velocity,<span class="at">colour=</span>clone))<span class="sc">+</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_violin</span>(<span class="at">alpha=</span><span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stat_compare_means</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -559,9 +561,11 @@ Optional
 <p>In the last workshop, we made a summary table to show which cell shape metrics were different between the two clones. We can do the same thing for the cell movement data. This will give us a clear summary of which metrics are different between the clones, and how different they are.</p>
 <p>We start by making clone A and clone B data frames:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make clone A and clone B data frames</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>cloneA.data <span class="ot">&lt;-</span> cell.movement.data <span class="sc">|&gt;</span> <span class="fu">filter</span>(clone <span class="sc">==</span> <span class="st">"cloneA"</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>cloneB.data <span class="ot">&lt;-</span> cell.movement.data <span class="sc">|&gt;</span> <span class="fu">filter</span>(clone <span class="sc">==</span> <span class="st">"cloneB"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SUMMARY OF LIVECYTE DATA ----</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># make clone A and clone B data frames</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>cloneA.data <span class="ot">&lt;-</span> cell.movement.data <span class="sc">|&gt;</span> <span class="fu">filter</span>(clone <span class="sc">==</span> <span class="st">"cloneA"</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>cloneB.data <span class="ot">&lt;-</span> cell.movement.data <span class="sc">|&gt;</span> <span class="fu">filter</span>(clone <span class="sc">==</span> <span class="st">"cloneB"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And then collecting a list of the numeric columns in the data frame, so we can loop through them and compare them between the clones.</p>
 <div class="cell">
@@ -641,15 +645,17 @@ Tip
 <p>So let’s try a PCA plot with only the cell movement data, <code>displacement</code>, <code>track.length</code> and <code>instantaneous.velocity</code></p>
 <p>We’ll prepare the data for PCA and then calculate PCA coordinates with the <code>prcomp()</code> function:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prepare data for PCA</span></span>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># PCA WITH LIVECYTE DATA ----</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>cell.data.for.pca <span class="ot">&lt;-</span> cell.movement.data <span class="sc">|&gt;</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="co"># remove rows with NA values</span></span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate PCA coordinates </span></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>pca.result <span class="ot">&lt;-</span> cell.data.for.pca <span class="sc">|&gt;</span></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>clone, <span class="sc">-</span>replicate) <span class="sc">|&gt;</span>   <span class="co"># removes the group categories</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prcomp</span>()                        <span class="co"># performs the PCA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># prepare data for PCA</span></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>cell.data.for.pca <span class="ot">&lt;-</span> cell.movement.data <span class="sc">|&gt;</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="co"># remove rows with NA values</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate PCA coordinates </span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>pca.result <span class="ot">&lt;-</span> cell.data.for.pca <span class="sc">|&gt;</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>clone, <span class="sc">-</span>replicate) <span class="sc">|&gt;</span>   <span class="co"># removes the group categories</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prcomp</span>()                        <span class="co"># performs the PCA</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To examine a summary of PCA results, we can use the <code>summary(pca.result)</code>, this will show us how much of the variance (range of values) in the data is explained by each PCA coordinate. We can also use <code>screeplot(pca.result)</code> to visualise this. You will see that almost all the variance is explained by the first PCA coordinate (PC1). Note that there are only 3 possible PCA coordinates with this data.</p>
 <p>Then we extract PCA scores and combine with clone and replicate info, and down sample the data so we can make a clearer plot. You may chose to show more or less of the data in the PCA plot. YOU can do this by changing this line of code, that currently selects 300 rows of the fata at random <code>slice_sample(n = 300)</code>.</p>
@@ -686,7 +692,7 @@ Tip
 </div>
 </div>
 </div>
-<p>At this stage, we could save this plot with <code>ggsave("BIO00066I-workshop3-movement-pca-plot.png", width = 6, height = 4)</code> if we like, but this PCA does not work well.</p>
+<p>At this stage, we could save this plot with <code>ggsave("BIO00066I-workshop3-movement-pca-plot.png", width = 6, height = 4)</code> if we like, but this PCA does not distingish clone A from clone B well at all.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -712,8 +718,10 @@ Note
 <p>Sometimes, the automated measurements are not the best quality. In this case, we know that the Livecyte microscope is not very good at tracking cells, so the cell movement metrics are not as good as we would like.</p>
 <p>So Amanda spent many hours <em>manually</em> tracking cells. These results were processed into manual tracking data. First, load the data and of course <strong>examine what you have</strong>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#load the manual tracking data</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>track <span class="ot">&lt;-</span><span class="fu">read_tsv</span>(<span class="fu">url</span>(<span class="st">"https://djeffares.github.io/BIO66I/data/A1-and-B2-tracking.data.2025-02-27.tsv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># LOAD MANUAL TRACKING DATA ----</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co">#load the manual tracking data</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>track <span class="ot">&lt;-</span><span class="fu">read_tsv</span>(<span class="fu">url</span>(<span class="st">"https://djeffares.github.io/BIO66I/data/A1-and-B2-tracking.data.2025-02-27.tsv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>As usual, it is wise to check what is in our data frame with <code>names()</code> and/or <code>glimpse()</code> or <code>summary(track)</code>.</p>
 <p>In this data, <code>TID</code> is the Livecyte <strong>tracking ID</strong>, a unique number that the microscope gives to each ‘object’ it can identify. <code>LID</code> is the Livecyte <strong>lineage ID</strong>. This keeps track of the cell lineage (ie: the initial cells, and the subsequent daughter cells that are derived from it as it divides). When a cell divides, both ‘daughter cells’ keep the same <strong>lineage ID</strong>, but each is assigned a new unique <strong>tracking ID</strong>.</p>
@@ -736,15 +744,16 @@ Different names, same metric!
 <figcaption><strong>Figure 1.</strong> The <strong>tracking ID (TID)</strong> is a unique ID that the microscope assigned to each object (cell), as it tracks it through time. The <strong>lineage ID (LID)</strong> is a number assigned to the ‘family’ of cells that derived by cell division during the the experiment. When a cell divides, each daughter cell is given a new tracking ID, but they keep their lineage ID, because they are still part of the same family.</figcaption>
 </figure>
 </div>
-</section>
-<section id="plotting-manual-tracking-data" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="plotting-manual-tracking-data"><span class="header-section-number">3.4</span> Plotting manual tracking data</h2>
+<section id="plotting-manual-tracking-data" class="level3" data-number="3.3.1">
+<h3 data-number="3.3.1" class="anchored" data-anchor-id="plotting-manual-tracking-data"><span class="header-section-number">3.3.1</span> Plotting manual tracking data</h3>
 <p>Let’s start by looking at the <strong>speed</strong> that each cell moves at during the experiment. This is recorded as <code>mean.speed</code> in this data set (the same as the <code>instantenous.velocity</code> in the <code>cells</code> data set). We can compare the clones (<code>cell.line</code>) like so:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#compare mean.speed between cell lines</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(track, <span class="fu">aes</span>(<span class="at">x=</span>cell.line,<span class="at">y=</span>mean.speed))<span class="sc">+</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_compare_means</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># PLOTTING MANUAL TRACKING DATA ----</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">#compare mean.speed between cell lines</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(track, <span class="fu">aes</span>(<span class="at">x=</span>cell.line,<span class="at">y=</span>mean.speed))<span class="sc">+</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_compare_means</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Warning: Removed 1 row containing non-finite outside the scale range
 (`stat_boxplot()`).</code></pre>
@@ -782,8 +791,8 @@ Improve the plot
 </div>
 <p>After the workshop, we advise you to plot some other movement metrics from the <code>tracking</code> data.</p>
 </section>
-<section id="correlations-abound" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="correlations-abound"><span class="header-section-number">3.5</span> Correlations abound!</h2>
+<section id="correlations-abound" class="level3" data-number="3.3.2">
+<h3 data-number="3.3.2" class="anchored" data-anchor-id="correlations-abound"><span class="header-section-number">3.3.2</span> Correlations abound!</h3>
 <p>With biological data (and data from many other sources), different measurements of the same set of ‘things’ are often correlated. For example, human height and weight are strongly correlated. So it is with cells.</p>
 <p>We <em>could</em> examine each correlation one by one, like so:</p>
 <div class="cell">
@@ -817,10 +826,12 @@ A Non parametric warning
 <p>But since there are 11 cell movement metrics, this would quickly become boring. And (just as importantly) the data would be a challenge to understand.</p>
 <p><strong>Fortunately, there is an easier way.</strong> First we use the <code>correlate</code> function to calculate all pairwise correlations. We save the correlation coefficients in the <code>track.correlations</code> data frame.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate all pairwise correlations</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>track.correlations <span class="ot">&lt;-</span> </span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  track <span class="sc">|&gt;</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">correlate</span>(<span class="at">method=</span><span class="st">"spearman"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># CORRELATIONS WITHIN MANUAL TRACKING DATA ----</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate all pairwise correlations</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>track.correlations <span class="ot">&lt;-</span> </span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>  track <span class="sc">|&gt;</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">correlate</span>(<span class="at">method=</span><span class="st">"spearman"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>Non-numeric variables removed from input: `track.present.at.start.or.end`, `track.never.divides`, and `cell.line`
 Correlation computed with
@@ -894,8 +905,8 @@ Correlation computed with
 </div>
 </div>
 </div>
-<section id="removing-unneeded-columns" class="level3" data-number="3.5.1">
-<h3 data-number="3.5.1" class="anchored" data-anchor-id="removing-unneeded-columns"><span class="header-section-number">3.5.1</span> Removing unneeded columns</h3>
+<section id="removing-unhelpful-columns" class="level4" data-number="3.3.2.1">
+<h4 data-number="3.3.2.1" class="anchored" data-anchor-id="removing-unhelpful-columns"><span class="header-section-number">3.3.2.1</span> Removing unhelpful columns</h4>
 <p>OK, this is a useful plot. If you have got this far in the workshop, <strong>you are doing well!</strong></p>
 <p>But it is a bit cluttered. We could improve it by removing the TID and LID columns, because these are arbitrary numbers that don’t tell us <em>anything</em> about the biology.</p>
 <p>Luckily, we don’t have to do all our analysis again. We can just remove these columns from the <code>track.correlations.pivot</code> data frame, before we make the plot. Here is how:</p>
@@ -929,8 +940,9 @@ Correlation computed with
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#and voila! no more TID and LID columns</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="relate-the-maths-to-the-biology" class="level3" data-number="3.5.2">
-<h3 data-number="3.5.2" class="anchored" data-anchor-id="relate-the-maths-to-the-biology"><span class="header-section-number">3.5.2</span> Relate the maths to the biology</h3>
+</section>
+<section id="relate-the-maths-to-the-biology" class="level3" data-number="3.3.3">
+<h3 data-number="3.3.3" class="anchored" data-anchor-id="relate-the-maths-to-the-biology"><span class="header-section-number">3.3.3</span> Relate the maths to the biology</h3>
 <ul>
 <li><p><strong>Positive correlations</strong> mean that when one metric is high, the other is high too. For example, <code>track.length</code> and <code>mean.speed</code> are positively correlated. This makes sense, because a cell that has managed to travel a long way, is probably a fast mover.</p></li>
 <li><p><strong>Negative correlations</strong> mean that when one metric is high, the other is low. For example, <code>track.length</code> and <code>meandering.index</code> are negatively correlated. This makes sense, because a cell that meanders about (doesn’t go a in straight line) <em>probably</em> doesn’t have a long total track length?</p></li>
@@ -956,21 +968,70 @@ Some points to note in this plot:
 </div>
 </div>
 </section>
+<section id="pca-with-manual-tracking-data" class="level3" data-number="3.3.4">
+<h3 data-number="3.3.4" class="anchored" data-anchor-id="pca-with-manual-tracking-data"><span class="header-section-number">3.3.4</span> PCA with manual tracking data</h3>
+<p>As with the Livecyte cell shape and cell movement data, we can also run a PCA analysis with the manual tracking data. This will show us how well the clones are separated by the PCA coordinates, and which metrics contribute to this separation.</p>
+<p>This time, we can bundle all the code to one block, because it is not very long, and it is easier to understand if we see it all together. You can run this code block all at once, and then examine the PCA plot that it produces.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prepare data for PCA</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>track.data.for.pca <span class="ot">&lt;-</span> track <span class="sc">|&gt;</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="co">#select the numeric columns</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(cell.line, track.duration, track.length, euclidean.distance, meandering.index, mean.speed) <span class="sc">|&gt;</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># remove rows with NA values</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate PCA coordinates</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>pca.result.track <span class="ot">&lt;-</span> track.data.for.pca <span class="sc">|&gt;</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>cell.line) <span class="sc">|&gt;</span>  <span class="co"># remove the group categories</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">prcomp</span>()               <span class="co"># performs the PCA</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a><span class="co"># extract PCA scores and combine with clone and replicate info</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>pca.scores.track <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(pca.result.track<span class="sc">$</span>x) <span class="sc">|&gt;</span></span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(track.data.for.pca <span class="sc">|&gt;</span> <span class="fu">select</span>(cell.line))</span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a><span class="co"># make the plot</span></span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>pca.plot.track <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(pca.scores.track, </span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> PC1, <span class="at">y =</span> PC2, <span class="at">color =</span> cell.line, <span class="at">fill =</span> cell.line)) <span class="sc">+</span></span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">4</span>)<span class="sc">+</span></span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_ellipse</span>(<span class="at">geom =</span> <span class="st">"polygon"</span>, <span class="at">alpha =</span> <span class="fl">0.1</span>, <span class="at">linewidth =</span> <span class="fl">1.2</span>) <span class="sc">+</span></span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic2</span>()</span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a><span class="co"># view and then save the plot</span></span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a>pca.plot.track</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="workshop3-improved_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"BIO00066I-workshop3-track-pca-plot.png"</span>, <span class="at">width =</span> <span class="dv">6</span>, <span class="at">height =</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this case, the elipses arund the points are not too helpful in my opinion. So you can remove these by removing the line <code>stat_ellipse(geom = "polygon", alpha = 0.1, linewidth = 1.2) +</code>.</p>
+</section>
 </section>
 </section>
 <section id="reflection" class="level1" data-number="4">
 <h1 data-number="4"><span class="header-section-number">4</span> Reflection</h1>
+<p>Today you have learned some data handling and plotting skills, and explored many facets of these mesenchymal stromal cells. You have learned:</p>
+<ul>
+<li>How to use <code>facet_wrap</code> to split plots by a second category</li>
+<li>How to plot values on a <code>log10()</code> scale</li>
+<li>How to ‘lengthen’ and simplify data using <code>pivot_longer</code></li>
+<li>How to calculate and display numerous correlations in a grid with <code>geom_tile</code></li>
+<li>That PCA analysis lacks explanatory power if we have few metrics, but is powerful when we have many metrics</li>
+</ul>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-It is critical to think about what our analysis shows about the biology
+Some things to think about
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p><strong>Do this now.</strong></p>
 <ul>
 <li>What do we know about the clones now?</li>
 <li>What do you know about how they move?</li>
@@ -979,16 +1040,10 @@ It is critical to think about what our analysis shows about the biology
 </ul>
 </div>
 </div>
-<p>Today you have learned some data handling and plotting skills. These are:</p>
-<ul>
-<li>How to use <code>facet_wrap</code> to split plots by a second category</li>
-<li>How to plot values on a <code>log10()</code> scale</li>
-<li>How to ‘lengthen’ and simplify data using <code>pivot_longer</code></li>
-<li>How to calculate and display numerous correlations in a grid with <code>geom_tile</code></li>
-</ul>
 </section>
 <section id="the-end" class="level1" data-number="5">
 <h1 data-number="5"><span class="header-section-number">5</span> The end</h1>
+<p>That is the end for today.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1009,83 +1064,66 @@ Download Code
 <h2 data-number="6.1" class="anchored" data-anchor-id="consolodation-exercises"><span class="header-section-number">6.1</span> Consolodation exercises</h2>
 <section id="explore-the-data" class="level3" data-number="6.1.1">
 <h3 data-number="6.1.1" class="anchored" data-anchor-id="explore-the-data"><span class="header-section-number">6.1.1</span> Explore the data</h3>
-<p>Use the code from section <strong>3.5 Plotting manual tracking data</strong> to plot other features of the manual tracking data. We advise you to plot: <code>track.length</code>, <code>track.duration</code>, <code>meandering.index</code>, and <code>euclidean.distance</code>.</p>
-<p>Sometimes, we need to be careful with the data. For <code>track.length</code>, <code>track.duration</code>, we want to choose tracking data <em>only</em> for cells that we have observed it’s entire life - from when it is ‘born’ from the parental cell, to when it divides again.</p>
-<p>Fortunately, this information in the data already. We do <em>not</em> see the entire ‘lifetime’ of any cell tracked object that have the value <code>TRUE</code> in in the column <code>track.present.at.start.or.end</code>, because we starting tracking them some time after they were born, or stopped tracking them before they divided again.</p>
-<p>So we can filter out these lines by putting <code>filter(track.present.at.start.or.end != TRUE)</code> in our code. Let’s check if this makes any difference by comparing <code>track.length</code>without the filter, and then with the filter:</p>
+<p>There are various ways you could explore this data further for your report. here, I will show how to make multi-part plots with <code>ggarrange</code>, show how to make a PCA plot with both cell shape and cell movement data together, and show how to extract more information from PCA results.</p>
+<section id="making-multi-part-plots" class="level4" data-number="6.1.1.1">
+<h4 data-number="6.1.1.1" class="anchored" data-anchor-id="making-multi-part-plots"><span class="header-section-number">6.1.1.1</span> Making multi-part plots</h4>
+<p>You can use the <code>ggarrange</code> function from the <code>ggpubr</code> package to arrange multiple ggplot objects into a single figure. This is useful for comparing different plots side by side.</p>
+<p>To do this you’ll need to save each plot in an object, like so:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#track.length without the filter</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>no.filter.plot<span class="ot">&lt;-</span> track <span class="sc">|&gt;</span> </span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>cell.line, <span class="at">y =</span> track.length))<span class="sc">+</span></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>()<span class="sc">+</span></span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_compare_means</span>()<span class="sc">+</span></span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"no filter"</span>)</span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a><span class="co">#track.length WITH the filter</span></span>
-<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>filter.plot<span class="ot">&lt;-</span> track <span class="sc">|&gt;</span> </span>
-<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(track.present.at.start.or.end <span class="sc">!=</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>cell.line, <span class="at">y =</span> track.length))<span class="sc">+</span></span>
-<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>()<span class="sc">+</span></span>
-<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_compare_means</span>()<span class="sc">+</span></span>
-<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"with filter"</span>)</span>
-<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a><span class="co">#show plots side by side</span></span>
-<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ggarrange</span>(no.filter.plot,filter.plot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="workshop3-improved_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># multi part livecyte data plot</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="co"># plot 1: displacement</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>displacement.plot <span class="ot">&lt;-</span> cells <span class="sc">|&gt;</span> </span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>clone,<span class="at">y=</span><span class="fu">log10</span>(displacement)))<span class="sc">+</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>(<span class="at">alpha=</span><span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_compare_means</span>()</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a><span class="co"># plot 2: track.length</span></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>track.length.plot <span class="ot">&lt;-</span> cells <span class="sc">|&gt;</span> </span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>clone,<span class="at">y=</span><span class="fu">log10</span>(track.length)))<span class="sc">+</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>(<span class="at">alpha=</span><span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_compare_means</span>()</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a><span class="co"># plot 3: width</span></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>width.plot <span class="ot">&lt;-</span> cells <span class="sc">|&gt;</span> </span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>clone,<span class="at">y=</span><span class="fu">log10</span>(width)))<span class="sc">+</span></span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>(<span class="at">alpha=</span><span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_compare_means</span>()</span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true" tabindex="-1"></a><span class="co"># plot 4: sphericity</span></span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true" tabindex="-1"></a>sphericity.plot <span class="ot">&lt;-</span> cells <span class="sc">|&gt;</span> </span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>clone,<span class="at">y=</span><span class="fu">log10</span>(sphericity)))<span class="sc">+</span></span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>(<span class="at">alpha=</span><span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_compare_means</span>()</span>
+<span id="cb38-25"><a href="#cb38-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-26"><a href="#cb38-26" aria-hidden="true" tabindex="-1"></a><span class="co"># arrange the plots into a 2x2 grid</span></span>
+<span id="cb38-27"><a href="#cb38-27" aria-hidden="true" tabindex="-1"></a>combined.livecyte.plot <span class="ot">&lt;-</span> <span class="fu">ggarrange</span>(</span>
+<span id="cb38-28"><a href="#cb38-28" aria-hidden="true" tabindex="-1"></a>  displacement.plot, </span>
+<span id="cb38-29"><a href="#cb38-29" aria-hidden="true" tabindex="-1"></a>  track.length.plot, </span>
+<span id="cb38-30"><a href="#cb38-30" aria-hidden="true" tabindex="-1"></a>  width.plot, </span>
+<span id="cb38-31"><a href="#cb38-31" aria-hidden="true" tabindex="-1"></a>  sphericity.plot, </span>
+<span id="cb38-32"><a href="#cb38-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">ncol=</span><span class="dv">2</span>, <span class="at">nrow=</span><span class="dv">2</span>,</span>
+<span id="cb38-33"><a href="#cb38-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>))</span>
+<span id="cb38-34"><a href="#cb38-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-35"><a href="#cb38-35" aria-hidden="true" tabindex="-1"></a><span class="co"># save the combined plot</span></span>
+<span id="cb38-36"><a href="#cb38-36" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"BIO00066I-workshop3-combined-livecyte-plot.png"</span>, </span>
+<span id="cb38-37"><a href="#cb38-37" aria-hidden="true" tabindex="-1"></a>       combined.livecyte.plot, <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Did this make a difference?
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<ul>
-<li>Did we get a different result after this ‘cleaning up’, with this large data set?</li>
-<li>Might we have a different result after this cleaning up, with a small data set?</li>
-</ul>
-</div>
-</div>
-<section id="explore-other-metrics" class="level4" data-number="6.1.1.1">
-<h4 data-number="6.1.1.1" class="anchored" data-anchor-id="explore-other-metrics"><span class="header-section-number">6.1.1.1</span> Explore other metrics</h4>
-<p>Try using the code above to explore other metrics in the <code>track</code> data other than <code>track.length</code>. Options include <code>track.duration</code>, track.duration.total.time<code>,</code>euclidean.distance<code>and</code>euclidean.distance`.</p>
 </section>
-</section>
-<section id="improve-the-correlation-heat-map" class="level3" data-number="6.1.2">
-<h3 data-number="6.1.2" class="anchored" data-anchor-id="improve-the-correlation-heat-map"><span class="header-section-number">6.1.2</span> Improve the correlation heat map</h3>
-<p>What if we wanted to show only the correlations where the absolute value of <span class="math inline">\(\rho\)</span> was greater than 0.25? Try using the pipe operator <code>|&gt;</code> to filter the <code>track.correlations.pivot</code> data before plotting, with:</p>
+<section id="pca-with-livecyte-cell-shape-and-cell-movement-data-together" class="level4" data-number="6.1.1.2">
+<h4 data-number="6.1.1.2" class="anchored" data-anchor-id="pca-with-livecyte-cell-shape-and-cell-movement-data-together"><span class="header-section-number">6.1.1.2</span> PCA with Livecyte cell shape and cell movement data together</h4>
+<p>Start by preparing the data for PCA, by selecting the numeric columns from both the cell shape and cell movement data, and removing rows with NA values.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#filter the data</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>track.correlations.pivot <span class="sc">|&gt;</span></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">abs</span>(corr.coeff) <span class="sc">&gt;</span> <span class="fl">0.25</span>) <span class="sc">|&gt;</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="co">#now we put the plotting code here </span></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(Variable1, Variable2)) <span class="sc">+</span></span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="fu">aes</span>(<span class="at">fill =</span> corr.coeff)) <span class="sc">+</span></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">round</span>(corr.coeff, <span class="dv">1</span>))) <span class="sc">+</span></span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_gradient</span>(<span class="at">low =</span> <span class="st">"white"</span>, <span class="at">high =</span> <span class="st">"red"</span>)<span class="sc">+</span></span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">0.5</span>, <span class="at">hjust=</span><span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="workshop3-improved_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># prepare data for PCA</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>pca.data <span class="ot">&lt;-</span> cells <span class="sc">|&gt;</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">|&gt;</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
-</div>
+</section>
 </section>
 </section>
 <section id="planning-for-your-report" class="level2" data-number="6.2">
 <h2 data-number="6.2" class="anchored" data-anchor-id="planning-for-your-report"><span class="header-section-number">6.2</span> Planning for your report</h2>
-<p>The RStudio project is worth 30% of this module. The submission of your RStudio project should:</p>
+<p>The RStudio project is worth 20% of this module. The submission of your RStudio project should:</p>
 <ul>
 <li>have a logical folder structure for your analysis</li>
 <li>contain a well-commented script</li>
@@ -1099,7 +1137,7 @@ Did this make a difference?
 <h2 data-number="6.3" class="anchored" data-anchor-id="in-case-install.packages-fails"><span class="header-section-number">6.3</span> In case install.packages fails</h2>
 <p>If <code>install.packages("corrr")</code> fails, you can obtain the <code>track.correlations</code> data frame like this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>track.correlations <span class="ot">&lt;-</span><span class="fu">read_tsv</span>(<span class="fu">url</span>(<span class="st">"https://djeffares.github.io/BIO66I/data/track.correlations.tsv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>track.correlations <span class="ot">&lt;-</span><span class="fu">read_tsv</span>(<span class="fu">url</span>(<span class="st">"https://djeffares.github.io/BIO66I/data/track.correlations.tsv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 
