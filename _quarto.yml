@@ -6,6 +6,10 @@ project:
     - data/trackingid.small.data.tsv
     - data/A1-and-B2-tracking.data.2025-02-27.tsv
     - data/track.correlations.tsv
+    - data/BIO66I-2025-03-21-pNP.plot.jpeg
+    - data/pNP.plot.jpeg
+    - data/figure1.jpg
+    
 
 website:
   title: "BIO00066I"
