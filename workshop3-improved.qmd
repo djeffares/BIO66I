@@ -497,7 +497,7 @@ Note that different analysis software can use different terminologies to define 
 :::
 
 
-![**Figure 1.** The **tracking ID (TID)** is a unique ID that the microscope assigned to each object (cell), as it tracks it through time. The **lineage ID (LID)** is a number assigned to the ‘family’ of cells that derived by cell division during the the experiment. When a cell divides, each daughter cell is given a new tracking ID, but they keep their lineage ID, because they are still part of the same family.](docs/figure1.jpg)
+![**Figure 1.** The **tracking ID (TID)** is a unique ID that the microscope assigned to each object (cell), as it tracks it through time. The **lineage ID (LID)** is a number assigned to the ‘family’ of cells that derived by cell division during the the experiment. When a cell divides, each daughter cell is given a new tracking ID, but they keep their lineage ID, because they are still part of the same family.](docs/data/figure1.jpg)
 
 ## Plotting manual tracking data
 
