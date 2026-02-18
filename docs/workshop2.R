@@ -27,7 +27,7 @@ view(cells)
 #what are the names of the columns?
 names(cells)
 
-#how many rows and columns you we have?
+#how many rows and columns do we have?
 nrow(cells)
 ncol(cells)
 dim(cells)
@@ -61,101 +61,140 @@ save.image("BIO00066I-workshop2.Rda")
 #load all my stuff from last time
 load("BIO00066I-workshop2.Rda")
 
-summary.table <- cells |> 
-    group_by(clone, replicate) |> 
-    summarise(
-        volume=median(volume),
-        mean.thickness=median(mean.thickness),
-        radius=median(radius),
-        area=median(area),
-        sphericity=median(sphericity),
-        length=median(length),
-        dry.mass=median(dry.mass),
-        length.to.width=median(length.to.width)
-)
-
-view(summary.table)
+# str(cells)
 
 ggplot(cells,aes(x=clone,y=width,fill=replicate))+
     geom_boxplot()
 
-ggplot(cells, aes(x = width)) +
-  geom_density()
+# make a density plot of the width data
+# using colour = replicate makes separate lines for each replicate
 
-#Wilcoxon rank sum test
-#To test if cloneA and cloneB have statistically different widths
+ggplot(cells, aes(x = width,colour = replicate)) +
+  geom_density()+
+  facet_wrap(~clone)+ #facet_wrap makes separate plots for each clone
+  scale_x_log10()     #the log10 scale makes this plot easier to read
+
+
+# Test if cloneA and cloneB have statistically different widths
+# Use  Wilcoxon rank sum test, which does not assume normal distribution
 wilcox.test(width ~ clone, data = cells)
 
 ggplot(cells,aes(x=clone,y=width))+
     geom_boxplot()+
     stat_compare_means()
 
-names(cells)
+str(cells)  #shows the type of each column
 
-#read in some data from a website
-small.tracking.data <-read_tsv(url("https://djeffares.github.io/BIO66I/data/trackingid.small.data.tsv"),
-    col_types = cols(
-        clone = col_factor(),
-        replicate = col_factor(),
-        tracking.id=col_factor(),
-        lineage.id=col_factor()
-    )
+# make cloneA and cloneB data frames
+cloneA.data <- cells |> filter(clone == "cloneA")
+cloneB.data <- cells |> filter(clone == "cloneB")
+
+#get the names of the numeric columns
+numeric.columns <- cells |> 
+  select(where(is.numeric)) |> 
+  names()
+
+#see what we have
+numeric.columns
+
+#create empty data frame
+clone.comparisons <- data.frame(
+  variable = character(),
+  cloneA.median = numeric(),
+  cloneB.median = numeric(),
+  median.ratio = numeric(),
+  p.value = numeric()
 )
 
-#check what we have
-glimpse(small.tracking.data)
-summary(small.tracking.data)
+#loop through each numeric column
+for(column.name in numeric.columns) {
+  
+  #calculate median for clone A
+  cloneA.median <- median(cloneA.data[[column.name]], na.rm = TRUE)
+  
+  #calculate median for clone B  
+  cloneB.median <- median(cloneB.data[[column.name]], na.rm = TRUE)
+  
+  #calculate the median ratio (cloneA.median / cloneB.median)
+  ratio <- cloneA.median / cloneB.median
+  
+  #run wilcox test comparing the two clones for this variable
+  test.result <- wilcox.test(cells[[column.name]] ~ cells$clone)
+  
+  #extract the p-value
+  p.val <- test.result$p.value
+  
+  #add this row to our results table
+  new.row <- data.frame(
+    variable = column.name,
+    cloneA.median = signif(cloneA.median,2),
+    cloneB.median = signif(cloneB.median,2),
+    median.ratio = signif(ratio,2),
+    p.value = p.val
+  )
+  
+  #add the new.row to the clone.comparisons data frame
+  clone.comparisons <- rbind(clone.comparisons, new.row)
+}
 
-#Load from local file for rendering
-small.tracking.data <-read_tsv("data/trackingid.small.data.tsv",
-    col_types = cols(
-        clone = col_factor(),
-        replicate = col_factor(),
-        tracking.id=col_factor(),
-        lineage.id=col_factor()
-    )
-)
-glimpse(small.tracking.data)
-summary(small.tracking.data)
+# prepare data for PCA
 
-ggplot(small.tracking.data, aes(x=clone, y=width))+
-    geom_boxplot(fill=NA)+
-    geom_jitter(width = 0.2,size=3,pch=1)+
-    theme_minimal()
+cells_for_pca <- cells |>
+  #select the numeric columns
+  select(clone, replicate, volume, mean.thickness, radius, area, 
+         sphericity, length, width, orientation, dry.mass, length.to.width) |>
+  # remove rows with NA values
+  drop_na()
 
-names(small.tracking.data)
+pca_result <- cells_for_pca |>
+  select(-clone, -replicate) |>  # remove the group categories
+  prcomp()                        # performs the PCA
 
-#test with small.tracking.data
-wilcox.test(width ~ clone, data = small.tracking.data)
+# View summary of PCA
+summary(pca_result)
 
-#test with 'cells' data frame - a *much* larger data set  
-wilcox.test(width ~ clone, data = cells)
+# extract PCA scores and combine with clone and replicate info
+pca_scores <- as.data.frame(pca_result$x) |>
+  bind_cols(cells_for_pca |> select(clone, replicate))
 
-#plot with the large data
-#storing the plot in an object called large.data.plot
-large.data.plot <- ggplot(cells, aes(x=clone, y=width))+
-    geom_boxplot()+
-    geom_jitter(width = 0.2,size=3,pch=1)+
-    stat_compare_means()+
-    ylim(0,200)+
-    ggtitle("large data")
+# plot PCA scores with ggplot, coloring by clone
+# use alpha = 0.1 to make points semi-transparent
+# use size = 4 to make points larger
+# save the plot as pca.plot
+pca.plot <- ggplot(pca_scores, aes(x = PC1, y = PC2, color = clone, fill = clone)) +
+  geom_point(alpha = 0.1, size = 4) 
 
-#plot with the small data
-#storing the plot in an object called small.data.plot
-small.data.plot <- ggplot(small.tracking.data, aes(x=clone, y=width))+
-    geom_boxplot()+
-    geom_jitter(width = 0.2,size=3,pch=1)+
-    stat_compare_means()+
-    ylim(0,200)+
-    ggtitle("small data")
+# view the plot
+pca.plot
 
-#create a two panel plot, with large.data.plot and small.data.plot
-ggarrange(large.data.plot,small.data.plot)
+# downsample the PCA scores to 3000 cells per clone
+pca_scores_sample <- pca_scores |>
+  group_by(clone) |>
+  slice_sample(n = 3000) |>
+  ungroup()
+
+# make the plot
+pca.plot <- ggplot(pca_scores_sample, 
+  aes(x = PC1, y = PC2, color = clone, fill = clone)) +
+  geom_point(alpha = 0.1, size = 4)
+# view the plot
+pca.plot
+
+# make the plot
+# stat_ellipse adds an ellipse to show the shape of the data
+# scale_color_manual sets the colors for the clones
+# facet_wrap makes separate plots for each replicate
+# theme_classic() makes the plot look nicer
+pca.plot +
+  stat_ellipse(geom = "polygon", alpha = 0.1, linewidth = 1.2) +
+  scale_color_manual(values = c("cloneA" = "red", "cloneB" = "blue"))+
+  facet_wrap(~replicate)+
+  theme_classic2()
 
 ggplot(cells,aes(x=clone,y=width,fill=replicate))+
     geom_violin()
 
-
+# a violin plot with title, axis labels and a theme
 ggplot(cells,aes(x=clone,y=length,fill=replicate))+
     geom_violin()+
     ggtitle("put your title here!")+
@@ -163,36 +202,3 @@ ggplot(cells,aes(x=clone,y=length,fill=replicate))+
     ylab("my Y axis label")+
     theme_classic()
 
-
-#take the mean of each unique tracking id
-trackingid.summary.table<-cells |>
-    group_by(clone, replicate, tracking.id) |>
-    summarise(
-        volume=median(volume),
-        mean.thickness=median(mean.thickness),
-        radius=median(radius),
-        area=median(area),
-        sphericity=median(sphericity),
-        length=median(length),
-        width=median(width),
-        dry.mass=median(dry.mass),
-        length.to.width=median(length.to.width)
-    )
-
-
-
-#collect a random subset, of 5 rows for each tracking id
-trackingid.small.data <- sample_n(trackingid.summary.table, 5)
-
-#check that we have
-nrow(trackingid.small.data)
-glimpse(trackingid.small.data)
-
-#output trackingid.small.data as a tab-separated value (tsv) file
-write_tsv(trackingid.small.data, file ="/Users/dj757/gd/modules/BIO66I/data/trackingid.small.data.tsv")
-
-#how many rows do we have?
-nrow(trackingid.small.data)
-
-#what does the data look like?
-view(trackingid.small.data)
