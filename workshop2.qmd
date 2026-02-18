@@ -56,7 +56,7 @@ Workshops are not a test. It's OK to make mistakes. It's OK to need help. You sh
 
 ## The biology
 
-Today we will look at some data from mesenchymal stem cells (MSCs, sometimes called *stromal* cells). MCSs are *multipotent* cells, than can differentiate into many kinds of mesenchymal cells, including bone, cartilage and fat cells. They are not *pluripotent*, in that they do have limits about how they differentiate.
+Today we will look at some data from mesenchymal stem  cells (MSCs, sometimes called *stromal* cells). MCSs are *multipotent* cells, than can differentiate into many kinds of mesenchymal cells, including bone, cartilage and fat cells. They are not *pluripotent*, in that they do have limits about how they differentiate.
 
 MSCs are also:
 
@@ -73,7 +73,7 @@ MSCs are also:
 
 ## The data
 
-The data we have today are derived from live cell imaging of mesenchymal stem cells with a Livecyte microscope and the software it has. Each clones was cultured and the microscope captured cell shape and size information for thousands of cells from each clone (clone A and clone B). For each clone, we measured three *biological replicates*. 
+The data we have today are derived from live cell imagining of mesenchymal stem cells with a Livecyte microscope and the software it has. Each clones was cultured and the microscope captured cell shape and size information for thousands of cells from each clone (clone A and clone B). For each clone, we measured three *biological replicates*. 
 
 The Livecyte tracked each cell every 23 minutes, giving each data point a **tracking ID** (which tracks a unique cell 'object') and a **lineage ID**, which recalls the lineage of cells as they divide. For example, if cell 1, divided into cell 1A and cell 1B, they are all recorded by the Livecyte as being part of lineage ID 1.
 
@@ -103,7 +103,7 @@ Data science can be challenging when you first start. But data science does have
 -   **Consider what the results tell you about the biology**
 :::
 
-# Part 1: Loading data and simple plotting
+# Exercises
 
 ::: callout-important
 ## Develop your R script, carefully.
@@ -212,7 +212,7 @@ view(cells)
 #what are the names of the columns?
 names(cells)
 
-#how many rows and columns do we have?
+#how many rows and columns you we have?
 nrow(cells)
 ncol(cells)
 dim(cells)
@@ -225,14 +225,14 @@ glimpse(cells)
 You may have noticed that we have two clones (cloneA and cloneB). For each clone, we have three replicates. For each replicate, we have many readings of cell widths, cell volume, cell sphericity, and so on.
 
 ::: callout-tip
-# Which 'data peeking' method of do *you* like the best?
+# Which method of do *you* like the best?
 
-We suggest you take a note of this, and use it regularly. It is important to know your data.
+Why not take a note of this, and use it all the time?
 :::
 
 ## Cleaning up
 
-When you ran `names(cells)` you will have seen *many* metrics from the Livecyte software. We don't need all these, and the movement metrics them are unreliable, so let's remove them. It is simple to remove columns of data, using the `select` function, like so:
+When you ran `names(cells)` you will have seen *many* metrics from the Livecyte software. We don't need all these, and the movement metrics them are unreliable, so let's remove them. It is simple to remove columns of data, using the `select` command, like so:
 
 ```{r}
 #| echo: true
@@ -291,22 +291,75 @@ You can load all the data again with:
 load("BIO00066I-workshop2.Rda")
 ```
 
-------------------------------------------------------------------------
+## Summarise with dplyr
 
-## Exploring the data with plots
+The `view(cells)` command shows that we have many cell shape metrics. We saw a summary of our cell shape metrics with the `summary(cells)` command above.
 
-A good way to explore data is to use plots. In this case we want to compare cloneA to cloneB. But first, lets look at what data we have on each clone. We'll use the `str()` function, which displays the **structure** of an R object (ie: shows us what's inside). 
+We can do even better, with tools from the `dplyr` package (part of the `tidyverse`). These allow us to make summaries of this data quickly. These methods will work for **any** data frames of any kind of data.
+
+::: callout-note
+## dplyr is wonderful
+
+`dplyr` is like a set of pliers, helping us to 'bend' or 'reshape' our data.
+:::
+
+Here is the command. I will explain it below.
 
 ```{r}
-#| eval: false
+#| echo: true
+#| warning: false
+#| output: false
+#| eval: true
 #| purl: true
-str(cells)
+
+summary.table <- cells |> 
+    group_by(clone, replicate) |> 
+    summarise(
+        volume=median(volume),
+        mean.thickness=median(mean.thickness),
+        radius=median(radius),
+        area=median(area),
+        sphericity=median(sphericity),
+        length=median(length),
+        dry.mass=median(dry.mass),
+        length.to.width=median(length.to.width)
+)
 ```
 
+### What this code does
 
-You will see that `volume`, `mean.thickness`, `radius`, `area`, `sphericity`, `length`, `dry.mass`, `length.to.width` and `width` are all numeric variables. We can use these to make plots.
+-   The `cells |>` part takes the data from the `cells` data frame, and 'pipes' it into the `group_by` function. The `|>` symbol as means **put this data into the next bit**.
 
-Let's start by plotting the width of the cells, to see if there are differences between clone A and clone B. We will use `ggplot` to make a boxplot (`geom_boxplot()`) to compare the two clones. We use a small 'trick' here: by including `fill=replicate` we force R to make different plots for each replicate.
+-   `group_by(clone, replicate)` means that make groups of data, according to which clone they are, and which replicate culture they were from.
+
+-   `summarise` calculates some summaries of all the data rows (for each clone and replicate). The part `volume=median(volume)` creates a header called `volume` and fills this with the median cell volume for each clone and replicate
+
+-   Right at the top, `summary.table <-` stores the results of all the piping in an object called `summary.table`.
+
+Have a look at the information we generated with:
+
+```{r}
+#| echo: true
+#| warning: false
+#| output: false
+#| eval: true
+#| purl: true
+
+view(summary.table)
+```
+
+::: callout-tip
+## Do you see any patterns in this data?
+
+-   What does this table tell you about **clone A** and **clone B**?
+-   What does this tell you about mesenchymal stem cells?
+:::
+
+------------------------------------------------------------------------
+
+## Making plots
+
+It looks like many of the cell shape metrics from above might differ between clones. So let's look deeper, starting with `cell width`. We will make a box and whisker plot. We use a small 'trick' here: by including `fill=replicate` we force R to make different plots for each replicate.
 
 ```{r}
 #| eval: true
@@ -316,38 +369,60 @@ ggplot(cells,aes(x=clone,y=width,fill=replicate))+
     geom_boxplot()
 ```
 
+::: callout-important
+## Making plots with ggplot
 
-It does look like clone A and clone B differ consistently in width, with all repeats. To prove this, we would like to do a statistical test. A Student's t-Test `t.test` would work. But t-Test's assume that the data are normally distributed (like a bell curve). We can test this approximately by plotting the data with a density plot.
+No matter what shape plot you want, `ggplot` uses the same syntax.
+
+1.  Start by telling R what data you want to use like this: `ggplot(some_data_frame,aes(x=x_axis_data, y=y_axis_data) +`
+
+In this line, `x_axis_data` and `y_axis_data` are columns of some_data_frame.
+
+2.  Then define what the shape plot you want (the 'geometry'): `geom_boxplot()`, `geom_histogram()` etc.
+3.  Add extra things to customise your plot, eg: `xlab("my x axis label")`
+
+If you are unsure what to do, it's OK to ask! Googling "ggpplot how to make a boxplot" (or any other plot) will help.
+:::
+
+It does look like clone A and clone B differ consistently in width, with all repeats. To prove this, we would like to do a statistical test. A Student's t-Test `t.test` would work. But t-Test's assume that the data are normally distributed (like a bell curve).
+
+We can test this approximately by plotting data, as below. It doesn't look perfectly 'bell shaped', so let's play is safe and use a nonparametric test.
 
 ```{r}
+#| echo: true
+#| warning: false
+#| output: false
 #| eval: true
 #| purl: true
 
-# make a density plot of the width data
-# using colour = replicate makes separate lines for each replicate
-
-ggplot(cells, aes(x = width,colour = replicate)) +
-  geom_density()+
-  facet_wrap(~clone)+ #facet_wrap makes separate plots for each clone
-  scale_x_log10()     #the log10 scale makes this plot easier to read
-
+ggplot(cells, aes(x = width)) +
+  geom_density()
 ```
 
-It doesn't look perfectly normally distributed, so let's play is safe and use a nonparametric test.
+The nonparametric equivalent of a t-Test is a **Wilcoxon rank sum test**. There are two ways to run this test in R. We can do `wilcox.test(vectorA, vectorB)`, where vectorA and vectorB contain the numeric values we want to test.
+
+But does does not suit `tidyverse` data frames very well. So we will use the `wilcox.test(numeric_values ~ category_name, data = some_data_frame)` method, like so:
 
 ```{r}
 #| eval: true
 #| purl: true
 
-# Test if cloneA and cloneB have statistically different widths
-# Use  Wilcoxon rank sum test, which does not assume normal distribution
+#Wilcoxon rank sum test
+#To test if cloneA and cloneB have statistically different widths
 wilcox.test(width ~ clone, data = cells)
 ```
 
 Because the `p-value` is *very low* (\< 2.2e-16), this means the null hypothesis (that both sets of numbers come from the same population) is *very* unlikely to be true.
 
+::: callout-warning
+## Non-parametric tests are safe
 
-You can add the results of nonparametric tests to ggplot, by adding `stat_compare_means()` to our plot. Note that below we do not force R to split up the replicates as we did above.
+Parametric tests are based on assumptions about the distribution of the real data. Nonparametric statistics are not based on these assumptions. So they are safer. Many biological metrics need nonparametric tests.
+:::
+
+### An easier way
+
+Fortunately, you can add the results of nonparametric tests to ggplot, by adding `stat_compare_means()` to our plot. Note that below we do not force R to split up the replicates as we did above.
 
 ```{r}
 #| echo: true
@@ -361,143 +436,88 @@ ggplot(cells,aes(x=clone,y=width))+
     stat_compare_means()
 ```
 
+# Next step: modify the code
 
-## Exploring all the data
+::: callout-important
+## If there is something you don't understand, it's OK to ask us!
+:::
 
-As you will have seen, we have many numeric variables in our data. We *could* make a plot for each one, to see if there are differences between the clones, but there is a quicker way to explore the data in R. 
-
-We can use **a loop** to compare all the numeric variables between the clones. This is a bit more advanced, but it is a good way to explore the data quickly
-
-First, see which columns in the `cells` data frame are numeric using the `str()` function, which shows the structure of an R object. 
+To increase your understanding, run through all the plots in section 3.5 with some other cell shape or size metric. To start, find what metrics are present with:
 
 ```{r}
 #| echo: true
 #| warning: false
+#| output: false
 #| eval: true
 #| purl: true
 
-str(cells)  #shows the type of each column
+names(cells)
 ```
 
-You will see that `volume`, is numeric because it has `: num` in the output \
+We suggest using one of these, in place of `width`:
 
-`volume         : num [1:101042]`
+-   volume
+-   mean.thickness
+-   radius
+-   area
+-   sphericity
+-   length
+-   dry.mass
 
-As are all the variable below it, but `clone` and `replicate` are factors, because they have `: Factor` in the output.
+# Analysis with small data
 
-### Compare all the numeric variables between the clones
+So far, we have used **all** the rows in our data frame. But perhaps this isn't wise, because the Livecyte tracking followed each cell over time. So each measurement of cell shape is not a *completely independent* measurement. It is more of a technical replicate than a biological replicate. 
 
-Now we create the loop to compare all the numeric variables.
+It is also valuable to learn how to make plots and analyse small data sets, as well as large ones. So now we will create a very small subset of the data, and investigate this.
 
-First, separate the data for clone A and clone B
+First, read in the small data set we prepared, and have a quick look, to check what we have.
 
 ```{r}
+#| echo: true
+#| warning: false
+#| output: false
 #| eval: true
 #| purl: true
 
-# make cloneA and cloneB data frames
-cloneA.data <- cells |> filter(clone == "cloneA")
-cloneB.data <- cells |> filter(clone == "cloneB")
-```
-
-And get list of the numeric column names
-
-```{r}
-#| eval: true
-#| purl: true
-
-#get the names of the numeric columns
-numeric.columns <- cells |> 
-  select(where(is.numeric)) |> 
-  names()
-
-#see what we have
-numeric.columns
-```
-
-
-Next we create an empty data frame to store results.
-
-
-```{r}
-#| eval: true
-#| purl: true
-
-#create empty data frame
-clone.comparisons <- data.frame(
-  variable = character(),
-  cloneA.median = numeric(),
-  cloneB.median = numeric(),
-  median.ratio = numeric(),
-  p.value = numeric()
+#read in some data from a website
+small.tracking.data <-read_tsv(url("https://djeffares.github.io/BIO66I/data/trackingid.small.data.tsv"),
+    col_types = cols(
+        clone = col_factor(),
+        replicate = col_factor(),
+        tracking.id=col_factor(),
+        lineage.id=col_factor()
+    )
 )
+
+#check what we have
+glimpse(small.tracking.data)
+summary(small.tracking.data)
 ```
 
-\
-
-Now we loop through each numeric variable. For each one, we calculate the medians (clone A and clone B) and run a `wilcox.test` to see if they differ significantly, then add the results to our `clone.comparisons` data frame.
-
-:::: callout-important
-# Run the loop code all at once
-Otherwise you will get errors. You can copy and paste the whole loop code into your script, then select all the loop code, run it with **Ctrl + Enter** keyboard shortcut.
-::::
-
-Here is the loop code:
-
 ```{r}
+#| echo: false
+#| warning: false
+#| output: false
 #| eval: true
 #| purl: true
 
-#loop through each numeric column
-for(column.name in numeric.columns) {
-  
-  #calculate median for clone A
-  cloneA.median <- median(cloneA.data[[column.name]], na.rm = TRUE)
-  
-  #calculate median for clone B  
-  cloneB.median <- median(cloneB.data[[column.name]], na.rm = TRUE)
-  
-  #calculate the median ratio (cloneA.median / cloneB.median)
-  ratio <- cloneA.median / cloneB.median
-  
-  #run wilcox test comparing the two clones for this variable
-  test.result <- wilcox.test(cells[[column.name]] ~ cells$clone)
-  
-  #extract the p-value
-  p.val <- test.result$p.value
-  
-  #add this row to our results table
-  new.row <- data.frame(
-    variable = column.name,
-    cloneA.median = signif(cloneA.median,2),
-    cloneB.median = signif(cloneB.median,2),
-    median.ratio = signif(ratio,2),
-    p.value = p.val
-  )
-  
-  #add the new.row to the clone.comparisons data frame
-  clone.comparisons <- rbind(clone.comparisons, new.row)
-}
+#Load from local file for rendering
+small.tracking.data <-read_tsv("data/trackingid.small.data.tsv",
+    col_types = cols(
+        clone = col_factor(),
+        replicate = col_factor(),
+        tracking.id=col_factor(),
+        lineage.id=col_factor()
+    )
+)
+glimpse(small.tracking.data)
+summary(small.tracking.data)
 ```
 
+## Plotting a small data set
 
-Now, look at the results with `view(clone.comparisons)`
+Previously we used `geom_boxplot()` to compare clone A and clone B. Box and whisker plots (`geom_boxplot`) and violin plots (`geom_violin`, which we describe below) are good ways of displaying *large* amounts of data, but they can be misleading for small data sets. For small data sets it is better to simpler plot all the data points, so the audience has all the information. Let's compare boxplot and a ggplot method to plot all the data (`geom_jitter`).
 
-While this was relatively complex code, it does show us the big picture for how the two clones differ. Feel free to plot any other cell size metrics, either today, or in your report. 
-
-
-# Part 2: Principle component analysis
-
-While we could plot many different variables to determine if clones A and B are different, but this does not summarise the data very well in the end. To describe **all** the data, we could use a principle component analysis (PCA). 
-
-Principal component analysis, or PCA, reduces the number of dimensions in large datasets to *principal components* that retain most of the original information.  It does this by transforming correlated variables into a smaller set of variables, called **principal components**. Usually, we look at only the first two principal components (PC1, PC2), because they capture the most of the information in the data (but sometimes we look at more, PC3, PC4, *etc.*).
-
-For now, that is all you need to understand about PCA, but I link to some [YouTube videos below](#understanding-pca). These are worth looking at if you want to progress in data science later in your degree.
-
-
-## Prepare data for PCA
-
-First we select the numeric columns and we remove any rows with NA values:
 
 ```{r}
 #| echo: true
@@ -506,19 +526,52 @@ First we select the numeric columns and we remove any rows with NA values:
 #| eval: true
 #| purl: true
 
-# prepare data for PCA
+ggplot(small.tracking.data, aes(x=clone, y=width))+
+    geom_boxplot(fill=NA)+
+    geom_jitter(width = 0.2,size=3,pch=1)+
+    theme_minimal()
 
-cells_for_pca <- cells |>
-  #select the numeric columns
-  select(clone, replicate, volume, mean.thickness, radius, area, 
-         sphericity, length, width, orientation, dry.mass, length.to.width) |>
-  # remove rows with NA values
-  drop_na()
+names(small.tracking.data)
 ```
 
-## Calculate PCA coordinates
 
-Now we calculate PCA coordinates with the `prcomp()` function:
+::: callout-tip
+## if you have time
+Try two alternations of this plot.
+
+1. Remove the `geom_boxplot(fill=NA)+` line. Does it display the data more clearly?
+
+2. Replace  width in `y=width` with some other cell shape/size parameter. Using `names(small.tracking.data)` will show what metrics we have.
+:::
+
+## Statistical tests with small data and large sets
+
+We use statistical tests like the Wilcoxon rank sum test (`wilcox.test`) to estimate how likely to be drawn from the same 'population' (or distribution). If the P-value is very low (eg: one chance in 10,000 or 0.0001), then we can conclude that the two data sets are indeed different. **But the power of such a test depends on the number of data points.** 
+
+We can prove that to ourselves by comparing a Wilcox test results from the `small.tracking.data` and the much larger `cells` data set:
+
+
+```{r}
+#| eval: true
+#| purl: true
+
+#test with small.tracking.data
+wilcox.test(width ~ clone, data = small.tracking.data)
+
+#test with 'cells' data frame - a *much* larger data set  
+wilcox.test(width ~ clone, data = cells)
+```
+
+
+::: callout-warning
+## P-values can be misleading
+P-values are not the biology. Use them with caution, and your own judgment. Sometimes very small differences, or very weak correlations can be statistically significant, but have little relevance for the biology.
+:::
+
+
+## Comparing plots side by side
+
+Now, lets look plotting the small and large data sets side by side. Sometimes, a plot can give us a better sense of the data that a P-value.
 
 ```{r}
 #| echo: true
@@ -526,127 +579,46 @@ Now we calculate PCA coordinates with the `prcomp()` function:
 #| output: false
 #| eval: true
 #| purl: true
-pca_result <- cells_for_pca |>
-  select(-clone, -replicate) |>  # remove the group categories
-  prcomp()                        # performs the PCA
 
-# View summary of PCA
-summary(pca_result)
+#plot with the large data
+#storing the plot in an object called large.data.plot
+large.data.plot <- ggplot(cells, aes(x=clone, y=width))+
+    geom_boxplot()+
+    geom_jitter(width = 0.2,size=3,pch=1)+
+    stat_compare_means()+
+    ylim(0,200)+
+    ggtitle("large data")
+
+#plot with the small data
+#storing the plot in an object called small.data.plot
+small.data.plot <- ggplot(small.tracking.data, aes(x=clone, y=width))+
+    geom_boxplot()+
+    geom_jitter(width = 0.2,size=3,pch=1)+
+    stat_compare_means()+
+    ylim(0,200)+
+    ggtitle("small data")
+
+#create a two panel plot, with large.data.plot and small.data.plot
+ggarrange(large.data.plot,small.data.plot)
 ```
 
-In the summary `pca_result` you will see the coordinates of PC1, PC2, etc. Now extract PC scores and combine them with clone information for plotting:
+The `geom_jitter` with the large data set looks *terrible*! This is not a good way to show this data. So remove this part of the plot, and try again. You may also want to try using `geom_violin` instead of `geom_boxplot`. 
 
-```{r}
-#| echo: true
-#| warning: false
-#| output: false
-#| eval: true
-#| purl: true
+You will also notice that we set the same *y* axis range for both plots, with `ylim(0,200)`. We did this so we can compare the plots side by side. 
 
-# extract PCA scores and combine with clone and replicate info
-pca_scores <- as.data.frame(pca_result$x) |>
-  bind_cols(cells_for_pca |> select(clone, replicate))
-```
+::: callout-tip
+# How to cite packages
+If you use a package in your work, you should cite it so that your code is fully transparent (for you, and others). **You'll also get points for citing packages in your Rstudio project.** You can obtain a nicely formatted citation for a package like so: 
 
-
-## Plot PCA coordinates
-
-Now lets make a plot:
-
-```{r}
-#| echo: true
-#| warning: false
-#| output: false
-#| eval: true
-#| purl: true
-
-# plot PCA scores with ggplot, coloring by clone
-# use alpha = 0.1 to make points semi-transparent
-# use size = 4 to make points larger
-# save the plot as pca.plot
-pca.plot <- ggplot(pca_scores, aes(x = PC1, y = PC2, color = clone, fill = clone)) +
-  geom_point(alpha = 0.1, size = 4) 
-
-# view the plot
-pca.plot
-```
-
-
-We can see a that PCA does separate the two clones well, but its not a very nice plot, for several reasons. First, there are so many points that they are all overlapping, and we can't see the shape of the data. Second, we have not shown the replicates separately, so we can't see if the replicates are consistent.
-
-So lets fix these problems.
-
-First lets *downsample* the data to retain only 3000 cells per clone for better visualization. We use `slice_sample()` which randomly selects rows of data.
-
-```{r}
-#| echo: true
-#| warning: false
-#| output: false
-#| eval: true
-#| purl: true
-# downsample the PCA scores to 3000 cells per clone
-pca_scores_sample <- pca_scores |>
-  group_by(clone) |>
-  slice_sample(n = 3000) |>
-  ungroup()
-```
-
-And make the PCA plot with the down sampled data:
-
-```{r}
-#| echo: true
-#| warning: false
-#| output: false
-#| eval: true
-#| purl: true
-# make the plot
-pca.plot <- ggplot(pca_scores_sample, 
-  aes(x = PC1, y = PC2, color = clone, fill = clone)) +
-  geom_point(alpha = 0.1, size = 4)
-# view the plot
-pca.plot
-```
-
-Finally, lets improve and save the plot. We can do this by adding elements to `pca.plot`:
-
-```{r}
-#| echo: true
-#| warning: false
-#| output: false
-#| eval: true
-#| purl: true
-# make the plot
-# stat_ellipse adds an ellipse to show the shape of the data
-# scale_color_manual sets the colors for the clones
-# facet_wrap makes separate plots for each replicate
-# theme_classic() makes the plot look nicer
-pca.plot +
-  stat_ellipse(geom = "polygon", alpha = 0.1, linewidth = 1.2) +
-  scale_color_manual(values = c("cloneA" = "red", "cloneB" = "blue"))+
-  facet_wrap(~replicate)+
-  theme_classic2()
-```
-
-
+`print(citation("tidyverse"), style = "text")`
+:::
 
 # Reflection
 
-## Summary
-
-Today, we started with loading a large table of data about clone A and clone B. This data was derived from live cell imaging of mesenchymal stem cells, using the Livecyte microscope and software. 
-
-**The data set was large.** It contained more than 100,000 rows (cell measurements), and 12  parameters about cell shape and size. We used R to explore the data, and to compare the two clones. We did some initial box plots, then made a summary table. Finally, we performed  a principle component analysis (PCA) to summarise the data in a single plot.
-
-## Things to consider
-
-- What was the value of making the boxplot of width, in your view?
-- What did the density plot of width tell us about this metric?
-- Why didn't we carry on making boxplots for all the other metrics?
-- Now that we have the summary table, we could make more boxplots to explore the differences between the clones. Which metric would you plot next?
-- Did the PCA plot differentiate clone A and clone B?
-
-Note that principle component analysis (PCA) can be used to summarise any kind of data.
-
+- After loading the data, what did we do first?
+- What did making the plots do that summary statistics (like average, or median) cannot do?
+- What did we learn about the two clones?
+- How do we plot and consider P-values for small and large data sets?
 
 # The end
 
@@ -662,40 +634,7 @@ You can download all the R code from this workshop as a single script file:
 
 Look at your script again. Add some comments, so that the next time you look at it, it will make more sense to you. Also, have a go at the consolidation exercises below.
 
-## Understanding PCA
-
-You don't need a detailed understanding of PCA for this module, but an understanding of PCA may help you in the future. Here are some videos that explain principle component analysis (PCA).  
-
-- [A nice simple explanation](https://youtu.be/kw9R0nD69OU?si=PRNygDRyM_pBQ6NE) (4 minutes)
-- [A very intuitive explanation](https://youtu.be/TJdH6rPA-TI?si=uLV-5oYw-1vau-S3) (20 minutes) 
-- [A  mathematical explanation](https://youtu.be/FgakZw6K1QQ?si=yUTobGFdy18sGEj9) for those who like maths (20 minutes)
-
-
-
-
-
 ## Consolidation exercises
-
-::: callout-tip
-## Making plots with ggplot
-
-No matter what shape plot you want, `ggplot` uses the same syntax.
-
-1.  Start by telling R what data you want to use like this: `ggplot(some_data_frame,aes(x=x_axis_data, y=y_axis_data) +`
-
-In this line, `x_axis_data` and `y_axis_data` are columns of some_data_frame.
-
-2.  Then define what the shape plot you want (the 'geometry'): `geom_boxplot()`, `geom_histogram()` etc.
-3.  Add extra things to customise your plot, eg: `xlab("my x axis label")`
-:::
-
-
-::: callout-tip
-# How to cite packages
-If you use a package in your work, you should cite it so that your code is fully transparent (for you, and others). **You'll also get points for citing packages in your Rstudio project.** You can obtain a nicely formatted citation for a package like so: 
-
-`print(citation("tidyverse"), style = "text")`
-:::
 
 ### Violin plots `geom_violin`
 
@@ -721,7 +660,7 @@ ggplot(cells,aes(x=clone,y=width,fill=replicate))+
 #| eval: true
 #| purl: true
 
-# a violin plot with title, axis labels and a theme
+
 ggplot(cells,aes(x=clone,y=length,fill=replicate))+
     geom_violin()+
     ggtitle("put your title here!")+
@@ -731,6 +670,78 @@ ggplot(cells,aes(x=clone,y=length,fill=replicate))+
 
 ```
 
+
+### Making the small data set
+
+This is how we made the small data set `trackingid.small.data`. Reading through and/or trying out this code will enhance your skills.
+
+Use the `dplyr` tools `group_by` and `summarise` to calculate the average of all the cell shape measurements for each cell. Each cell is marked by the Livecyte software with a tracking id (`tracking.id`), so we group cells by this. The code `group_by(clone, replicate, tracking.id)` will group each measurement by the clone, replicate **and** tracking id, then the `summarise` part calculates the mean values for all our metrics:
+
+```{r}
+#| eval: true
+#| purl: true
+
+#take the mean of each unique tracking id
+trackingid.summary.table<-cells |>
+    group_by(clone, replicate, tracking.id) |>
+    summarise(
+        volume=median(volume),
+        mean.thickness=median(mean.thickness),
+        radius=median(radius),
+        area=median(area),
+        sphericity=median(sphericity),
+        length=median(length),
+        width=median(width),
+        dry.mass=median(dry.mass),
+        length.to.width=median(length.to.width)
+    )
+
+```
+
+
+Then we use the `dplyr` function `sample_n`, which samples a number of rows from a data frame at random. If the data frame is grouped (which our data is),the number we set applies to each group:
+
+```{r}
+#| echo: true
+#| warning: false
+#| output: false
+#| eval: true
+#| purl: true
+
+
+#collect a random subset, of 5 rows for each tracking id
+trackingid.small.data <- sample_n(trackingid.summary.table, 5)
+
+#check that we have
+nrow(trackingid.small.data)
+glimpse(trackingid.small.data)
+```
+
+We write the output to a file:
+
+```{r}
+#| eval: true
+#| purl: true
+
+#output trackingid.small.data as a tab-separated value (tsv) file
+write_tsv(trackingid.small.data, file ="/Users/dj757/gd/modules/BIO66I/data/trackingid.small.data.tsv")
+```
+
+Look at the `trackingid.small.data` data frame, so we know what we have:
+
+```{r}
+#| echo: true
+#| warning: false
+#| output: false
+#| eval: true
+#| purl: true
+
+#how many rows do we have?
+nrow(trackingid.small.data)
+
+#what does the data look like?
+view(trackingid.small.data)
+```
 
 ## Planning for your report
 

@@ -51,7 +51,7 @@ cell.move.data <- select(cells,
 #check that we have
 names(cell.move.data)
 
-#get a simple summary, using summary and also glimpse
+#get a simple summaru, using summary and also glimpse
 summary(cell.move.data)
 glimpse(cell.move.data)
 

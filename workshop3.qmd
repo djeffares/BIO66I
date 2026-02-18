@@ -69,11 +69,11 @@ Why do these clones maintain different shapes after growing in the lab for so lo
 
 In this workshop, we first examine cell movement data that was collected in an automated way by the Livecyte microscope. This shows something interesting, but it is not very reliable, because the Livecyte is *not perfect* at tracking individual cells.
 
-People are better at tracking individual cells. So we then look at some *manual* tracking data. We will see such metrics as `euclidean.distance` (how far the cells have moved), `mean.speed` (how fast they go), and `meandering.index` (how much they *meander* and change their minds about where they are going!).
+People are better at tracking individual cells. So we then look at some *manual* tracking data. We will se such metrics as `euclidean.distance` (how far the cells have moved), `mean.speed` (how fast they go), and `meandering.index` (how much they *meander* and change their minds about where they are going!).
 
 While we could *guess* how the cells differ from looking down the microscope, we can use our data science skills in two ways to enrich our perception, by:
 
--   showing metrics with plots - this will enhance our intuition
+-   showing metrics with plots - this will enhance out intuition
 -   using statistical tests to test our intuitions
 -   the tests will determine which metrics (if any) are **significantly different** between the clones
 
@@ -103,7 +103,7 @@ We will keep working on this script. We advise you to mark clearly where worksho
 ########################################################
 ```
 
-First we will install the `corrr` package. To do this, we do:
+First we will install the `corrr` package. Do do this, we do:
 
 ```{r}
 #| echo: true
@@ -198,7 +198,7 @@ names(cells)
 In data science, we can easily get confused. keep the data as simple as you can (but no simpler).
 :::
 
-In the spirit of **keeping it simple**, let's retain only the columns in this data frame that we need, using the `select` function. The `cells` data frame still has all the data, so it is not lost.
+In the spirit of **keeping it simple**, let's retain only the columns in this data frame that we need, using the `select` function. The `cells` data framt still have all the data, so it is not lost.
 
 ```{r}
 #| echo: true
@@ -218,7 +218,7 @@ cell.move.data <- select(cells,
 #check that we have
 names(cell.move.data)
 
-#get a simple summary, using summary and also glimpse
+#get a simple summaru, using summary and also glimpse
 summary(cell.move.data)
 glimpse(cell.move.data)
 ```
@@ -398,7 +398,7 @@ head(track.correlations)
 
 Then we use `pivot_longer` ass we did in [BIO00066I core workshop 1](https://3mmarand.github.io/R4BABS/r4babs4/week-1/workshop.html#visualisation), to simplify the data format.
 
-![**Figure 2.** How `pivot_longer` reshapes data. Notice that no data is lost.](https://www.fromthebottomoftheheap.net/assets/img/posts/tidyr-longer-wider.gif)
+![**Figure 2.** How `pivot_longer` reshapes data. Notice that no data is lost. does.](https://www.fromthebottomoftheheap.net/assets/img/posts/tidyr-longer-wider.gif)
 
 We will use `pivot_longer` this way:
 
@@ -490,7 +490,7 @@ track.correlations.pivot |>
 # Reflection
 
 ::: callout-important
-## It is critical to think about what our analysis shows about the biology
+## It is critical to think about what our analysis shows aout the biology
 **Do this now.** 
 
 - What do we know about the clones now?
