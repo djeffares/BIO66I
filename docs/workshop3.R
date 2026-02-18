@@ -1,8 +1,10 @@
-########################################################
-#WORKSHOP 3: CELL MOVEMENT DATA
-########################################################
+
+# WORKSHOP 3: CELL MOVEMENT DATA ----
 
 
+
+
+# SET UP AND LIBRARY LOADING ----
 
 #clear previous data
 rm(list=ls())
@@ -17,6 +19,8 @@ library(corrr)
 library(ggpubr)
 
 
+# LOADING LIVECYTE DATA ----
+
 # Read the automated Livecyte data
 cells <-read_tsv(url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-02-22.tsv"),
                  col_types = cols(
@@ -27,62 +31,135 @@ cells <-read_tsv(url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.
                  )
 )
 
-#Load from local file for rendering
-cells <-read_tsv("data/all-cell-data-FFT.filtered.2024-02-22.tsv",
-                 col_types = cols(
-                   clone = col_factor(),
-                   replicate = col_factor(),
-                   tracking.id=col_factor(),
-                   lineage.id=col_factor()
-                 )
-)
+# names(cells)
 
+#examine what we have in the data frame
 names(cells)
 
-names(cells)
 #select only the columns we need
-cell.move.data <- select(cells,
+cell.movement.data <- select(cells,
         clone,
         replicate,
         displacement, 
         track.length, 
         instantaneous.velocity
 )
-#check that we have
-names(cell.move.data)
 
-#get a simple summaru, using summary and also glimpse
-summary(cell.move.data)
-glimpse(cell.move.data)
+# #check that we have
+# names(cell.movement.data)
+# 
+# #get a simple summary, using summary and also glimpse
+# summary(cell.movement.data)
+# glimpse(cell.movement.data)
 
-#lets save our data
-save.image("BIO00066I-workshop3-cell-movement-metrics.Rda")
-
-#you can load this any time later with:
-load("BIO00066I-workshop3-cell-movement-metrics.Rda")
+# PLOTTING LIVECYTE DATA ----
 
 #instantaneous.velocity - geom_violin
-ggplot(cell.move.data,aes(x=clone,y=instantaneous.velocity,colour=clone))+
+ggplot(cell.movement.data,aes(x=clone,y=instantaneous.velocity,colour=clone))+
     geom_violin(alpha=0.5)+
     stat_compare_means()
 
 
-ggplot(cell.move.data,aes(x=clone,y=log10(instantaneous.velocity),colour=clone))+
+ggplot(cell.movement.data,aes(x=clone,y=log10(instantaneous.velocity),colour=clone))+
     geom_violin(alpha=0.5)+
     facet_wrap(~replicate)+
     stat_compare_means()
 
+# SUMMARY OF LIVECYTE DATA ----
+
+# make clone A and clone B data frames
+cloneA.data <- cell.movement.data |> filter(clone == "cloneA")
+cloneB.data <- cell.movement.data |> filter(clone == "cloneB")
+
+#get the names of the numeric columns
+numeric.columns <- cell.movement.data |> 
+  select(where(is.numeric)) |> 
+  names()
+
+#see what we have
+numeric.columns
+
+#create empty data frame
+clone.comparisons <- data.frame(
+  variable = character(),
+  cloneA.median = numeric(),
+  cloneB.median = numeric(),
+  median.ratio = numeric(),
+  p.value = numeric()
+)
+
+#loop through each numeric column
+for(column.name in numeric.columns) {
+  
+  #calculate median for clone A
+  cloneA.median <- median(cloneA.data[[column.name]], na.rm = TRUE)
+  
+  #calculate median for clone B  
+  cloneB.median <- median(cloneB.data[[column.name]], na.rm = TRUE)
+  
+  #calculate the median ratio (cloneA.median / cloneB.median)
+  ratio <- cloneA.median / cloneB.median
+  
+  #run wilcox test comparing the two clones for this variable
+  test.result <- wilcox.test(cells[[column.name]] ~ cells$clone)
+  
+  #extract the p-value
+  p.val <- test.result$p.value
+  
+  #add this row to our results table
+  new.row <- data.frame(
+    variable = column.name,
+    cloneA.median = signif(cloneA.median,2),
+    cloneB.median = signif(cloneB.median,2),
+    median.ratio = signif(ratio,2),
+    p.value = p.val
+  )
+  
+  #add the new.row to the clone.comparisons data frame
+  clone.comparisons <- rbind(clone.comparisons, new.row)
+}
+
+# PCA WITH LIVECYTE DATA ----
+
+# prepare data for PCA
+
+cell.data.for.pca <- cell.movement.data |>
+  drop_na() # remove rows with NA values
+
+# calculate PCA coordinates 
+pca.result <- cell.data.for.pca |>
+  select(-clone, -replicate) |>   # removes the group categories
+  prcomp()                        # performs the PCA
+
+# extract PCA scores and combine with clone and replicate info
+pca.scores <- as.data.frame(pca.result$x) |>
+  bind_cols(cell.data.for.pca |> select(clone, replicate))
+
+# downsample the PCA scores to 3000 cells per clone
+pca.scores.sample <- pca.scores |>
+  group_by(clone) |>
+  slice_sample(n = 300) |>
+  ungroup()
+
+# make the plot
+pca.plot <- ggplot(pca.scores.sample, 
+  aes(x = PC1, y = PC2, color = clone, fill = clone)) +
+  geom_point(alpha = 0.1, size = 4)+
+  stat_ellipse(geom = "polygon", alpha = 0.1, linewidth = 1.2) +
+  scale_color_manual(values = c("cloneA" = "red", "cloneB" = "blue"))+
+  facet_wrap(~replicate)+
+  theme_classic2()
+
+
+# view the plot
+pca.plot
+
+# LOAD MANUAL TRACKING DATA ----
+
 #load the manual tracking data
 track <-read_tsv(url("https://djeffares.github.io/BIO66I/data/A1-and-B2-tracking.data.2025-02-27.tsv"))
 
-#check it out
-glimpse(track)
-names(track)
-
-#Load from local file for rendering
-track <-read_tsv("data/A1-and-B2-tracking.data.2025-02-27.tsv")
-glimpse(track)
-names(track)
+# PLOTTING MANUAL TRACKING DATA ----
 
 #compare mean.speed between cell lines
 ggplot(track, aes(x=cell.line,y=mean.speed))+
@@ -91,6 +168,8 @@ ggplot(track, aes(x=cell.line,y=mean.speed))+
 
 #examine whether track.length and mean.speed are correlated
 cor.test(track$track.length,track$mean.speed,method="spearman")
+
+# CORRELATIONS WITHIN MANUAL TRACKING DATA ----
 
 #calculate all pairwise correlations
 track.correlations <- 
@@ -136,33 +215,138 @@ track.correlations.pivot |>
 
 #and voila! no more TID and LID columns
 
-#track.length without the filter
-no.filter.plot<- track |> 
-  ggplot(aes(x=cell.line, y = track.length))+
-  geom_violin()+
-  stat_compare_means()+
-  ggtitle("no filter")
-
-#track.length WITH the filter
-filter.plot<- track |> 
-  filter(track.present.at.start.or.end != TRUE) |> 
-  ggplot(aes(x=cell.line, y = track.length))+
-  geom_violin()+
-  stat_compare_means()+
-  ggtitle("with filter")
-
-#show plots side by side
-ggarrange(no.filter.plot,filter.plot)
+# prepare data for PCA
+track.data.for.pca <- track |>
+  #select the numeric columns
+  select(cell.line, track.duration, track.length, euclidean.distance, meandering.index, mean.speed) |>
+  # remove rows with NA values
+  drop_na()
 
 
-#filter the data
-track.correlations.pivot |>
-  filter(abs(corr.coeff) > 0.25) |>
-#now we put the plotting code here 
-  ggplot(aes(Variable1, Variable2)) +
-  geom_tile(aes(fill = corr.coeff)) +
-  geom_text(aes(label = round(corr.coeff, 1))) +
-  scale_fill_gradient(low = "white", high = "red")+
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+# calculate PCA coordinates
+pca.result.track <- track.data.for.pca |>
+  select(-cell.line) |>  # remove the group categories
+  prcomp()               # performs the PCA
 
-track.correlations <-read_tsv(url("https://djeffares.github.io/BIO66I/data/track.correlations.tsv"))
+# extract PCA scores and combine with clone and replicate info
+pca.scores.track <- as.data.frame(pca.result.track$x) |>
+  bind_cols(track.data.for.pca |> select(cell.line))
+
+# make the plot
+pca.plot.track <- ggplot(pca.scores.track, 
+  aes(x = PC1, y = PC2, color = cell.line, fill = cell.line)) +
+  geom_point(size = 4)+
+  stat_ellipse(geom = "polygon", alpha = 0.1, linewidth = 1.2) +
+  theme_classic2()
+
+# view and then save the plot
+pca.plot.track
+ggsave("BIO00066I-workshop3-track-pca-plot.png", width = 6, height = 4)
+
+# multi part livecyte data plot
+# plot 1: displacement
+displacement.plot <- cells |> 
+  ggplot(aes(x=clone,y=log10(displacement)))+
+  geom_violin(alpha=0.5)+
+  stat_compare_means()
+
+# plot 2: track.length
+track.length.plot <- cells |> 
+  ggplot(aes(x=clone,y=log10(track.length)))+
+  geom_violin(alpha=0.5)+
+  stat_compare_means()
+
+# plot 3: width
+width.plot <- cells |> 
+  ggplot(aes(x=clone,y=log10(width)))+
+  geom_violin(alpha=0.5)+
+  stat_compare_means()
+
+# plot 4: sphericity
+sphericity.plot <- cells |> 
+  ggplot(aes(x=clone,y=log10(sphericity)))+
+  geom_violin(alpha=0.5)+
+  stat_compare_means()
+
+# arrange the plots into a 2x2 grid
+combined.livecyte.plot <- ggarrange(
+  displacement.plot, 
+  track.length.plot, 
+  width.plot, 
+  sphericity.plot, 
+  ncol=2, nrow=2,
+  labels = c("A", "B", "C", "D"))
+
+# save the combined plot
+ggsave("BIO00066I-workshop3-combined-livecyte-plot.png", 
+       combined.livecyte.plot, width = 8, height = 6)
+
+
+# # Read the automated Livecyte data
+# cells <-read_tsv(url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-02-22.tsv"),
+#                  col_types = cols(
+#                    clone = col_factor(),
+#                    replicate = col_factor(),
+#                    tracking.id=col_factor(),
+#                    lineage.id=col_factor()
+#                  )
+# )
+# 
+# # prepare data for PCA with both cell shape and movement data
+# cells.for.pca.alldata <- cells |>
+#   #select the numeric columns, including the cell shape data and also the cell movement data
+#   select(clone, replicate,
+#       # shape data
+#       volume, mean.thickness, radius, area, sphericity, length, width, orientation, dry.mass,
+#       # movement data
+#       length.to.width, displacement, track.length, instantaneous.velocity) |>
+#   # remove rows with NA values
+#   drop_na()
+# 
+# 
+# #run PCA
+# pca.result <- cells.for.pca.alldata  |>
+#   select(-clone, -replicate) |>  # remove the group categories
+#   prcomp()                        # performs the PCA
+# 
+# # extract PCA scores and combine with clone and replicate info
+# pca.scores <- as.data.frame(pca.result$x) |>
+#   bind_cols(cells.for.pca.alldata |> select(clone, replicate))
+# 
+# # down sample the PCA scores to 3000 cells per clone
+# pca.scores.sample <- pca.scores |>
+#   group_by(clone) |>
+#   slice_sample(n = 3000) |>
+#   ungroup()
+# 
+# # create PCA1, PC2 plot
+# pca.plot <- ggplot(pca.scores.sample,
+#   aes(x = PC1, y = PC2, color = clone, fill = clone)) +
+#   geom_point(alpha = 0.5, size = 2)+
+#   stat_ellipse(geom = "polygon", alpha = 0.05, linewidth = 1.2)+
+#   theme_classic2()
+# 
+# # view and save the plot
+# pca.plot
+# ggsave("BIO00066I-workshop3-pca-alldata-plot.png", width = 6, height = 4)
+
+# # make a scree plot from pca.result
+# screeplot(pca.result.track, type = "lines")
+# 
+# # Calculate manually from standard deviations
+# variance <- pca.result.track$sdev^2
+# percent.variance <- variance / sum(variance) * 100
+# 
+# # Or create a nice data frame
+# variance.explained <- data.frame(
+#   PC = paste0("PC", 1:length(percent.variance)),
+#   Variance = variance,
+#   Percent = percent.variance,
+#   Cumulative = cumsum(percent.variance)
+# )
+# 
+# # Visualize with a scree plot
+# barplot(percent.variance,
+#         names.arg = paste0("PC", 1:length(percent.variance)),
+#         xlab = "Principal Component",
+#         ylab = "% Variance Explained")

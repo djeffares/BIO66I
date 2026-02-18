@@ -208,7 +208,6 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#consolodation-exercises" id="toc-consolodation-exercises" class="nav-link" data-scroll-target="#consolodation-exercises"><span class="header-section-number">6.1</span> Consolodation exercises</a></li>
   <li><a href="#planning-for-your-report" id="toc-planning-for-your-report" class="nav-link" data-scroll-target="#planning-for-your-report"><span class="header-section-number">6.2</span> Planning for your report</a></li>
-  <li><a href="#in-case-install.packages-fails" id="toc-in-case-install.packages-fails" class="nav-link" data-scroll-target="#in-case-install.packages-fails"><span class="header-section-number">6.3</span> In case install.packages fails</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -1201,13 +1200,6 @@ Download Code
 <p>The details are described <a href="https://docs.google.com/document/d/1Qo2PCfF2Wi1hQKDV_rTaL3ssJotNFhVTAJqZI5DD_CQ/edit?usp=sharing">in this document</a>.</p>
 <p>The aim of all this is to make the code and the data analysis clear and readable for someone else.</p>
 <p>So spending just <strong>10 minutes</strong> tidying your code now will make your future life easier. For example, look at your variable names, and make them clearer.</p>
-</section>
-<section id="in-case-install.packages-fails" class="level2" data-number="6.3">
-<h2 data-number="6.3" class="anchored" data-anchor-id="in-case-install.packages-fails"><span class="header-section-number">6.3</span> In case install.packages fails</h2>
-<p>If <code>install.packages("corrr")</code> fails, you can obtain the <code>track.correlations</code> data frame like this:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>track.correlations <span class="ot">&lt;-</span><span class="fu">read_tsv</span>(<span class="fu">url</span>(<span class="st">"https://djeffares.github.io/BIO66I/data/track.correlations.tsv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
 
 
 </section>
