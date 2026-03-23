@@ -6,23 +6,25 @@ library(readxl)
 library(ggpubr)
 library(gganimate)
 
-ap<-read_excel("raw-data/example_alkaline_phosphatase_activity_assay_DNA_Lab.xlsx", sheet=1, skip=3)
+# read the standard curve data
+# skipping the first three lines, and specifying the first sheet
+pnp.calibration <- read_excel("raw-data/BIO00066I-pNP-example-data-2025-26.xlsx", sheet=1, skip=3)
 
 #check what we have
-view(ap)
+view(pnp.calibration)
 
-ap.pivot <- 
-  ap |> 
+pnp.calibration.pivot <- 
+  pnp.calibration |> 
   select(-mean.abs, -standard.deviation) |>
-  pivot_longer(-pNP.conc, names_to = "rep", values_to = "absorb")
-view(ap.pivot)
+  pivot_longer(-pNP.conc, names_to = "rep", values_to = "absorbance")
+view(pnp.calibration.pivot)
 
-ap.pivot <- relocate(ap.pivot, absorb)
+pnp.calibration.pivot <- relocate(pnp.calibration.pivot, absorbance)
 
 
-#plot, saving thr plot in an object called 'pNP.plot'
-pNP.plot <- ap.pivot |>
-  ggplot(aes(x=absorb, y=pNP.conc))+
+#plot, saving the plot in an object called 'pNP.plot'
+pNP.plot <- pnp.calibration.pivot |>
+  ggplot(aes(x=absorbance, y=pNP.conc))+
   geom_point()+
   geom_smooth(method="lm")
 
@@ -30,63 +32,64 @@ pNP.plot <- ap.pivot |>
 pNP.plot
 
 
-#save as a pdf
-ggsave("pNP.plot.pdf",pNP.plot,width=7,height=7) 
-
-#save as a jpeg, with a better name
-#easier to find in your files
+#save as a jpeg
 #has a 'date stamp' (2025-03-21) in the name
-ggsave("BIO66I-2025-03-21-pNP.plot.jpeg",pNP.plot,width=7,height=7)
+ggsave("BIO66I-pNP-standard-curve.jpeg",pNP.plot,width=7,height=7)
 
 
-linear_model <- lm(pNP.conc ~ absorb , data = ap.pivot)
+# make a linear model so we can predict pNP concentration from absorbanceance values
+linear_model <- lm(pNP.conc ~ absorbance , data = pnp.calibration.pivot)
 
-mock<-read_excel("raw-data/example_alkaline_phosphatase_activity_assay_DNA_Lab.xlsx", sheet=2, skip=1)
+
+# read in experimental pNP data for unknown samples, skipping the first line
+pnp.experimental <- read_excel("raw-data/BIO00066I-pNP-example-data-2025-26.xlsx", sheet=2, skip=1)
 
 #check what we have
-view(mock)
+glimpse(pnp.experimental)
 
-mock <- mock |> 
+pnp.experimental <- pnp.experimental |> 
   rowwise() |> 
-  mutate(absorb=mean(c(absorb.rep1,absorb.rep2,absorb.rep3),na.rm=T)) 
+  mutate(absorbance=mean(c(absorb.rep1,absorb.rep2,absorb.rep3),na.rm=T)) 
 
 
 #calculate predicted pNP concentration using the linear model
-predictions.from.lm <- predict(linear_model,mock)
+predictions.from.lm <- predict(linear_model,pnp.experimental)
 
 #Add these predictions from the linear model (predictions.from.lm)
 #As a new column
-mock$predicted.pNP.concs = predictions.from.lm
+pnp.experimental$predicted.pNP.concs = predictions.from.lm
 
 #check what we have
-view(mock)
+glimpse(pnp.experimental)
 
-#And save all our data
-save.image("BIO00066I-workshop4-2025-03-21.Rda")
 
 ##divide the predicted.pNP.concs column by the DNA_ug_per_ml column
-mock <- mock |> 
+pnp.experimental <- pnp.experimental |> 
   mutate(normalised.pNP.concs = predicted.pNP.concs / DNA_ug_per_ml)
 
-mock$day <-as.factor(mock$day)
-mock$clone <-as.factor(mock$clone)
-mock$differentiated <-as.factor(mock$differentiated)
+# check what we have now
+names(pnp.experimental)
+
+
+pnp.experimental$day <-as.factor(pnp.experimental$day)
+pnp.experimental$clone <-as.factor(pnp.experimental$clone)
+pnp.experimental$differentiated <-as.factor(pnp.experimental$differentiated)
 
 #make the plot
-ggplot(data=mock, aes(x=day, y=predicted.pNP.concs,fill=clone:differentiated)) +
+ggplot(data=pnp.experimental, aes(x=day, y=predicted.pNP.concs,fill=clone:differentiated)) +
   geom_bar(stat="identity", position=position_dodge())
 
 
 # first check that data columns we have 
-names(mock)
+names(pnp.experimental)
 
-#make the plot using the normalised.pNP.concs as a y values
-ggplot(data=mock, aes(x=day, y=normalised.pNP.concs,fill=clone:differentiated)) +
+#make the plot using the normalised.pNP.concs as y values
+ggplot(data=pnp.experimental, aes(x=day, y=normalised.pNP.concs,fill=clone:differentiated)) +
   geom_bar(stat="identity", position=position_dodge())
 
 
 # #load data from a URL
-# points<-read_csv(url("https://djeffares.github.io/BIO66I/points.data.2024-03-16.csv"),
+# points<-read_csv(url("https://djeffares.github.io/BIO66I/data/points.data.2024-03-16.csv"),
 #                  col_types = cols(LID = col_factor(),TID = col_factor(),pid = col_factor())
 # )
 # 
@@ -153,47 +156,47 @@ ggplot(data=mock, aes(x=day, y=normalised.pNP.concs,fill=clone:differentiated)) 
 
 # #save the animation as a gif
 # #make sure you use a sensible file name
-# anim_save("cloneB.ineage2gif", animated.plot)
+# anim_save("cloneB.lineage2.gif", animated.plot)
 
 # ?glimpse
 
 # #load the data
-# ap<-read_excel("raw-data/alkaline-phosphatase-activity-assay-real-data.xlsx",sheet=2)
+# pnp.calibration<-read_excel("raw-data/alkaline-phosphatase-activity-assay-real-data.xlsx",sheet=2)
 # 
 # #rename the 'differentiated' column 'induced', which describes it better
-# names(ap)[3]<-'induced'
+# names(pnp.calibration)[3]<-'induced'
 
 # #set day, clone and induced columns to be factors
-# ap$day <-as.factor(ap$day)
-# ap$clone <-as.factor(ap$clone)
-# ap$induced <-as.factor(ap$induced)
+# pnp.calibration$day <-as.factor(pnp.calibration$day)
+# pnp.calibration$clone <-as.factor(pnp.calibration$clone)
+# pnp.calibration$induced <-as.factor(pnp.calibration$induced)
 # 
 # #this is what we have:
-# head(ap)
+# head(pnp.calibration)
 
-# ap.pivot<-ap |>
-#   pivot_longer(cols=!c(day,clone,induced), names_to = "rep", values_to = "absorb")
+# pnp.calibration.pivot<-pnp.calibration |>
+#   pivot_longer(cols=!c(day,clone,induced), names_to = "rep", values_to = "absorbance")
 # 
 # #this is what we have now
-# head(ap.pivot)
+# head(pnp.calibration.pivot)
 
-# ggplot(ap.pivot, aes(x = clone, y = absorb, color = day))+
+# ggplot(pnp.calibration.pivot, aes(x = clone, y = absorbance, colour = day))+
 #   geom_boxplot()+
 #   theme_classic()
 
-# ggplot(ap.pivot, aes(x = clone, y = absorb, color = day))+
+# ggplot(pnp.calibration.pivot, aes(x = clone, y = absorbance, colour = day))+
 #   geom_boxplot()+
 #   theme_classic()+
 #   facet_wrap(~induced)
 
 # #we save the result in an object called aov.result.additive
-# aov.result.add <- aov(absorb ~ day + clone + induced, data = ap.pivot)
+# aov.result.add <- aov(absorbance ~ day + clone + induced, data = pnp.calibration.pivot)
 
 # summary(aov.result.add)
 
 # 
 # #run the ANOVA
-# aov.result.mult  <- aov(absorb ~ day * clone * induced, data = ap.pivot)
+# aov.result.mult  <- aov(absorbance ~ day * clone * induced, data = pnp.calibration.pivot)
 # 
 # #to view the results
 # summary(aov.result.mult)

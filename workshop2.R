@@ -66,6 +66,12 @@ load("BIO00066I-workshop2.Rda")
 ggplot(cells,aes(x=clone,y=width,fill=replicate))+
     geom_boxplot()
 
+ggplot(cells,aes(x=clone,y=sphericity,fill=replicate))+
+  geom_violin()
+
+
+names(cells)
+
 # make a density plot of the width data
 # using colour = replicate makes separate lines for each replicate
 
@@ -136,6 +142,7 @@ for(column.name in numeric.columns) {
   #add the new.row to the clone.comparisons data frame
   clone.comparisons <- rbind(clone.comparisons, new.row)
 }
+
 
 # prepare data for PCA
 

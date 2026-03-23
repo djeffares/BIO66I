@@ -30,63 +30,66 @@ editor: source
 Today, we will learn how to:
 
 -   Use a linear model to predict some ***y*** values, given some ***x*** values
--   In our case we use absorbance (***x*** **values**) to predict alkaline phosphatase activity (***y*** **values**)
+-   In our case we use absorbanceance (***x*** **values**) to predict alkaline phosphatase activity (***y*** **values**)
 -   Make **animated plots** with `gganimate`
 
 ## Thinking like a data scientist
 
 It might seem like a lot of trouble to use **R** to read in a small number of ***x*** and ***y*** values from an Excel sheet to a standard curve, and then estimate some new ***y*** values. We *could* probably do this in Excel.
 
-But what if we have 200 standard curves, and we want to automate the process? What if we have 50,000 ***x*** and ***y*** values and a non-linear model? For big data, **R (or some similar software) is the only sensible way**. NB: There are [similar software for statistical analysis](https://www.inwt-statistics.com/blog/comparison-of-r-python-sas-spss-and-stata), but we don't teach them here. R is currently the state of the art for analysis of biological data. And it's *free*.
+But what if we have 200 standard curves, and we want to automate the process? What if we have 50,000 ***x*** and ***y*** values and a non-linear model? For big data, **R (or some similar software) is the only sensible way**. 
 
 # Introduction
 
 ## The biology
 
+### Cell movement
+
 We saw in workshop 3 that clone A moves faster than clone B. This time we will use R to explore MCS cell movement in more depth. Use ***x*** and ***y*** coordinates from *manually* tracked cells. We have 10 manually tracked cell lineages of clone A and 9 manually tracked cell lineages of clone B. Today, we will explore the ways these lineages move.
 
-![**Figure 1.** The **tracking ID (TID)** is a unique ID that the microscope assigned to each object (cell), as it tracks it through time. The **lineage ID (LID)** is a number assigned to the ‘family’ of cells that derived by cell division during the the experiment. When a cell divides, each daughter cell is given a new tracking ID, but they keep their lineage ID, because they are still part of the same family.](docs/figure1.jpg)
+![**Figure 1.** The **tracking ID (TID)** is a unique ID that the microscope assigned to each object (cell), as it tracks it through time. The **lineage ID (LID)** is a number assigned to the ‘family’ of cells that were derived by cell division during the experiment. When a cell divides, each daughter cell is given a new tracking ID, but they keep their lineage ID, because they are still part of the same family.](data/figure1.jpg)
 
-To help address our research question of whether morphology and migration can be used to predict MSC phenotype, we also need to investigate the phenotype (ability to differentiate) of the two clonal lines. In practical 4 we'll explore the potency of the two clonal lines by looking at their capacity to undergo *osteogenesis* (differentiate into osteoblasts - bone cells) when they are given an inductive media.
 
-We can use an enzyme called *alkaline phosphatase* as a biomarker to quantify osteogenesis in the cells, as the activity of the enzyme increases in cells undergoing osteogenesis as osteoblasts use the enzyme when producing bone extracellular matrix. To measure the activity of the enzyme we mix the lysate (cellular contents) of the cells with the substrate for the enzyme, para-nitrophenyl phosphate (pNPP) and measure the rate of product formation over time. The product of the reaction is para-nitro phenol (pNP) and we can measure it *colorimetrically* as it absorbs light at a known wavelength.
+### Osteogenesis and alkaline phosphatase assays
 
-Creating a standard curve and estimating values from this curve is *Part 1* of our analysis today. *Part 2* is looking at cell movement data.
+To help address our research question of whether morphology and migration can be used to predict MSC phenotype, we also need to investigate the ability of the two clonal lines to differentiate. 
 
-::: callout-note
-## Same coding methods, different data
+In practical 4 you have examined their capacity to undergo *osteogenesis* (differentiate into osteoblasts - bone cells) when they are given an inductive medium. To recap:
 
-The methods we use to examine cells moving on *x* and *x* coordinates would be used any location data that tracks objects objects in a two-dimensional plane over time; traffic, birds, slugs, people*.* with consent
-:::
+- Cells that are undergoing osteogenesis will produce bone extracellular matrix, which contains a lot of the **alkaline phosphatase** enzyme
+- Alkaline phosphatase catalyses the reaction of substrate **para-nitrophenyl phosphate (pNPP)** to  **para-nitro phenol (pNP)**
+- **ie: pNPP -[alkaline phosphatase]-> pNP**
+
+**So the amount of pNP produced is a proxy for the activity of alkaline phosphatase, and therefore the extent of osteogenesis in the cells.**
+
+
 
 ## Research questions
 
--   What is the osteogenic potential of clonal lines A and B (Part 1)
 -   Can we see differences in how clonal lines A and B move?
 -   How can we display this data visually?
--   Do cells 'follow' each other in the petri dish?
+-   What is the osteogenic potential of clonal lines A and B (Part 1)
 
 ## The data
 
-### Part 1: pNP absorbance values
+### Part 1: pNP absorbanceance values
 
-Once you've completed Practical 4 you'll have your own data to use to make the standard curve of pNP and absorbance values for each of the clonal line time points. You should use your own standard curve data from the practical as well as your unknown values as the readings for absorbance will vary based on the plate the samples are in and the plate reader used.
+In this section, we show how to use a linear model to predict pNP concentration from absorbanceance values using some **example data**. In your report, use **your own data** from practical 4.
 
-To create the standard curve you have the absorbance readings for 8 concentrations of pNP in triplicate. To measure osteogenesis in the two clonal lines, samples of the cells were grown in an inductive media for 8 days. The cells were then lysed at different time points to measure the activity of alkaline phosphatase and explore how it varies over time and between the two clonal lines. The clonal lines were analysed at Day 0, Day 4 and Day 8. At each time point you have data for both induced cells and non-induced cells (negative control), with the exception of Day 0 as the differentiation was induced at Day 1. There are three repeated measures for the data at each time point.
 
 ### Part 2: manually-tracked cell movement 'point' data
 
-The Livecyte data that tracked cells automatically was unreliable. In [workshop 3](https://djeffares.github.io/BIO66I/workshop3.html#manual-tracking-data) we looked at some manual tracking data. This contained information like `track.length`, the `meandering.index`, `euclidean.distance` and so on. This time we look at manual data in it's raw form: ***x*** and ***y*** coordinates of the cells, tracked over time.
+The Livecyte data that tracked cells automatically was unreliable. In [workshop 3](https://djeffares.github.io/BIO66I/workshop3.html#manual-tracking-data) we looked at some manual tracking data. 
 
-We can of course extract information from this about how far the cells travel, and how fast they travel (because we have distance and time measurements). But, we can do much more. This time we will be able to visualise the paths they take in culture dish. We may observe interesting patterns by studying this data.
+This contained information like `track.length`, the `meandering.index`, `euclidean.distance` and so on. This time we look at manual data in its raw form: ***x*** and ***y*** coordinates of the cells, tracked over time. We will visualise the paths they take in the culture dish using animated plots. We may observe interesting patterns by studying this data.
 
-# Exercises (Part 1): Standard curve
+# Exercises
 
 To quantify the concentration of pNP and therefore the activity of the enzyme in unknown samples we'll create a standard curve of known values of pNP and then interpolate the unknown pNP values in our sample from this.
 
-## Load libraries (install packages)
+## Setting up: installing packages and loading libraries
 
-First, install the `gganimate` package. We will use this to creating moving plots later. You only need to do this once.
+First, install the `gganimate` package. We will use this to create moving plots later.
 
 ```{r}
 #| echo: true
@@ -112,11 +115,20 @@ library(ggpubr)
 library(gganimate)
 ```
 
-## Load data
+## Part 1: pNP absorbanceance values
 
-First, read in some ata from an Excel file. You can obtain [an example file from here](https://docs.google.com/spreadsheets/d/1xcRoGBI8CoAu343Et2aiVSfoZ7FGBtBy/edit?usp=sharing&ouid=113672614936656202737&rtpof=true&sd=true). Click to download, and then save the file in your **raw-data** directory. If you don't have a **raw-data** directory, make one!
+First, we read in some data from an Excel file of some asmaple data. 
 
-Then read in the Excel file. Two important things to note about reading Excel files:
+You can obtain the example file **BIO00066I-pNP-example-data-2025-26.xlsx** [from here](https://docs.google.com/spreadsheets/d/1OceoSxnQ53MV_TTp8Vhyyc1WV-o8E9hp/edit?usp=sharing&ouid=113672614936656202737&rtpof=true&sd=true). 
+
+Download this file and save it in your **raw-data** directory. If you don't have a **raw-data** directory, make one.
+
+
+### The pNP standard curve
+
+We'll read in the standard curve data from the file BIO00066I-pNP-example-data-2025-26.xlsx.
+
+Note that:
 
 - we use `sheet=1` to specify that we want the first sheet (or tab)
 - we use `skip=3` to specify that we want to skip the first three lines (because they are comments, not data)
@@ -127,10 +139,13 @@ Then read in the Excel file. Two important things to note about reading Excel fi
 #| warning: false
 #| eval: true
 #| purl: true
-ap<-read_excel("raw-data/example_alkaline_phosphatase_activity_assay_DNA_Lab.xlsx", sheet=1, skip=3)
+
+# read the standard curve data
+# skipping the first three lines, and specifying the first sheet
+pnp.calibration <- read_excel("raw-data/BIO00066I-pNP-example-data-2025-26.xlsx", sheet=1, skip=3)
 
 #check what we have
-view(ap)
+view(pnp.calibration)
 ```
 
 Then simplify the data with `pivot_longer`:
@@ -140,11 +155,11 @@ Then simplify the data with `pivot_longer`:
 #| warning: false
 #| eval: true
 #| purl: true
-ap.pivot <- 
-  ap |> 
+pnp.calibration.pivot <- 
+  pnp.calibration |> 
   select(-mean.abs, -standard.deviation) |>
-  pivot_longer(-pNP.conc, names_to = "rep", values_to = "absorb")
-view(ap.pivot)
+  pivot_longer(-pNP.conc, names_to = "rep", values_to = "absorbance")
+view(pnp.calibration.pivot)
 ```
 
 Reorder the columns, so it is more intuitive for us using `relocate`:
@@ -155,13 +170,13 @@ Reorder the columns, so it is more intuitive for us using `relocate`:
 #| eval: true
 #| purl: true
  
-ap.pivot <- relocate(ap.pivot, absorb)
+pnp.calibration.pivot <- relocate(pnp.calibration.pivot, absorbance)
 
 ```
 
 ## Plot enzyme data
 
-Let's make a simple plot, adding a line that shows the linear model with the line `geom_smooth(method="lm")`. The `method="lm` means plotting a linear model.
+Let's make a simple plot, adding a line that shows the linear model with the line `geom_smooth(method="lm")`. The `method="lm"` means plotting a linear model.
 
 ```{r}
 #| echo: true
@@ -169,9 +184,9 @@ Let's make a simple plot, adding a line that shows the linear model with the lin
 #| eval: true
 #| purl: true
 
-#plot, saving thr plot in an object called 'pNP.plot'
-pNP.plot <- ap.pivot |>
-  ggplot(aes(x=absorb, y=pNP.conc))+
+#plot, saving the plot in an object called 'pNP.plot'
+pNP.plot <- pnp.calibration.pivot |>
+  ggplot(aes(x=absorbance, y=pNP.conc))+
   geom_point()+
   geom_smooth(method="lm")
 
@@ -188,25 +203,16 @@ Now save the plot:
 #| purl: true
 
 
-#save as a pdf
-ggsave("pNP.plot.pdf",pNP.plot,width=7,height=7) 
-
-#save as a jpeg, with a better name
-#easier to find in your files
+#save as a jpeg
 #has a 'date stamp' (2025-03-21) in the name
-ggsave("BIO66I-2025-03-21-pNP.plot.jpeg",pNP.plot,width=7,height=7)
+ggsave("BIO66I-pNP-standard-curve.jpeg",pNP.plot,width=7,height=7)
 
 ```
 
-::: callout-note
-# Optional: How close are the replicates?
-
-How similar to the linear models look if you use: `ggplot(aes(x=absorb, y=pNP.conc,colour = rep))`
-:::
 
 ## Make a linear model
 
-We can use the `lm` function to make a linear model. This is a simple model that assumes that the absorbance is linearly related to the pNP concentration. We can use this model to predict the pNP concentration of unknown samples.
+We can use the `lm` function to make a linear model. This is a simple model that assumes that the absorbanceance is linearly related to the pNP concentration. We can use this model to predict the pNP concentration of unknown samples.
 
 
 ```{r}
@@ -215,37 +221,44 @@ We can use the `lm` function to make a linear model. This is a simple model that
 #| eval: true
 #| purl: true
 
-linear_model <- lm(pNP.conc ~ absorb , data = ap.pivot)
+# make a linear model so we can predict pNP concentration from absorbanceance values
+linear_model <- lm(pNP.conc ~ absorbance , data = pnp.calibration.pivot)
+
 ```
 
-Now we have the linear model, if we have some some pNP absorbance values, we can determine of the pNP product concentrations. We have put some mock pNP values in the excel file `example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx`, in sheet two.
+Now we have the linear model, if we have some pNP absorbanceance values, we can determine the pNP product concentrations. 
+
+We have put some mock pNP values in the excel file `BIO00066I-pNP-example-data-2025-26.xlsx`, in sheet two. Read in sheet two of the file, skipping the first line (because it is a comment, not data). This sheet contains some mock data for the unknown samples. We will use the linear model to predict the pNP concentrations of these unknown samples.
+
 
 ```{r}
 #| echo: true
 #| warning: false
 #| eval: true
 #| purl: true
-mock<-read_excel("raw-data/example_alkaline_phosphatase_activity_assay_DNA_Lab.xlsx", sheet=2, skip=1)
+
+# read in experimental pNP data for unknown samples, skipping the first line
+pnp.experimental <- read_excel("raw-data/BIO00066I-pNP-example-data-2025-26.xlsx", sheet=2, skip=1)
 
 #check what we have
-view(mock)
+glimpse(pnp.experimental)
 ```
 
 
-Now we calculate the average for each of the three explicates using `mutate`. Note that `mutate` is a very useful function for creating new columns using existing ones. It can also join text columns. We can also use `select` *after* the mutation to remove the replicate columns.
+Now we calculate the average for each of the three replicates using `mutate`. Note that `mutate` is a very useful function for creating new columns using existing ones. It can also join text columns. We can also use `select` *after* the mutation to remove the replicate columns.
 
 ```{r}
 #| echo: true
 #| warning: false
 #| eval: true
 #| purl: true
-mock <- mock |> 
+pnp.experimental <- pnp.experimental |> 
   rowwise() |> 
-  mutate(absorb=mean(c(absorb.rep1,absorb.rep2,absorb.rep3),na.rm=T)) 
+  mutate(absorbance=mean(c(absorb.rep1,absorb.rep2,absorb.rep3),na.rm=T)) 
 
 ```
 
-We named our mean absorbance `absorb`  because we specified the `absorb` variable in the code `linear_model <- lm(pNP.conc ~ absorb , data = ap.pivot)` above. So our linear model is 'looking for' an absorb variable to use.
+We named our mean absorbanceance `absorbance` because we specified the `absorbance` variable in the code `linear_model <- lm(pNP.conc ~ absorbance , data = pnp.calibration.pivot)` above. So our linear model is 'looking for' an absorbance variable to use.
 
 
 # Predict values based on a linear model
@@ -254,7 +267,7 @@ We named our mean absorbance `absorb`  because we specified the `absorb` variabl
 
 In your project work, you will use the real data collected. But for now, we will use some mock data. We will use the linear model we created to predict the pNP concentration of the mock data.
 
-Here is how do it, using the `predict` function:
+Here is how to do it, using the `predict` function:
 
 ```{r}
 #| echo: true
@@ -263,17 +276,15 @@ Here is how do it, using the `predict` function:
 #| purl: true
 
 #calculate predicted pNP concentration using the linear model
-predictions.from.lm <- predict(linear_model,mock)
+predictions.from.lm <- predict(linear_model,pnp.experimental)
 
 #Add these predictions from the linear model (predictions.from.lm)
 #As a new column
-mock$predicted.pNP.concs = predictions.from.lm
+pnp.experimental$predicted.pNP.concs = predictions.from.lm
 
 #check what we have
-view(mock)
+glimpse(pnp.experimental)
 
-#And save all our data
-save.image("BIO00066I-workshop4-2025-03-21.Rda")
 ```
 
 ## Normalise pNP concentrations
@@ -282,12 +293,12 @@ Each experiment will have a slightly different number of cells, and this will af
 
 :::callout-note
 # Why normalise?
-During the osteogenic differentiation of the clonal lines, the cells will proliferate at different rates. In basal conditions clone A normally grows slightly slower than clone B, and hMSCs also grow quicker in osteoinductive media, therefore we need to normalise the results of the experiment relative to cell number. Without normalisation, if we observe an increase in pNP concentration (and therefore ALP activity) in some of the conditions we cannot infer this is because the enzyme is more highly expressed. It could simply be due to the presence of a greater number of cells that are expressing the same amount of ALP as another condition, but there are just more cells present. 
+Cells grow at different rates during osteogenic differentiation. For example, clone A usually grows slightly more slowly than clone B, and hMSCs grow faster in osteoinductive medium. So we need to normalise the results to cell number. Otherwise, a higher pNP concentration may simply mean there were more cells, not that each cell had higher alkaline phosphatase activity.
 :::
 
-So we need to normalise these differences in growth rate. We can do this by dividing the predicted pNP concentration by the DNA concentration, because we know that cells **don't** gain or lose large amounts of DNA very often!
+So we need to normalise these differences in growth rate. We can do this by dividing the predicted pNP concentration by the DNA concentration, because we know that cells **do not** gain or lose large amounts of DNA very often.
 
-To achieve this, we can use the `mutate` function to create a new column in the data frame, `mock`. We will call this new column `normalised.pNP.concs`. We will divide the `predicted.pNP.concs` column by the `DNA.conc` column.
+To achieve this, we can use the `mutate` function to create a new column in the data frame, `pnp.experimental`. We will call this new column `normalised.pNP.concs`. We will divide the `predicted.pNP.concs` column by the `DNA.conc` column.
 
 ```{r}
 #| echo: true
@@ -296,15 +307,18 @@ To achieve this, we can use the `mutate` function to create a new column in the 
 #| purl: true
 
 ##divide the predicted.pNP.concs column by the DNA_ug_per_ml column
-mock <- mock |> 
+pnp.experimental <- pnp.experimental |> 
   mutate(normalised.pNP.concs = predicted.pNP.concs / DNA_ug_per_ml)
+
+# check what we have now
+names(pnp.experimental)
+
 ```
 
-names(mock)
 
-## Making a bar plot of predicted pNP concetrations
+## Making a bar plot of predicted pNP concentrations
 
-First, we need to ensure that the `day`, `clone` and `differentiated` columns are set as **factors*. This is important because we want to treat these columns as **categories**, not **numeric values**:
+First, we need to ensure that the `day`, `clone` and `differentiated` columns are set as **factors**. This is important because we want to treat these columns as **categories**, not **numeric values**:
 
 
 ```{R}
@@ -313,9 +327,9 @@ First, we need to ensure that the `day`, `clone` and `differentiated` columns ar
 #| eval: true
 #| purl: true
 
-mock$day <-as.factor(mock$day)
-mock$clone <-as.factor(mock$clone)
-mock$differentiated <-as.factor(mock$differentiated)
+pnp.experimental$day <-as.factor(pnp.experimental$day)
+pnp.experimental$clone <-as.factor(pnp.experimental$clone)
+pnp.experimental$differentiated <-as.factor(pnp.experimental$differentiated)
 ```
 
 Then we can make a plot (with the **un-normalised** data).
@@ -327,14 +341,14 @@ Then we can make a plot (with the **un-normalised** data).
 #| purl: true
 
 #make the plot
-ggplot(data=mock, aes(x=day, y=predicted.pNP.concs,fill=clone:differentiated)) +
+ggplot(data=pnp.experimental, aes(x=day, y=predicted.pNP.concs,fill=clone:differentiated)) +
   geom_bar(stat="identity", position=position_dodge())
 
 ```
 
 **Note** that this dummy data may look *very* different from your real data.
 
-Noe let's make a plot (with the **normalised** data). This will account for differential growth rates of the clones.
+Now let's make a plot (with the **normalised** data). This will account for differential growth rates of the clones.
 
 
 
@@ -345,10 +359,10 @@ Noe let's make a plot (with the **normalised** data). This will account for diff
 #| purl: true
 
 # first check that data columns we have 
-names(mock)
+names(pnp.experimental)
 
-#make the plot using the normalised.pNP.concs as a y values
-ggplot(data=mock, aes(x=day, y=normalised.pNP.concs,fill=clone:differentiated)) +
+#make the plot using the normalised.pNP.concs as y values
+ggplot(data=pnp.experimental, aes(x=day, y=normalised.pNP.concs,fill=clone:differentiated)) +
   geom_bar(stat="identity", position=position_dodge())
 
 ```
@@ -372,7 +386,7 @@ First, load the data from the website, and check what you have:
 #| purl: true
 
 #load data from a URL
-points<-read_csv(url("https://djeffares.github.io/BIO66I/points.data.2024-03-16.csv"),
+points<-read_csv(url("https://djeffares.github.io/BIO66I/data/points.data.2024-03-16.csv"),
                  col_types = cols(LID = col_factor(),TID = col_factor(),pid = col_factor())
 )
 
@@ -392,16 +406,16 @@ This data contains the positions of cells, tracked over time. Lineages are track
 -   the location of the cell in *x* and *y* coordinates (x.position, y.position)
 -   the time point (time)
 -   movement metrics (track.length, euclidean.distance, velocity)
--   a new movement metric: howfar the cell moved between this time ppint, and thr last one (jump.distance)
+-   a new movement metric: how far the cell moved between this time point, and the last one (jump.distance)
 -   clone (A/B)
 
-NB: **pid** describes what data point the row of data corresponds to for a cell with a specific LID and TID. For example, LID 1 TID 1 PID 1 would correspond to the first data point (it's x and Y coordinates etc) for a cell with TID 1 from lineage 1.
+NB: **pid** describes what data point the row of data corresponds to for a cell with a specific LID and TID. For example, LID 1 TID 1 PID 1 would correspond to the first data point (its x and Y coordinates etc) for a cell with TID 1 from lineage 1.
 
 ## Exploratory plots
 
 ### Recap: how fast do they move
 
-You'll notice that this file has velocity, just like the last file we used in workshop 3. For a simple 'sanity check', we will tests again that the clones differ.
+You'll notice that this file has velocity, just like the last file we used in workshop 3. For a simple 'sanity check', we will test again that the clones differ.
 
 ::: callout-caution
 **We know that clone A moves faster than clone B. So why do it again?**
@@ -437,7 +451,7 @@ To find out what any function does, type `?function` in the RStudio Console. For
 
 ### Plotting cell movement tracks
 
-Now, let's examine the directions do the cells move in. A simple way to do this is to plot the *x* and *y* coordinates. We will use `facet_wrap` to plot one boz for each lineage ID `LID`. Remember, a lineage ID contains information for each cell, and all its daughter cell and so on.
+Now, let's examine the directions the cells move in. A simple way to do this is to plot the *x* and *y* coordinates. We will use `facet_wrap` to plot one box for each lineage ID `LID`. Remember, a lineage ID contains information for each cell, and all its daughter cells and so on.
 
 To keep our image simple, we allow clone A and clone B to be on the same panels. But note that **clone A, lineage ID 1** has no relationship to **clone A, lineage ID 2** - they are merely the first lineage ID that Amanda tracked.
 
@@ -478,7 +492,7 @@ points |>
 
 ## Scatter plots to show cell movement range intuitively
 
-If we want to view how far many different cells have moved, we will need to adjust their point locations, so the **median** of their `x.position`s and `x.position`s are zero. Effectively setting all their start positions to x=0,y=0 on a grid.
+If we want to view how far many different cells have moved, we will need to adjust their point locations, so the **median** of their `x.position`s and `y.position`s are zero. Effectively setting all their start positions to x=0,y=0 on a grid.
 
 We can use some simple math and the `mutate` function to achieve this:
 
@@ -517,9 +531,9 @@ points2 |>
 
 ## Animate it!
 
-`ggplot2` can achieve *almost* any plot you can image (and probably some you cant imagine!). To create very visually appealing graphics can help enormously to explain complex data. Animated plots are much more intuitive for explaining data with a *time* element.
+`ggplot2` can achieve *almost* any plot you can imagine (and probably some you can't imagine!). Creating very visually appealing graphics can help enormously to explain complex data. Animated plots are much more intuitive for explaining data with a *time* element.
 
-Here is now to make an amimated plot with `gganimate`:
+Here is how to make an animated plot with `gganimate`:
 
 ### Animate: step 1.
 
@@ -578,7 +592,7 @@ Save the animation as a GIF:
 
 #save the animation as a gif
 #make sure you use a sensible file name
-anim_save("cloneB.ineage2gif", animated.plot)
+anim_save("cloneB.lineage2.gif", animated.plot)
 ```
 
 [See this website](https://gganimate.com/index.html) to learn more about `gganimate`.
@@ -630,7 +644,7 @@ In this workshop, we learned:
 -   Quality control
 
 ::: callout-important
-# It is the undertanding that matters
+# It is the understanding that matters
 
 Understanding takes time. Be sure you understand all these concepts well.
 :::
@@ -690,7 +704,7 @@ Ask yourself, and discuss with your classmates:
 -   What is the value of both laboratory work *and* data analysis?
 -   Would **you** prefer to do laboratory work, data analysis, or both?
 
-## Consolodation exercises
+## Consolidation exercises
 
 To consolidate, follow up on aspects of the previous workshops that you are unsure about. Try some different plots. Break the code, then try and fix it.
 
@@ -703,25 +717,25 @@ Create a logical folder structure for your analysis. The top folder should be na
 
 # Supplementary analysis: three-way ANOVA
 
-In practical 4, you collected absorbance readings for concentrations of pNP in triplicate, to provide an indication of the two clones to undergo osteogenesis. pNP concentrations were measured in day 0,4 and 8, and at each time point you have data for both induced cells and non-induced cells (negative control), with the exception of day 0 as the differentiation was induced at day 1.
+In practical 4, you collected absorbanceance readings for concentrations of pNP in triplicate, to provide an indication of the two clones to undergo osteogenesis. pNP concentrations were measured in day 0,4 and 8, and at each time point you have data for both induced cells and non-induced cells (negative control), with the exception of day 0 as the differentiation was induced at day 1.
 
-To find out which the conditions affect the pNP, we can carry out a three-way ANOVA is used to compare the effects of three **grouping variables** (day, clone and induction condition) on the one **response variable** (pNP concentration).
+To find out which conditions affect pNP, we can carry out a three-way ANOVA to compare the effects of three **grouping variables** (day, clone and induction condition) on one **response variable** (pNP concentration).
 
 The methods below show you how to do this. We first start by assuming that the grouping variables do not interact (ie: combinations of two factors don't cause different outcomes to each factor alone), in what is called an **additive model**. 
 
-But the three grouping variables may have interacting effects, and not be independent. So then we then examine a non-additive (or multiplicative) model. You'll see more clearly what this means as you do the analysis.
+But the three grouping variables may have interacting effects, and not be independent. So we then examine a non-additive (or multiplicative) model. You'll see more clearly what this means as you do the analysis.
 
 :::callout-note
 # An example of a multiplicative model
-Two people (A and B) walk back to their hotel, in a city they don't know well. Last time, when they both had their phones, it took 30 minutes. When person A lost their phone, so it took 35 minutes (ie: +5 minutes). When **both** A and B lost their phones, it took 60 minutes. This much longer we would expect the lost-phones problem was simply an **additive** effect of two phone being lost (30 + 5 + 5). The problems were multiplicative rather than merely additive.
+Two people (A and B) walk back to their hotel, in a city they don't know well. Last time, when they both had their phones, it took 30 minutes. When person A lost their phone, it took 35 minutes (ie: +5 minutes). When **both** A and B lost their phones, it took 60 minutes. This is much longer than we would expect if the lost-phones problem was simply an **additive** effect of two phones being lost (30 + 5 + 5). The problems were multiplicative rather than merely additive.
 :::
 
 
 ## Read data and reformat with `pivot_longer`
 
-We'll assume you have the  `tidyverse` and `readxl` libraries load already. If not load these now.
+We'll assume you have the `tidyverse` and `readxl` libraries loaded already. If not, load these now.
 
-First, we load the data. Your data file might have a different name. This code will work without adjustment of your file has the same rows and columns as [this example file ](https://djeffares.github.io/BIO66I/example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx). We'll also rename a column, so it's more intuitive.
+First, we load the data. Your data file might have a different name. This code will work without adjustment if your file has the same rows and columns as [this example file ](https://djeffares.github.io/BIO66I/example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx). We'll also rename a column, so it's more intuitive.
 
 
 ```{r}
@@ -731,10 +745,10 @@ First, we load the data. Your data file might have a different name. This code w
 #| purl: true
 
 #load the data
-ap<-read_excel("raw-data/alkaline-phosphatase-activity-assay-real-data.xlsx",sheet=2)
+pnp.calibration<-read_excel("raw-data/alkaline-phosphatase-activity-assay-real-data.xlsx",sheet=2)
 
 #rename the 'differentiated' column 'induced', which describes it better
-names(ap)[3]<-'induced'
+names(pnp.calibration)[3]<-'induced'
 ```
 
 
@@ -748,32 +762,32 @@ Then we need to set some columns to be factors:
 #| purl: true
 
 #set day, clone and induced columns to be factors
-ap$day <-as.factor(ap$day)
-ap$clone <-as.factor(ap$clone)
-ap$induced <-as.factor(ap$induced)
+pnp.calibration$day <-as.factor(pnp.calibration$day)
+pnp.calibration$clone <-as.factor(pnp.calibration$clone)
+pnp.calibration$induced <-as.factor(pnp.calibration$induced)
 
 #this is what we have:
-head(ap)
+head(pnp.calibration)
 ```
 
-Now we use `pivot_longer` to reformat the data, so we can use all the repeats. The `cols=!c(day,clone,differentiated)` part indicates that the day,clone,differentiated columns are not to be lengthened in to the 'absorb' column. So it is `onlyabsorptionrep1`,`absorptionrep2` and `absorptionrep3` that are put into the 'absorb' column.
+Now we use `pivot_longer` to reformat the data, so we can use all the repeats. The `cols=!c(day,clone,differentiated)` part indicates that the day,clone,differentiated columns are not to be lengthened into the 'absorbance' column. So it is `onlyabsorptionrep1`,`absorptionrep2` and `absorptionrep3` that are put into the 'absorbance' column.
 
 ```{r}
 #| echo: true
 #| warning: false
 #| eval: false
 #| purl: true
-ap.pivot<-ap |> 
-  pivot_longer(cols=!c(day,clone,induced), names_to = "rep", values_to = "absorb")
+pnp.calibration.pivot<-pnp.calibration |> 
+  pivot_longer(cols=!c(day,clone,induced), names_to = "rep", values_to = "absorbance")
 
 #this is what we have now
-head(ap.pivot)
+head(pnp.calibration.pivot)
 ```
 
 
 ## Make some plots
 
-If we look at the absorbance by day, we can see that absorbance goes up each day. Here we are ignoring the media (`induced`).
+If we look at the absorbanceance by day, we can see that absorbanceance goes up each day. Here we are ignoring the media (`induced`).
 
 ```{r}
 #| echo: true
@@ -781,7 +795,7 @@ If we look at the absorbance by day, we can see that absorbance goes up each day
 #| eval: false
 #| purl: true
 
-ggplot(ap.pivot, aes(x = clone, y = absorb, color = day))+
+ggplot(pnp.calibration.pivot, aes(x = clone, y = absorbance, colour = day))+
   geom_boxplot()+
   theme_classic()
 ```
@@ -794,7 +808,7 @@ Then we can use `facet_wrap` to examine the data by day *and* by media. We can s
 #| eval: false
 #| purl: true
 
-ggplot(ap.pivot, aes(x = clone, y = absorb, color = day))+
+ggplot(pnp.calibration.pivot, aes(x = clone, y = absorbance, colour = day))+
   geom_boxplot()+
   theme_classic()+
   facet_wrap(~induced)
@@ -803,7 +817,7 @@ ggplot(ap.pivot, aes(x = clone, y = absorb, color = day))+
 
 ## ANOVA (additive model)
 
-To find out if there is evidence that the absorbance value affected by day, clone or media using an ANOVA, we can use the the R function `aov()`.
+To find out if there is evidence that the absorbanceance value is affected by day, clone or media using an ANOVA, we can use the R function `aov()`.
 
 ```{r}
 #| echo: true
@@ -812,7 +826,7 @@ To find out if there is evidence that the absorbance value affected by day, clon
 #| purl: true
 
 #we save the result in an object called aov.result.additive
-aov.result.add <- aov(absorb ~ day + clone + induced, data = ap.pivot)
+aov.result.add <- aov(absorbance ~ day + clone + induced, data = pnp.calibration.pivot)
 ```
 
 To view the results, we do:
@@ -829,12 +843,12 @@ summary(aov.result.add)
 ::: callout-note
 # Interpretation 
 When p-values are < 0.05, this means we have a significant effect from this factor.\ 
-Do day, clone, and the induction media all have a significant effects?
+Do day, clone, and the induction media all have a significant effect?
 :::
 
 ## ANOVA (multiplicative model)
 
-Now then examine a multiplicative (non additive) model. Here we examine whether interactions between the factors affect the pNP levels. To test this, we simple replace the plus symbol (+) with an asterisk (*) in our code:
+Now examine a multiplicative (non additive) model. Here we examine whether interactions between the factors affect the pNP levels. To test this, we simply replace the plus symbol (+) with an asterisk (*) in our code:
 
 ```{r}
 #| echo: true
@@ -844,13 +858,13 @@ Now then examine a multiplicative (non additive) model. Here we examine whether 
 
 
 #run the ANOVA
-aov.result.mult  <- aov(absorb ~ day * clone * induced, data = ap.pivot)
+aov.result.mult  <- aov(absorbance ~ day * clone * induced, data = pnp.calibration.pivot)
 
 #to view the results
 summary(aov.result.mult)
 ```
 
-**Interpretation:** The multiplicative model all single factors, all pairwise factors (eg: `day:clone`) and the interaction of all three factors(`day:clone:induced`). Where the p-values `Pr(>F)` are < 0.05, we have a significant effect of this factor (or factors) on the pNP level (and therefore osteogenesis). 
+**Interpretation:** The multiplicative model includes all single factors, all pairwise factors (eg: `day:clone`) and the interaction of all three factors (`day:clone:induced`). Where the p-values `Pr(>F)` are < 0.05, we have a significant effect of this factor (or factors) on the pNP level (and therefore osteogenesis).
 
 
 # The End

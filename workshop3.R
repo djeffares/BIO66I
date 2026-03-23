@@ -118,7 +118,7 @@ for(column.name in numeric.columns) {
   #add the new.row to the clone.comparisons data frame
   clone.comparisons <- rbind(clone.comparisons, new.row)
 }
-
+clone.comparisons
 # PCA WITH LIVECYTE DATA ----
 
 # prepare data for PCA

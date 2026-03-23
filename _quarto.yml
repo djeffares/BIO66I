@@ -9,6 +9,7 @@ project:
     - data/BIO66I-2025-03-21-pNP.plot.jpeg
     - data/pNP.plot.jpeg
     - data/figure1.jpg
+    - data/points.data.2024-03-16.csv
     
 
 website:
