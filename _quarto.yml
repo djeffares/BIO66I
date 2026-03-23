@@ -10,6 +10,7 @@ project:
     - data/pNP.plot.jpeg
     - data/figure1.jpg
     - data/points.data.2024-03-16.csv
+    - data/processed-points-data.csv
     
 
 website:
