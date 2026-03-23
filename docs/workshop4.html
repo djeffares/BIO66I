@@ -565,7 +565,7 @@ Why normalise?
 <p>First, load the data from the website, and check what you have:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#load data from a URL</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>points<span class="ot">&lt;-</span><span class="fu">read_csv</span>(<span class="fu">url</span>(<span class="st">"https://djeffares.github.io/BIO66I/data/points.data.2024-03-16.csv"</span>),</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>points <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">url</span>(<span class="st">"https://djeffares.github.io/BIO66I/data/processed-points-data.csv"</span>),</span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">col_types =</span> <span class="fu">cols</span>(<span class="at">LID =</span> <span class="fu">col_factor</span>(),<span class="at">TID =</span> <span class="fu">col_factor</span>(),<span class="at">pid =</span> <span class="fu">col_factor</span>())</span>
 <span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>

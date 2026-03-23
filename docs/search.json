@@ -193,7 +193,7 @@
     "href": "BIO00066I-template.html#callouts",
     "title": "BIO00066I",
     "section": "Callouts:",
-    "text": "Callouts:\nSee this site for more info.\nThere are five different types of callouts available:\n\nnote\nwarning\nimportant\ntip\ncaution\n\n\n\n\n\n\n\nThis is a callout note block.\n\n\n\nText or code goes here.\n\nmean(rnorm(100))\n\n[1] 0.07985072\n\n\n\n\n\n\n\n\n\n\nCallout warning\n\n\n\nwarning\n\n\n\n\n\n\n\n\nCallout important\n\n\n\nimportant\n\n\n\n\n\n\n\n\nCallout tip\n\n\n\ntip\n\n\n\n\n\n\n\n\nCallout caution\n\n\n\ncaution"
+    "text": "Callouts:\nSee this site for more info.\nThere are five different types of callouts available:\n\nnote\nwarning\nimportant\ntip\ncaution\n\n\n\n\n\n\n\nThis is a callout note block.\n\n\n\nText or code goes here.\n\nmean(rnorm(100))\n\n[1] -0.008957244\n\n\n\n\n\n\n\n\n\n\nCallout warning\n\n\n\nwarning\n\n\n\n\n\n\n\n\nCallout important\n\n\n\nimportant\n\n\n\n\n\n\n\n\nCallout tip\n\n\n\ntip\n\n\n\n\n\n\n\n\nCallout caution\n\n\n\ncaution"
   },
   {
     "objectID": "workshop4.html",
@@ -298,7 +298,7 @@
     "href": "workshop4.html#loading-data",
     "title": "BIO00066I Workshop 4",
     "section": "5.1 Loading data",
-    "text": "5.1 Loading data\nFirst, load the data from the website, and check what you have:\n\n#load data from a URL\npoints&lt;-read_csv(url(\"https://djeffares.github.io/BIO66I/data/points.data.2024-03-16.csv\"),\n                 col_types = cols(LID = col_factor(),TID = col_factor(),pid = col_factor())\n)\n\n#check what we have\nglimpse(points)\nhead(points)"
+    "text": "5.1 Loading data\nFirst, load the data from the website, and check what you have:\n\n#load data from a URL\npoints &lt;- read_csv(url(\"https://djeffares.github.io/BIO66I/data/processed-points-data.csv\"),\n                 col_types = cols(LID = col_factor(),TID = col_factor(),pid = col_factor())\n)\n\n#check what we have\nglimpse(points)\nhead(points)"
   },
   {
     "objectID": "workshop4.html#what-is-in-the-point-data",

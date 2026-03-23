@@ -89,7 +89,7 @@ ggplot(data=pnp.experimental, aes(x=day, y=normalised.pNP.concs,fill=clone:diffe
 
 
 # #load data from a URL
-# points<-read_csv(url("https://djeffares.github.io/BIO66I/data/points.data.2024-03-16.csv"),
+# points <- read_csv(url("https://djeffares.github.io/BIO66I/data/processed-points-data.csv"),
 #                  col_types = cols(LID = col_factor(),TID = col_factor(),pid = col_factor())
 # )
 # 
