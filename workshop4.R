@@ -1,10 +1,14 @@
-# #install a new package
+# #install new packages for the animated plots
 # install.packages("gganimate")
+# install.packages("gifski")
+# 
 
+# load libraries
 library(tidyverse)
 library(readxl)
 library(ggpubr)
 library(gganimate)
+library(gifski)
 
 # read the standard curve data
 # skipping the first three lines, and specifying the first sheet
@@ -127,23 +131,38 @@ ggplot(data=pnp.experimental, aes(x=day, y=normalised.pNP.concs,fill=clone:diffe
 #   facet_wrap(~TID)
 # 
 
-# static.plot <-points |>
+# # make the static plot
+# static.plot <- points |>
 #   filter(clone == "B", LID == 1) |>
-#   ggplot(aes(x=normalised.x,y=normalised.y, colour=TID))+
-#   geom_point(size=10, pch=1,lwd=2)
+#   ggplot(aes(x=normalised.x, y=normalised.y, colour=as.numeric(TID)))+
+#   geom_point(size=10, pch=1, lwd=2)+
+#   geom_hline(yintercept = 0, colour = "grey", linetype = "dashed")+
+#   geom_vline(xintercept = 0, colour = "grey", linetype = "dashed")+
+#   theme_classic2()+
+#   labs(colour = "Tracking ID")
+# # view the static plot
 # static.plot
+# 
 
-# #set up the animation code
+# #set up the animation
 # animated.plot <- static.plot +
 #   transition_time(time) +
 #   shadow_mark(past = T, future=F, alpha=0.5)
+# animated.plot
 # 
-# #check the animation worked
-# animate(animated.plot, width =800, height = 800)
+
+# #render the animation, saving it in an object called 'rendered.animation'
+# rendered.animation <- animate(
+#   animated.plot,
+#   width = 600,
+#   height = 600,
+#   renderer = gifski_renderer()
+# )
+# rendered.animation
 
 # #save the animation as a gif
 # #make sure you use a sensible file name
-# anim_save("cloneB.lineage2.gif", animated.plot)
+# anim_save("cloneB.lineage2.gif", rendered.animation)
 
 # ?glimpse
 

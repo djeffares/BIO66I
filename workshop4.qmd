@@ -97,8 +97,10 @@ First, install the `gganimate` package. We will use this to create moving plots 
 #| eval: false
 #| purl: true
 
-#install a new package
-install.packages("gganimate")
+#install new packages for the animated plots
+install.packages("gganimate") 
+install.packages("gifski")
+
 ```
 
 Then load all the libraries we'll need today.
@@ -109,10 +111,12 @@ Then load all the libraries we'll need today.
 #| eval: true
 #| purl: true
 
+# load libraries
 library(tidyverse)
 library(readxl)
 library(ggpubr)
 library(gganimate)
+library(gifski)
 ```
 
 ## Part 1: pNP absorbanceance values
@@ -513,11 +517,19 @@ Make a static plot:
 #| warning: false
 #| eval: false
 #| purl: true
-static.plot <-points |>
+
+# make the static plot  
+static.plot <- points |>
   filter(clone == "B", LID == 1) |>
-  ggplot(aes(x=normalised.x,y=normalised.y, colour=TID))+
-  geom_point(size=10, pch=1,lwd=2)
+  ggplot(aes(x=normalised.x, y=normalised.y, colour=as.numeric(TID)))+
+  geom_point(size=10, pch=1, lwd=2)+
+  geom_hline(yintercept = 0, colour = "grey", linetype = "dashed")+
+  geom_vline(xintercept = 0, colour = "grey", linetype = "dashed")+
+  theme_classic2()+
+  labs(colour = "Tracking ID")
+# view the static plot  
 static.plot
+
 ```
 
 
@@ -540,18 +552,35 @@ Animate the plot:
 #| eval: false
 #| purl: true
 
-#set up the animation code
+#set up the animation 
 animated.plot <- static.plot +
   transition_time(time) +
   shadow_mark(past = T, future=F, alpha=0.5)
+animated.plot
 
-#check the animation worked
-animate(animated.plot, width =800, height = 800)
 ```
+
 
 ### Animate: step 3
 
-Save the animation as a GIF:
+We then render the animation
+
+```{r}
+#| echo: true
+#| warning: false
+#| eval: false
+#| purl: true
+#render the animation, saving it in an object called 'rendered.animation'
+rendered.animation <- animate(
+  animated.plot,
+  width = 600,
+  height = 600,
+  renderer = gifski_renderer()
+)
+rendered.animation
+```
+
+Save the animation as a GIF
 
 ```{r}
 #| echo: true
@@ -561,7 +590,7 @@ Save the animation as a GIF:
 
 #save the animation as a gif
 #make sure you use a sensible file name
-anim_save("cloneB.lineage2.gif", animated.plot)
+anim_save("cloneB.lineage2.gif", rendered.animation)
 ```
 
 [See this website](https://gganimate.com/index.html) to learn more about `gganimate`.
