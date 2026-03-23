@@ -408,6 +408,8 @@ This data contains the positions of cells, tracked over time. Lineages are track
 -   movement metrics (track.length, euclidean.distance, velocity)
 -   a new movement metric: how far the cell moved between this time point, and the last one (jump.distance)
 -   clone (A/B)
+-   the start starting.x starting.y for each cell (the first time point for each cell, which is the same for all time points for that cell)
+-   the normalised.x normalised.y (which is the position at each time point, relative to the starting position)
 
 NB: **pid** describes what data point the row of data corresponds to for a cell with a specific LID and TID. For example, LID 1 TID 1 PID 1 would correspond to the first data point (its x and Y coordinates etc) for a cell with TID 1 from lineage 1.
 
@@ -462,9 +464,12 @@ To keep our image simple, we allow clone A and clone B to be on the same panels.
 #| purl: true
 
 points |>
-  ggplot(aes(x=x.position,y=y.position,colour=clone))+
-  geom_point(size=1)+
-  facet_wrap(~LID)
+  ggplot(aes(x=normalised.x,y=normalised.y,colour=clone))+
+  geom_point(size=1,alpha=0.2)+
+  facet_wrap(~LID)+
+  geom_hline(yintercept = 0,colour = "grey",linetype = "dashed")+
+  geom_vline(xintercept = 0,colour = "grey",linetype = "dashed")+
+  theme_classic2()
 
 #If we want to show just one clone add this line after 'points |>'
 #filter(clone == "A")|>
@@ -479,55 +484,19 @@ We can see that they wriggle about a lot. They do not move in straight lines. To
 #| purl: true
 
 
+# plot the paths taken by the cells in lineage 4 of clone A, colouring by tracking ID (TID)
 points |>
-  filter(clone == "B" & LID==4) |>
+  filter(clone == "A" & LID==4) |>
   # Convert TID to factor with numeric ordering
   mutate(TID = factor(TID, levels = sort(as.numeric(as.character(unique(TID)))))) |>
-  ggplot(aes(x=x.position, y=y.position, colour=TID)) +
-  geom_point(size=1)
+  ggplot(aes(x=normalised.x,y=normalised.y,colour=time))+
+  geom_point(size=1)+
+  facet_wrap(~TID)
 
 ```
 
+This time we use `colour=time` to indicate the time point of each data point. You can see that the cells from one lineage move in different directions. You can investigate other lineages and clones by changing the filter line, for example: `filter(clone == "B" & LID==2) |>`
 
-
-## Scatter plots to show cell movement range intuitively
-
-If we want to view how far many different cells have moved, we will need to adjust their point locations, so the **median** of their `x.position`s and `y.position`s are zero. Effectively setting all their start positions to x=0,y=0 on a grid.
-
-We can use some simple math and the `mutate` function to achieve this:
-
-```{r}
-#| echo: true
-#| warning: false
-#| eval: false
-#| purl: true
-
-#use mutate to make new columns
-points2<- points |> 
-  group_by(LID) |> 
-  mutate(med.x = mean(x.position, na.rm = TRUE))|>
-  mutate(adjusted.x =  x.position - med.x) |>
-  mutate(med.y = mean(y.position, na.rm = TRUE))|>
-  mutate(adjusted.y =  y.position - med.y)
-
-#check our new data
-points2
-```
-
-Plot the 'centralised' (x=0,y=0) cell positions. We use `facet_wrap` to show each clone on a different panel.
-
-```{r}
-#| echo: true
-#| warning: false
-#| eval: false
-#| purl: true
-points2 |>  
-  ggplot(aes(x=adjusted.x,y=adjusted.y,colour = time))+
-  geom_point(alpha=0.5, size=3)+
-  geom_hline(yintercept = 0)+
-  geom_vline(xintercept = 0)+
-  facet_wrap(~clone)
-```
 
 ## Animate it!
 
@@ -546,7 +515,7 @@ Make a static plot:
 #| purl: true
 static.plot <-points |>
   filter(clone == "B", LID == 1) |>
-  ggplot(aes(x=x.position,y=y.position, colour=TID))+
+  ggplot(aes(x=normalised.x,y=normalised.y, colour=TID))+
   geom_point(size=10, pch=1,lwd=2)
 static.plot
 ```

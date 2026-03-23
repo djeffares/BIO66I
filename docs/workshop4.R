@@ -106,43 +106,30 @@ ggplot(data=pnp.experimental, aes(x=day, y=normalised.pNP.concs,fill=clone:diffe
 # ?glimpse
 
 # points |>
-#   ggplot(aes(x=x.position,y=y.position,colour=clone))+
-#   geom_point(size=1)+
-#   facet_wrap(~LID)
+#   ggplot(aes(x=normalised.x,y=normalised.y,colour=clone))+
+#   geom_point(size=1,alpha=0.2)+
+#   facet_wrap(~LID)+
+#   geom_hline(yintercept = 0,colour = "grey",linetype = "dashed")+
+#   geom_vline(xintercept = 0,colour = "grey",linetype = "dashed")+
+#   theme_classic2()
 # 
 # #If we want to show just one clone add this line after 'points |>'
 # #filter(clone == "A")|>
 
 # 
+# # plot the paths taken by the cells in lineage 4 of clone A, colouring by tracking ID (TID)
 # points |>
-#   filter(clone == "B" & LID==4) |>
+#   filter(clone == "A" & LID==4) |>
 #   # Convert TID to factor with numeric ordering
 #   mutate(TID = factor(TID, levels = sort(as.numeric(as.character(unique(TID)))))) |>
-#   ggplot(aes(x=x.position, y=y.position, colour=TID)) +
-#   geom_point(size=1)
+#   ggplot(aes(x=normalised.x,y=normalised.y,colour=time))+
+#   geom_point(size=1)+
+#   facet_wrap(~TID)
 # 
-
-# #use mutate to make new columns
-# points2<- points |>
-#   group_by(LID) |>
-#   mutate(med.x = mean(x.position, na.rm = TRUE))|>
-#   mutate(adjusted.x =  x.position - med.x) |>
-#   mutate(med.y = mean(y.position, na.rm = TRUE))|>
-#   mutate(adjusted.y =  y.position - med.y)
-# 
-# #check our new data
-# points2
-
-# points2 |>
-#   ggplot(aes(x=adjusted.x,y=adjusted.y,colour = time))+
-#   geom_point(alpha=0.5, size=3)+
-#   geom_hline(yintercept = 0)+
-#   geom_vline(xintercept = 0)+
-#   facet_wrap(~clone)
 
 # static.plot <-points |>
 #   filter(clone == "B", LID == 1) |>
-#   ggplot(aes(x=x.position,y=y.position, colour=TID))+
+#   ggplot(aes(x=normalised.x,y=normalised.y, colour=TID))+
 #   geom_point(size=10, pch=1,lwd=2)
 # static.plot
 
