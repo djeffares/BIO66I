@@ -41,7 +41,7 @@ pNP.plot
 ggsave("BIO66I-pNP-standard-curve.jpeg",pNP.plot,width=7,height=7)
 
 
-# make a linear model so we can predict pNP concentration from absorbanceance values
+# make a linear model so we can predict pNP concentration from absorbance values
 linear_model <- lm(pNP.conc ~ absorbance , data = pnp.calibration.pivot)
 
 
@@ -92,64 +92,65 @@ ggplot(data=pnp.experimental, aes(x=day, y=normalised.pNP.concs,fill=clone:diffe
   geom_bar(stat="identity", position=position_dodge())
 
 
-# #load data from a URL
-# points <- read_csv(url("https://djeffares.github.io/BIO66I/data/processed-points-data.csv"),
-#                  col_types = cols(LID = col_factor(),TID = col_factor(),pid = col_factor())
-# )
-# 
-# #check what we have
-# glimpse(points)
-# head(points)
-# 
+#load data from a URL
+points <- read_csv(url("https://djeffares.github.io/BIO66I/data/processed-points-data.csv"),
+                 col_types = cols(LID = col_factor(),TID = col_factor(),pid = col_factor())
+)
 
-# points |>
-#   ggplot(aes(x=clone,y=log10(velocity)))+
-#   geom_violin()+
-#   stat_compare_means()
+#check what we have
+glimpse(points)
+head(points)
 
-# ?glimpse
 
-# points |>
-#   ggplot(aes(x=normalised.x,y=normalised.y,colour=clone))+
-#   geom_point(size=1,alpha=0.2)+
-#   facet_wrap(~LID)+
-#   geom_hline(yintercept = 0,colour = "grey",linetype = "dashed")+
-#   geom_vline(xintercept = 0,colour = "grey",linetype = "dashed")+
-#   theme_classic2()
-# 
-# #If we want to show just one clone add this line after 'points |>'
-# #filter(clone == "A")|>
+points |>
+  ggplot(aes(x=clone,y=log10(velocity)))+
+  geom_violin()+
+  stat_compare_means()
 
-# 
-# # plot the paths taken by the cells in lineage 4 of clone A, colouring by tracking ID (TID)
-# points |>
-#   filter(clone == "A" & LID==4) |>
-#   # Convert TID to factor with numeric ordering
-#   mutate(TID = factor(TID, levels = sort(as.numeric(as.character(unique(TID)))))) |>
-#   ggplot(aes(x=normalised.x,y=normalised.y,colour=time))+
-#   geom_point(size=1)+
-#   facet_wrap(~TID)
-# 
+?glimpse
 
-# # make the static plot
-# static.plot <- points |>
-#   filter(clone == "B", LID == 1) |>
-#   ggplot(aes(x=normalised.x, y=normalised.y, colour=as.numeric(TID)))+
-#   geom_point(size=10, pch=1, lwd=2)+
-#   geom_hline(yintercept = 0, colour = "grey", linetype = "dashed")+
-#   geom_vline(xintercept = 0, colour = "grey", linetype = "dashed")+
-#   theme_classic2()+
-#   labs(colour = "Tracking ID")
-# # view the static plot
-# static.plot
-# 
+points |>
+  ggplot(aes(x=normalised.x,y=normalised.y,colour=clone))+
+  geom_point(size=1,alpha=0.2)+
+  facet_wrap(~LID)+
+  geom_hline(yintercept = 0,colour = "grey",linetype = "dashed")+
+  geom_vline(xintercept = 0,colour = "grey",linetype = "dashed")+
+  theme_classic2()
 
-# #set up the animation
-# animated.plot <- static.plot +
-#   transition_time(time) +
-#   shadow_mark(past = T, future=F, alpha=0.5)
-# animated.plot
-# 
+#If we want to show just one clone add this line after 'points |>'
+#filter(clone == "A")|>
+
+
+# plot the paths taken by the cells in lineage 4 of clone A
+#colouring by tracking ID (TID)
+points |>
+  filter(clone == "A" & LID==4) |>
+  # Convert TID to factor with numeric ordering
+  mutate(TID = factor(TID, levels = sort(as.numeric(as.character(unique(TID)))))) |>
+  ggplot(aes(x=normalised.x,y=normalised.y,colour=time))+
+  geom_point(size=1)+
+  facet_wrap(~TID)
+
+
+# make the static plot  
+static.plot <- points |>
+  filter(clone == "B", LID == 1) |>
+  ggplot(aes(x=normalised.x, y=normalised.y, colour=as.numeric(TID)))+
+  geom_point(size=1, pch=1, lwd=2)+
+  geom_hline(yintercept = 0, colour = "grey", linetype = "dashed")+
+  geom_vline(xintercept = 0, colour = "grey", linetype = "dashed")+
+  theme_classic2()+
+  labs(colour = "Tracking ID")
+# view the static plot  
+static.plot
+
+
+#set up the animation 
+animated.plot <- static.plot +
+  transition_time(time) +
+  shadow_mark(past = T, future=F, alpha=0.5)
+animated.plot
+
 
 # #render the animation, saving it in an object called 'rendered.animation'
 # rendered.animation <- animate(
@@ -160,6 +161,7 @@ ggplot(data=pnp.experimental, aes(x=day, y=normalised.pNP.concs,fill=clone:diffe
 # )
 # rendered.animation
 
+# 
 # #save the animation as a gif
 # #make sure you use a sensible file name
 # anim_save("cloneB.lineage2.gif", rendered.animation)
@@ -186,6 +188,7 @@ ggplot(data=pnp.experimental, aes(x=day, y=normalised.pNP.concs,fill=clone:diffe
 # #this is what we have now
 # head(pnp.calibration.pivot)
 
+# # make a plot of the absorbance for each clone
 # ggplot(pnp.calibration.pivot, aes(x = clone, y = absorbance, colour = day))+
 #   geom_boxplot()+
 #   theme_classic()
@@ -200,7 +203,6 @@ ggplot(data=pnp.experimental, aes(x=day, y=normalised.pNP.concs,fill=clone:diffe
 
 # summary(aov.result.add)
 
-# 
 # #run the ANOVA
 # aov.result.mult  <- aov(absorbance ~ day * clone * induced, data = pnp.calibration.pivot)
 # 

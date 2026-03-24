@@ -30,7 +30,7 @@ editor: source
 Today, we will learn how to:
 
 -   Use a linear model to predict some ***y*** values, given some ***x*** values
--   In our case we use absorbanceance (***x*** **values**) to predict alkaline phosphatase activity (***y*** **values**)
+-   In our case we use absorbance (***x*** **values**) to predict alkaline phosphatase activity (***y*** **values**)
 -   Make **animated plots** with `gganimate`
 
 ## Thinking like a data scientist
@@ -54,7 +54,7 @@ We saw in workshop 3 that clone A moves faster than clone B. This time we will u
 
 To help address our research question of whether morphology and migration can be used to predict MSC phenotype, we also need to investigate the ability of the two clonal lines to differentiate. 
 
-In practical 4 you have examined their capacity to undergo *osteogenesis* (differentiate into osteoblasts - bone cells) when they are given an inductive medium. To recap:
+In Practical 3 you have examined their capacity to undergo *osteogenesis* (differentiate into osteoblasts - bone cells) when they are given an inductive medium. To recap:
 
 - Cells that are undergoing osteogenesis will produce bone extracellular matrix, which contains a lot of the **alkaline phosphatase** enzyme
 - Alkaline phosphatase catalyses the reaction of substrate **para-nitrophenyl phosphate (pNPP)** to  **para-nitro phenol (pNP)**
@@ -72,9 +72,9 @@ In practical 4 you have examined their capacity to undergo *osteogenesis* (diffe
 
 ## The data
 
-### Part 1: pNP absorbanceance values
+### Part 1: pNP absorbance values
 
-In this section, we show how to use a linear model to predict pNP concentration from absorbanceance values using some **example data**. In your report, use **your own data** from practical 4.
+In this section, we show how to use a linear model to predict pNP concentration from absorbance values using some **example data**. In your report, use **your own data** from Practical 3.
 
 
 ### Part 2: manually-tracked cell movement 'point' data
@@ -119,7 +119,7 @@ library(gganimate)
 library(gifski)
 ```
 
-## Part 1: pNP absorbanceance values
+## Part 1: pNP absorbance values
 
 First, we read in some data from an Excel file of some asmaple data. 
 
@@ -216,7 +216,7 @@ ggsave("BIO66I-pNP-standard-curve.jpeg",pNP.plot,width=7,height=7)
 
 ## Make a linear model
 
-We can use the `lm` function to make a linear model. This is a simple model that assumes that the absorbanceance is linearly related to the pNP concentration. We can use this model to predict the pNP concentration of unknown samples.
+We can use the `lm` function to make a linear model. This is a simple model that assumes that the absorbance is linearly related to the pNP concentration. We can use this model to predict the pNP concentration of unknown samples.
 
 
 ```{r}
@@ -225,12 +225,12 @@ We can use the `lm` function to make a linear model. This is a simple model that
 #| eval: true
 #| purl: true
 
-# make a linear model so we can predict pNP concentration from absorbanceance values
+# make a linear model so we can predict pNP concentration from absorbance values
 linear_model <- lm(pNP.conc ~ absorbance , data = pnp.calibration.pivot)
 
 ```
 
-Now we have the linear model, if we have some pNP absorbanceance values, we can determine the pNP product concentrations. 
+Now we have the linear model, if we have some pNP absorbance values, we can determine the pNP product concentrations. 
 
 We have put some mock pNP values in the excel file `BIO00066I-pNP-example-data-2025-26.xlsx`, in sheet two. Read in sheet two of the file, skipping the first line (because it is a comment, not data). This sheet contains some mock data for the unknown samples. We will use the linear model to predict the pNP concentrations of these unknown samples.
 
@@ -262,7 +262,7 @@ pnp.experimental <- pnp.experimental |>
 
 ```
 
-We named our mean absorbanceance `absorbance` because we specified the `absorbance` variable in the code `linear_model <- lm(pNP.conc ~ absorbance , data = pnp.calibration.pivot)` above. So our linear model is 'looking for' an absorbance variable to use.
+We named our mean absorbance `absorbance` because we specified the `absorbance` variable in the code `linear_model <- lm(pNP.conc ~ absorbance , data = pnp.calibration.pivot)` above. So our linear model is 'looking for' an absorbance variable to use.
 
 
 # Predict values based on a linear model
@@ -350,7 +350,7 @@ ggplot(data=pnp.experimental, aes(x=day, y=predicted.pNP.concs,fill=clone:differ
 
 ```
 
-**Note** that this dummy data may look *very* different from your real data.
+**Note that this dummy data may look very different from your real data**. You should compare your data to the model data shared with you on the VLE by plotting both sets of data. If your data doesn't follow the same trend, you are advised to use the model data
 
 Now let's make a plot (with the **normalised** data). This will account for differential growth rates of the clones.
 
@@ -386,7 +386,7 @@ First, load the data from the website, and check what you have:
 ```{r}
 #| echo: true
 #| warning: false
-#| eval: false
+#| eval: true
 #| purl: true
 
 #load data from a URL
@@ -432,7 +432,7 @@ You'll notice that this file has velocity, just like the last file we used in wo
 ```{r}
 #| echo: true
 #| warning: false
-#| eval: false
+#| eval: true
 #| purl: true
 points |>
   ggplot(aes(x=clone,y=log10(velocity)))+
@@ -448,7 +448,7 @@ To find out what any function does, type `?function` in the RStudio Console. For
 ```{r}
 #| echo: true
 #| warning: false
-#| eval: false
+#| eval: true
 #| purl: true
 
 ?glimpse
@@ -464,7 +464,7 @@ To keep our image simple, we allow clone A and clone B to be on the same panels.
 ```{r}
 #| echo: true
 #| warning: false
-#| eval: false
+#| eval: true
 #| purl: true
 
 points |>
@@ -484,11 +484,12 @@ We can see that they wriggle about a lot. They do not move in straight lines. To
 ```{r}
 #| echo: true
 #| warning: false
-#| eval: false
 #| purl: true
+#| eval: true
 
 
-# plot the paths taken by the cells in lineage 4 of clone A, colouring by tracking ID (TID)
+# plot the paths taken by the cells in lineage 4 of clone A
+#colouring by tracking ID (TID)
 points |>
   filter(clone == "A" & LID==4) |>
   # Convert TID to factor with numeric ordering
@@ -515,14 +516,14 @@ Make a static plot:
 ```{r}
 #| echo: true
 #| warning: false
-#| eval: false
 #| purl: true
+#| eval: true
 
 # make the static plot  
 static.plot <- points |>
   filter(clone == "B", LID == 1) |>
   ggplot(aes(x=normalised.x, y=normalised.y, colour=as.numeric(TID)))+
-  geom_point(size=10, pch=1, lwd=2)+
+  geom_point(size=1, pch=1, lwd=2)+
   geom_hline(yintercept = 0, colour = "grey", linetype = "dashed")+
   geom_vline(xintercept = 0, colour = "grey", linetype = "dashed")+
   theme_classic2()+
@@ -549,8 +550,8 @@ Animate the plot:
 ```{r}
 #| echo: true
 #| warning: false
-#| eval: false
 #| purl: true
+#| eval: true
 
 #set up the animation 
 animated.plot <- static.plot +
@@ -568,8 +569,9 @@ We then render the animation
 ```{r}
 #| echo: true
 #| warning: false
-#| eval: false
 #| purl: true
+#| eval: false
+
 #render the animation, saving it in an object called 'rendered.animation'
 rendered.animation <- animate(
   animated.plot,
@@ -585,8 +587,9 @@ Save the animation as a GIF
 ```{r}
 #| echo: true
 #| warning: false
-#| eval: false
 #| purl: true
+#| eval: false
+
 
 #save the animation as a gif
 #make sure you use a sensible file name
@@ -665,8 +668,8 @@ To find out what any function does, type `?function` in the RStudio Console. For
 ```{r}
 #| echo: true
 #| warning: false
-#| eval: false
 #| purl: true
+#| eval: false
 
 ?glimpse
 ```
@@ -715,7 +718,7 @@ Create a logical folder structure for your analysis. The top folder should be na
 
 # Supplementary analysis: three-way ANOVA
 
-In practical 4, you collected absorbanceance readings for concentrations of pNP in triplicate, to provide an indication of the two clones to undergo osteogenesis. pNP concentrations were measured in day 0,4 and 8, and at each time point you have data for both induced cells and non-induced cells (negative control), with the exception of day 0 as the differentiation was induced at day 1.
+In Practical 3, you collected absorbance readings for concentrations of pNP in triplicate, to provide an indication of the two clones to undergo osteogenesis. pNP concentrations were measured in day 0,4 and 8, and at each time point you have data for both induced cells and non-induced cells (negative control), with the exception of day 0 as the differentiation was induced at day 1.
 
 To find out which conditions affect pNP, we can carry out a three-way ANOVA to compare the effects of three **grouping variables** (day, clone and induction condition) on one **response variable** (pNP concentration).
 
@@ -785,7 +788,7 @@ head(pnp.calibration.pivot)
 
 ## Make some plots
 
-If we look at the absorbanceance by day, we can see that absorbanceance goes up each day. Here we are ignoring the media (`induced`).
+If we look at the absorbance by day, we can see that absorbance goes up each day. Here we are ignoring the media (`induced`).
 
 ```{r}
 #| echo: true
@@ -793,6 +796,7 @@ If we look at the absorbanceance by day, we can see that absorbanceance goes up 
 #| eval: false
 #| purl: true
 
+# make a plot of the absorbance for each clone
 ggplot(pnp.calibration.pivot, aes(x = clone, y = absorbance, colour = day))+
   geom_boxplot()+
   theme_classic()
@@ -815,7 +819,7 @@ ggplot(pnp.calibration.pivot, aes(x = clone, y = absorbance, colour = day))+
 
 ## ANOVA (additive model)
 
-To find out if there is evidence that the absorbanceance value is affected by day, clone or media using an ANOVA, we can use the R function `aov()`.
+To find out if there is evidence that the absorbance value is affected by day, clone or media using an ANOVA, we can use the R function `aov()`.
 
 ```{r}
 #| echo: true
@@ -853,7 +857,6 @@ Now examine a multiplicative (non additive) model. Here we examine whether inter
 #| warning: false
 #| eval: false
 #| purl: true
-
 
 #run the ANOVA
 aov.result.mult  <- aov(absorbance ~ day * clone * induced, data = pnp.calibration.pivot)
