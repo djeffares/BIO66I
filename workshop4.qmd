@@ -280,11 +280,10 @@ Here is how to do it, using the `predict` function:
 #| purl: true
 
 #calculate predicted pNP concentration using the linear model
-predictions.from.lm <- predict(linear_model,pnp.experimental)
+predicted.pnp.conc <- predict(linear_model,pnp.experimental)
 
-#Add these predictions from the linear model (predictions.from.lm)
-#As a new column
-pnp.experimental$predicted.pNP.concs = predictions.from.lm
+#add predicted pNP concentration as a new column
+pnp.experimental$predicted.pnp.conc = predicted.pnp.conc
 
 #check what we have
 glimpse(pnp.experimental)
@@ -302,7 +301,7 @@ Cells grow at different rates during osteogenic differentiation. For example, cl
 
 So we need to normalise these differences in growth rate. We can do this by dividing the predicted pNP concentration by the DNA concentration, because we know that cells **do not** gain or lose large amounts of DNA very often.
 
-To achieve this, we can use the `mutate` function to create a new column in the data frame, `pnp.experimental`. We will call this new column `normalised.pNP.concs`. We will divide the `predicted.pNP.concs` column by the `DNA.conc` column.
+To achieve this, we can use the `mutate` function to create a new column in the data frame, `pnp.experimental`. We will call this new column `normalised.pnp.conc`. We will divide the `predicted.pnp.conc` column by the `DNA_ug_per_ml` column.
 
 ```{r}
 #| echo: true
@@ -310,9 +309,9 @@ To achieve this, we can use the `mutate` function to create a new column in the 
 #| eval: true
 #| purl: true
 
-##divide the predicted.pNP.concs column by the DNA_ug_per_ml column
+##divide the predicted.pnp.conc column by the DNA_ug_per_ml column
 pnp.experimental <- pnp.experimental |> 
-  mutate(normalised.pNP.concs = predicted.pNP.concs / DNA_ug_per_ml)
+  mutate(normalised.pnp.conc = predicted.pnp.conc / DNA_ug_per_ml)
 
 # check what we have now
 names(pnp.experimental)
@@ -321,6 +320,8 @@ names(pnp.experimental)
 
 
 ## Making a bar plot of predicted pNP concentrations
+
+At this point, `pnp.experimental` has grouping columns (`day`, `clone`, `differentiated`) and response columns (`predicted.pnp.conc`, `normalised.pnp.conc`).
 
 First, we need to ensure that the `day`, `clone` and `differentiated` columns are set as **factors**. This is important because we want to treat these columns as **categories**, not **numeric values**:
 
@@ -345,7 +346,7 @@ Then we can make a plot (with the **un-normalised** data).
 #| purl: true
 
 #make the plot
-ggplot(data=pnp.experimental, aes(x=day, y=predicted.pNP.concs,fill=clone:differentiated)) +
+ggplot(data=pnp.experimental, aes(x=day, y=predicted.pnp.conc,fill=clone:differentiated)) +
   geom_bar(stat="identity", position=position_dodge())
 
 ```
@@ -365,8 +366,8 @@ Now let's make a plot (with the **normalised** data). This will account for diff
 # first check that data columns we have 
 names(pnp.experimental)
 
-#make the plot using the normalised.pNP.concs as y values
-ggplot(data=pnp.experimental, aes(x=day, y=normalised.pNP.concs,fill=clone:differentiated)) +
+#make the plot using the normalised.pnp.conc as y values
+ggplot(data=pnp.experimental, aes(x=day, y=normalised.pnp.conc,fill=clone:differentiated)) +
   geom_bar(stat="identity", position=position_dodge())
 
 ```
@@ -746,10 +747,10 @@ First, we load the data. Your data file might have a different name. This code w
 #| purl: true
 
 #load the data
-pnp.calibration<-read_excel("raw-data/alkaline-phosphatase-activity-assay-real-data.xlsx",sheet=2)
+pnp.anova.data<-read_excel("raw-data/alkaline-phosphatase-activity-assay-real-data.xlsx",sheet=2)
 
 #rename the 'differentiated' column 'induced', which describes it better
-names(pnp.calibration)[3]<-'induced'
+names(pnp.anova.data)[3]<-'induced'
 ```
 
 
@@ -763,26 +764,26 @@ Then we need to set some columns to be factors:
 #| purl: true
 
 #set day, clone and induced columns to be factors
-pnp.calibration$day <-as.factor(pnp.calibration$day)
-pnp.calibration$clone <-as.factor(pnp.calibration$clone)
-pnp.calibration$induced <-as.factor(pnp.calibration$induced)
+pnp.anova.data$day <-as.factor(pnp.anova.data$day)
+pnp.anova.data$clone <-as.factor(pnp.anova.data$clone)
+pnp.anova.data$induced <-as.factor(pnp.anova.data$induced)
 
 #this is what we have:
-head(pnp.calibration)
+head(pnp.anova.data)
 ```
 
-Now we use `pivot_longer` to reformat the data, so we can use all the repeats. The `cols=!c(day,clone,differentiated)` part indicates that the day,clone,differentiated columns are not to be lengthened into the 'absorbance' column. So it is `onlyabsorptionrep1`,`absorptionrep2` and `absorptionrep3` that are put into the 'absorbance' column.
+Now we use `pivot_longer` to reformat the data, so we can use all the repeats. The `cols=!c(day,clone,induced)` part indicates that the `day`, `clone` and `induced` columns are not to be lengthened into the `absorbance` column. So it is `absorptionrep1`,`absorptionrep2` and `absorptionrep3` that are put into the `absorbance` column.
 
 ```{r}
 #| echo: true
 #| warning: false
 #| eval: false
 #| purl: true
-pnp.calibration.pivot<-pnp.calibration |> 
-  pivot_longer(cols=!c(day,clone,induced), names_to = "rep", values_to = "absorbance")
+pnp.anova.long<-pnp.anova.data |> 
+  pivot_longer(cols=!c(day,clone,induced), names_to = "replicate", values_to = "absorbance")
 
 #this is what we have now
-head(pnp.calibration.pivot)
+head(pnp.anova.long)
 ```
 
 
@@ -797,7 +798,7 @@ If we look at the absorbance by day, we can see that absorbance goes up each day
 #| purl: true
 
 # make a plot of the absorbance for each clone
-ggplot(pnp.calibration.pivot, aes(x = clone, y = absorbance, colour = day))+
+ggplot(pnp.anova.long, aes(x = clone, y = absorbance, colour = day))+
   geom_boxplot()+
   theme_classic()
 ```
@@ -810,7 +811,7 @@ Then we can use `facet_wrap` to examine the data by day *and* by media. We can s
 #| eval: false
 #| purl: true
 
-ggplot(pnp.calibration.pivot, aes(x = clone, y = absorbance, colour = day))+
+ggplot(pnp.anova.long, aes(x = clone, y = absorbance, colour = day))+
   geom_boxplot()+
   theme_classic()+
   facet_wrap(~induced)
@@ -828,7 +829,7 @@ To find out if there is evidence that the absorbance value is affected by day, c
 #| purl: true
 
 #we save the result in an object called aov.result.additive
-aov.result.add <- aov(absorbance ~ day + clone + induced, data = pnp.calibration.pivot)
+aov.result.additive <- aov(absorbance ~ day + clone + induced, data = pnp.anova.long)
 ```
 
 To view the results, we do:
@@ -839,7 +840,7 @@ To view the results, we do:
 #| eval: false
 #| purl: true
 
-summary(aov.result.add)
+summary(aov.result.additive)
 ```
 
 ::: callout-note
@@ -859,10 +860,10 @@ Now examine a multiplicative (non additive) model. Here we examine whether inter
 #| purl: true
 
 #run the ANOVA
-aov.result.mult  <- aov(absorbance ~ day * clone * induced, data = pnp.calibration.pivot)
+aov.result.interaction  <- aov(absorbance ~ day * clone * induced, data = pnp.anova.long)
 
 #to view the results
-summary(aov.result.mult)
+summary(aov.result.interaction)
 ```
 
 **Interpretation:** The multiplicative model includes all single factors, all pairwise factors (eg: `day:clone`) and the interaction of all three factors (`day:clone:induced`). Where the p-values `Pr(>F)` are < 0.05, we have a significant effect of this factor (or factors) on the pNP level (and therefore osteogenesis).
