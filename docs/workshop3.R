@@ -1,10 +1,8 @@
+################################################################################
+# WORKSHOP 3: CELL MOVEMENT DATA -----------------------------------------------
+################################################################################
 
-# WORKSHOP 3: CELL MOVEMENT DATA ----
-
-
-
-
-# SET UP AND LIBRARY LOADING ----
+# SET UP AND LIBRARY LOADING ---------------------------------------------------
 
 #clear previous data
 rm(list=ls())
@@ -19,19 +17,20 @@ library(corrr)
 library(ggpubr)
 
 
-# LOADING LIVECYTE DATA ----
+# LOADING LIVECYTE DATA --------------------------------------------------------
+
+# This is data from the Livecyte microscope that contains both cell shape and cell movement data. We will focus on the movement data for this workshop, but you can explore the shape data if you like.
 
 # Read the automated Livecyte data
-cells <-read_tsv(url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-02-22.tsv"),
-                 col_types = cols(
-                   clone = col_factor(),
-                   replicate = col_factor(),
-                   tracking.id=col_factor(),
-                   lineage.id=col_factor()
-                 )
+cells <-read_tsv(
+  url("https://djeffares.github.io/BIO66I/data/all-cell-data-FFT.filtered.2024-02-22.tsv"),
+    col_types = cols(
+    clone = col_factor(),
+    replicate = col_factor(),
+    tracking.id=col_factor(),
+  lineage.id=col_factor()
+  )
 )
-
-# names(cells)
 
 #examine what we have in the data frame
 names(cells)
@@ -45,25 +44,54 @@ cell.movement.data <- select(cells,
         instantaneous.velocity
 )
 
-# #check that we have
-# names(cell.movement.data)
-# 
-# #get a simple summary, using summary and also glimpse
+#check that we have
+names(cell.movement.data)
+ 
+#get a simple summary, using summary and also glimpse
 # summary(cell.movement.data)
 # glimpse(cell.movement.data)
 
-# PLOTTING LIVECYTE DATA ----
+# PLOTTING LIVECYTE DATA -------------------------------------------------------
 
+names(cell.movement.data)
 #instantaneous.velocity - geom_violin
-ggplot(cell.movement.data,aes(x=clone,y=instantaneous.velocity,colour=clone))+
+
+# how to output a citation
+print(citation("tidyverse"), style = "text")
+
+instantaneous.velocity.plot <- 
+  ggplot(cell.movement.data,aes(
+    x=clone,y=instantaneous.velocity,colour=clone))+
     geom_violin(alpha=0.5)+
     stat_compare_means()
 
 
-ggplot(cell.movement.data,aes(x=clone,y=log10(instantaneous.velocity),colour=clone))+
+track.length.plot <- 
+  ggplot(cell.movement.data,
+  aes(x=clone,y=log10(track.length),colour=clone))+
     geom_violin(alpha=0.5)+
-    facet_wrap(~replicate)+
     stat_compare_means()
+
+track.length.and.instantaneous.velocity.plots <- 
+  ggarrange(plot1,plot2,plot3,plot4
+          track.length.plot, 
+          ncol=2, nrow=2)
+track.length.and.instantaneous.velocity.plots
+
+ggsave("BIO00066I-workshop3-livecyte-movement-plots.png", 
+       track.length.and.instantaneous.velocity.plots, 
+       width = 8, height = 4)
+
+# make the plot
+pca.plot <- ggplot(pca.scores.sample, 
+  aes(x = PC1, y = PC2, color = clone, fill = clone)) +
+  geom_point(alpha = 0.1, size = 4)+
+  stat_ellipse(geom = "polygon", 
+  alpha = 0.1, linewidth = 1.2, level = 0.99) +
+  scale_color_manual(values = c("cloneA" = "red", "cloneB" = "blue"))+
+  theme_classic2()
+pca.plot
+
 
 # SUMMARY OF LIVECYTE DATA ----
 
@@ -350,3 +378,13 @@ ggsave("BIO00066I-workshop3-combined-livecyte-plot.png",
 #         names.arg = paste0("PC", 1:length(percent.variance)),
 #         xlab = "Principal Component",
 #         ylab = "% Variance Explained")
+
+
+#Citations
+#Wickham H, Averick M, Bryan J, Chang W, McGowan LD, François R,
+#K, Vaughan D, Wilke C, Woo K, Yutani H (2019). “Welcome to the
+##Bache SM, Müller K, Ooms J, Robinson D, Seidel DP, Spinu V, Takahashi
+###Grolemund G, Hayes A, Henry L, Hester J, Kuhn M, Pedersen TL, Miller E,
+#tidyverse.” _Journal of Open Source Software_, *4*(43), 1686.
+##doi:10.21105/joss.01686 <https://doi.org/10.21105/joss.01686>.
+
