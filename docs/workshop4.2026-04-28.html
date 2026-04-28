@@ -137,7 +137,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Workshop 3</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./workshop4.html" aria-current="page"> 
+    <a class="nav-link" href="./workshop4.html"> 
 <span class="menu-text">Workshop 4</span></a>
   </li>  
 </ul>
@@ -364,22 +364,22 @@ Philosophy
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read the standard curve data</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># skipping the first three lines, and specifying the first sheet</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>pnp.calibration.data <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"raw-data/BIO00066I-pNP-example-data-2025-26.xlsx"</span>, <span class="at">sheet=</span><span class="dv">1</span>, <span class="at">skip=</span><span class="dv">3</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>pnp.calibration <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"raw-data/BIO00066I-pNP-example-data-2025-26.xlsx"</span>, <span class="at">sheet=</span><span class="dv">1</span>, <span class="at">skip=</span><span class="dv">3</span>)</span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#check what we have</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(pnp.calibration.data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(pnp.calibration)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then simplify the data with <code>pivot_longer</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pnp.calibration.data.pivot <span class="ot">&lt;-</span> </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  pnp.calibration.data <span class="sc">|&gt;</span> </span>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>pnp.calibration.pivot <span class="ot">&lt;-</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  pnp.calibration <span class="sc">|&gt;</span> </span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>mean.abs, <span class="sc">-</span>standard.deviation) <span class="sc">|&gt;</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>pNP.conc, <span class="at">names_to =</span> <span class="st">"rep"</span>, <span class="at">values_to =</span> <span class="st">"absorbance"</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(pnp.calibration.data.pivot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(pnp.calibration.pivot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Reorder the columns, so it is more intuitive for us using <code>relocate</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pnp.calibration.data.pivot <span class="ot">&lt;-</span> <span class="fu">relocate</span>(pnp.calibration.data.pivot, absorbance)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pnp.calibration.pivot <span class="ot">&lt;-</span> <span class="fu">relocate</span>(pnp.calibration.pivot, absorbance)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -387,18 +387,18 @@ Philosophy
 <h2 data-number="3.3" class="anchored" data-anchor-id="plot-enzyme-data"><span class="header-section-number">3.3</span> Plot enzyme data</h2>
 <p>Let’s make a simple plot, adding a line that shows the linear model with the line <code>geom_smooth(method="lm")</code>. The <code>method="lm"</code> means plotting a linear model.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#plot, saving the plot in an object called 'pnp.standard.curve.plot'</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>pnp.standard.curve.plot <span class="ot">&lt;-</span> pnp.calibration.data.pivot <span class="sc">|&gt;</span></span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#plot, saving the plot in an object called 'pNP.plot'</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>pNP.plot <span class="ot">&lt;-</span> pnp.calibration.pivot <span class="sc">|&gt;</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>absorbance, <span class="at">y=</span>pNP.conc))<span class="sc">+</span></span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">"lm"</span>)</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">#show the plot</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>pnp.standard.curve.plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>pNP.plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="workshop4_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="workshop4.2026-04-28_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -407,7 +407,7 @@ Philosophy
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#save as a jpeg</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#has a 'date stamp' (2025-03-21) in the name</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"pnp-standard-curve.jpeg"</span>,pnp.standard.curve.plot,<span class="at">width=</span><span class="dv">7</span>,<span class="at">height=</span><span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="st">"BIO66I-pNP-standard-curve.jpeg"</span>,pNP.plot,<span class="at">width=</span><span class="dv">7</span>,<span class="at">height=</span><span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="make-a-linear-model" class="level2" data-number="3.4">
@@ -415,16 +415,16 @@ Philosophy
 <p>We can use the <code>lm</code> function to make a linear model. This is a simple model that assumes that the absorbance is linearly related to the pNP concentration. We can use this model to predict the pNP concentration of unknown samples.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make a linear model so we can predict pNP concentration from absorbance values</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>pnp.linear.model <span class="ot">&lt;-</span> <span class="fu">lm</span>(pNP.conc <span class="sc">~</span> absorbance , <span class="at">data =</span> pnp.calibration.data.pivot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>linear_model <span class="ot">&lt;-</span> <span class="fu">lm</span>(pNP.conc <span class="sc">~</span> absorbance , <span class="at">data =</span> pnp.calibration.pivot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now we have the linear model, if we have some pNP absorbance values, we can determine the pNP product concentrations.</p>
 <p>We have put some mock pNP values in the excel file <code>BIO00066I-pNP-example-data-2025-26.xlsx</code>, in sheet two. Read in sheet two of the file, skipping the first line (because it is a comment, not data). This sheet contains some mock data for the unknown samples. We will use the linear model to predict the pNP concentrations of these unknown samples.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># read in experimental pNP data for unknown samples, skipping the first line</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>pnp.experimental.data <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"raw-data/BIO00066I-pNP-example-data-2025-26.xlsx"</span>, <span class="at">sheet=</span><span class="dv">2</span>, <span class="at">skip=</span><span class="dv">1</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>pnp.experimental <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"raw-data/BIO00066I-pNP-example-data-2025-26.xlsx"</span>, <span class="at">sheet=</span><span class="dv">2</span>, <span class="at">skip=</span><span class="dv">1</span>)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#check what we have</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(pnp.experimental.data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(pnp.experimental)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 6
 Columns: 7
@@ -439,11 +439,11 @@ $ DNA_ug_per_ml  &lt;dbl&gt; 2.902954, 2.140482, 3.915969, 4.892328, 2.498356, 2
 </div>
 <p>Now we calculate the average for each of the three replicates using <code>mutate</code>. Note that <code>mutate</code> is a very useful function for creating new columns using existing ones. It can also join text columns. We can also use <code>select</code> <em>after</em> the mutation to remove the replicate columns.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pnp.experimental.data <span class="ot">&lt;-</span> pnp.experimental.data <span class="sc">|&gt;</span> </span>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>pnp.experimental <span class="ot">&lt;-</span> pnp.experimental <span class="sc">|&gt;</span> </span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">|&gt;</span> </span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">absorbance=</span><span class="fu">mean</span>(<span class="fu">c</span>(absorb.rep1,absorb.rep2,absorb.rep3),<span class="at">na.rm=</span>T)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We named our mean absorbance <code>absorbance</code> because we specified the <code>absorbance</code> variable in the code <code>pnp.linear.model &lt;- lm(pNP.conc ~ absorbance , data = pnp.calibration.data.pivot)</code> above. So our linear model is ‘looking for’ an absorbance variable to use.</p>
+<p>We named our mean absorbance <code>absorbance</code> because we specified the <code>absorbance</code> variable in the code <code>linear_model &lt;- lm(pNP.conc ~ absorbance , data = pnp.calibration.pivot)</code> above. So our linear model is ‘looking for’ an absorbance variable to use.</p>
 </section>
 </section>
 <section id="predict-values-based-on-a-linear-model" class="level1" data-number="4">
@@ -454,26 +454,27 @@ $ DNA_ug_per_ml  &lt;dbl&gt; 2.902954, 2.140482, 3.915969, 4.892328, 2.498356, 2
 <p>Here is how to do it, using the <code>predict</code> function:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate predicted pNP concentration using the linear model</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>predicted.pnp.conc <span class="ot">&lt;-</span> <span class="fu">predict</span>(pnp.linear.model,pnp.experimental.data)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>predictions.from.lm <span class="ot">&lt;-</span> <span class="fu">predict</span>(linear_model,pnp.experimental)</span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#add predicted pNP concentration as a new column</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>pnp.experimental.data<span class="sc">$</span>predicted.pnp.conc <span class="ot">=</span> predicted.pnp.conc</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#check what we have</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(pnp.experimental.data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Add these predictions from the linear model (predictions.from.lm)</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#As a new column</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>pnp.experimental<span class="sc">$</span>predicted.pNP.concs <span class="ot">=</span> predictions.from.lm</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#check what we have</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(pnp.experimental)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 6
 Columns: 9
 Rowwise: 
-$ day                &lt;dbl&gt; 0, 0, 8, 8, 8, 8
-$ clone              &lt;chr&gt; "A", "B", "A", "B", "A", "B"
-$ differentiated     &lt;chr&gt; "N", "N", "N", "N", "Y", "Y"
-$ absorb.rep1        &lt;dbl&gt; 0.106, 0.056, 0.358, 0.054, 1.365, 0.054
-$ absorb.rep2        &lt;dbl&gt; 0.169, 0.055, 0.218, 0.058, 1.214, 0.056
-$ absorb.rep3        &lt;dbl&gt; 0.137, 0.057, 0.131, 0.054, 1.227, 0.056
-$ DNA_ug_per_ml      &lt;dbl&gt; 2.902954, 2.140482, 3.915969, 4.892328, 2.498356, 2…
-$ absorbance         &lt;dbl&gt; 0.13733333, 0.05600000, 0.23566667, 0.05533333, 1.2…
-$ predicted.pnp.conc &lt;dbl&gt; 0.0186305663, -0.0007477517, 0.0420592704, -0.00090…</code></pre>
+$ day                 &lt;dbl&gt; 0, 0, 8, 8, 8, 8
+$ clone               &lt;chr&gt; "A", "B", "A", "B", "A", "B"
+$ differentiated      &lt;chr&gt; "N", "N", "N", "N", "Y", "Y"
+$ absorb.rep1         &lt;dbl&gt; 0.106, 0.056, 0.358, 0.054, 1.365, 0.054
+$ absorb.rep2         &lt;dbl&gt; 0.169, 0.055, 0.218, 0.058, 1.214, 0.056
+$ absorb.rep3         &lt;dbl&gt; 0.137, 0.057, 0.131, 0.054, 1.227, 0.056
+$ DNA_ug_per_ml       &lt;dbl&gt; 2.902954, 2.140482, 3.915969, 4.892328, 2.498356, …
+$ absorbance          &lt;dbl&gt; 0.13733333, 0.05600000, 0.23566667, 0.05533333, 1.…
+$ predicted.pNP.concs &lt;dbl&gt; 0.0186305663, -0.0007477517, 0.0420592704, -0.0009…</code></pre>
 </div>
 </div>
 </section>
@@ -494,40 +495,39 @@ Why normalise?
 </div>
 </div>
 <p>So we need to normalise these differences in growth rate. We can do this by dividing the predicted pNP concentration by the DNA concentration, because we know that cells <strong>do not</strong> gain or lose large amounts of DNA very often.</p>
-<p>To achieve this, we can use the <code>mutate</code> function to create a new column in the data frame, <code>pnp.experimental.data</code>. We will call this new column <code>normalised.pnp.conc</code>. We will divide the <code>predicted.pnp.conc</code> column by the <code>DNA_ug_per_ml</code> column.</p>
+<p>To achieve this, we can use the <code>mutate</code> function to create a new column in the data frame, <code>pnp.experimental</code>. We will call this new column <code>normalised.pNP.concs</code>. We will divide the <code>predicted.pNP.concs</code> column by the <code>DNA.conc</code> column.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="do">##divide the predicted.pnp.conc column by the DNA_ug_per_ml column</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>pnp.experimental.data <span class="ot">&lt;-</span> pnp.experimental.data <span class="sc">|&gt;</span> </span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">normalised.pnp.conc =</span> predicted.pnp.conc <span class="sc">/</span> DNA_ug_per_ml)</span>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="do">##divide the predicted.pNP.concs column by the DNA_ug_per_ml column</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>pnp.experimental <span class="ot">&lt;-</span> pnp.experimental <span class="sc">|&gt;</span> </span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">normalised.pNP.concs =</span> predicted.pNP.concs <span class="sc">/</span> DNA_ug_per_ml)</span>
 <span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># check what we have now</span></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pnp.experimental.data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pnp.experimental)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "day"                 "clone"               "differentiated"     
- [4] "absorb.rep1"         "absorb.rep2"         "absorb.rep3"        
- [7] "DNA_ug_per_ml"       "absorbance"          "predicted.pnp.conc" 
-[10] "normalised.pnp.conc"</code></pre>
+<pre><code> [1] "day"                  "clone"                "differentiated"      
+ [4] "absorb.rep1"          "absorb.rep2"          "absorb.rep3"         
+ [7] "DNA_ug_per_ml"        "absorbance"           "predicted.pNP.concs" 
+[10] "normalised.pNP.concs"</code></pre>
 </div>
 </div>
 </section>
 <section id="making-a-bar-plot-of-predicted-pnp-concentrations" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="making-a-bar-plot-of-predicted-pnp-concentrations"><span class="header-section-number">4.3</span> Making a bar plot of predicted pNP concentrations</h2>
-<p>At this point, <code>pnp.experimental.data</code> has grouping columns (<code>day</code>, <code>clone</code>, <code>differentiated</code>) and response columns (<code>predicted.pnp.conc</code>, <code>normalised.pnp.conc</code>).</p>
 <p>First, we need to ensure that the <code>day</code>, <code>clone</code> and <code>differentiated</code> columns are set as <strong>factors</strong>. This is important because we want to treat these columns as <strong>categories</strong>, not <strong>numeric values</strong>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pnp.experimental.data<span class="sc">$</span>day <span class="ot">&lt;-</span><span class="fu">as.factor</span>(pnp.experimental.data<span class="sc">$</span>day)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>pnp.experimental.data<span class="sc">$</span>clone <span class="ot">&lt;-</span><span class="fu">as.factor</span>(pnp.experimental.data<span class="sc">$</span>clone)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>pnp.experimental.data<span class="sc">$</span>differentiated <span class="ot">&lt;-</span><span class="fu">as.factor</span>(pnp.experimental.data<span class="sc">$</span>differentiated)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>pnp.experimental<span class="sc">$</span>day <span class="ot">&lt;-</span><span class="fu">as.factor</span>(pnp.experimental<span class="sc">$</span>day)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>pnp.experimental<span class="sc">$</span>clone <span class="ot">&lt;-</span><span class="fu">as.factor</span>(pnp.experimental<span class="sc">$</span>clone)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>pnp.experimental<span class="sc">$</span>differentiated <span class="ot">&lt;-</span><span class="fu">as.factor</span>(pnp.experimental<span class="sc">$</span>differentiated)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then we can make a plot (with the <strong>un-normalised</strong> data).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#make the plot</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>pnp.experimental.data, <span class="fu">aes</span>(<span class="at">x=</span>day, <span class="at">y=</span>predicted.pnp.conc,<span class="at">fill=</span>clone<span class="sc">:</span>differentiated)) <span class="sc">+</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>pnp.experimental, <span class="fu">aes</span>(<span class="at">x=</span>day, <span class="at">y=</span>predicted.pNP.concs,<span class="at">fill=</span>clone<span class="sc">:</span>differentiated)) <span class="sc">+</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">"identity"</span>, <span class="at">position=</span><span class="fu">position_dodge</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="workshop4_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="workshop4.2026-04-28_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -536,40 +536,23 @@ Why normalise?
 <p>Now let’s make a plot (with the <strong>normalised</strong> data). This will account for differential growth rates of the clones.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># first check that data columns we have </span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pnp.experimental.data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pnp.experimental)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code> [1] "day"                 "clone"               "differentiated"     
- [4] "absorb.rep1"         "absorb.rep2"         "absorb.rep3"        
- [7] "DNA_ug_per_ml"       "absorbance"          "predicted.pnp.conc" 
-[10] "normalised.pnp.conc"</code></pre>
+<pre><code> [1] "day"                  "clone"                "differentiated"      
+ [4] "absorb.rep1"          "absorb.rep2"          "absorb.rep3"         
+ [7] "DNA_ug_per_ml"        "absorbance"           "predicted.pNP.concs" 
+[10] "normalised.pNP.concs"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#make the plot using the normalised.pnp.conc as y values</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>pnp.experimental.data, <span class="fu">aes</span>(<span class="at">x=</span>day, <span class="at">y=</span>normalised.pnp.conc,<span class="at">fill=</span>clone<span class="sc">:</span>differentiated)) <span class="sc">+</span></span>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#make the plot using the normalised.pNP.concs as y values</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>pnp.experimental, <span class="fu">aes</span>(<span class="at">x=</span>day, <span class="at">y=</span>normalised.pNP.concs,<span class="at">fill=</span>clone<span class="sc">:</span>differentiated)) <span class="sc">+</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">"identity"</span>, <span class="at">position=</span><span class="fu">position_dodge</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="workshop4_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="workshop4.2026-04-28_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#make the plot using the normalised.pnp.conc as y values</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>pnp.experimental.data, <span class="fu">aes</span>(<span class="at">x=</span>day, <span class="at">y=</span>normalised.pnp.conc,<span class="at">fill=</span>clone<span class="sc">:</span>differentiated)) <span class="sc">+</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat=</span><span class="st">"identity"</span>, <span class="at">position=</span><span class="fu">position_dodge</span>())<span class="sc">+</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">"day"</span>)<span class="sc">+</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"normalised pNP concentration"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="workshop4_files/figure-html/unnamed-chunk-15-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Finally, we will save our <code>pnp.experimental.data</code>, with our <code>predicted.pnp.conc</code> and <code>normalised.pnp.conc</code> values. We may use this if we conduct an ANOVA (see below).</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#output the pnp.experimental.data to a tab-separated file (TSV)</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_tsv</span>(pnp.experimental.data, <span class="at">file =</span> <span class="st">"pnp_experimental_data_normalised.tsv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="end-of-part-1." class="level2" data-number="4.4">
@@ -583,13 +566,13 @@ Why normalise?
 <h2 data-number="5.1" class="anchored" data-anchor-id="loading-data"><span class="header-section-number">5.1</span> Loading data</h2>
 <p>First, load the data from the website, and check what you have:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#load data from a URL</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>points <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">url</span>(<span class="st">"https://djeffares.github.io/BIO66I/data/processed-points-data.csv"</span>),</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">col_types =</span> <span class="fu">cols</span>(<span class="at">LID =</span> <span class="fu">col_factor</span>(),<span class="at">TID =</span> <span class="fu">col_factor</span>(),<span class="at">pid =</span> <span class="fu">col_factor</span>())</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co">#check what we have</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(points)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co">#load data from a URL</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>points <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">url</span>(<span class="st">"https://djeffares.github.io/BIO66I/data/processed-points-data.csv"</span>),</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">col_types =</span> <span class="fu">cols</span>(<span class="at">LID =</span> <span class="fu">col_factor</span>(),<span class="at">TID =</span> <span class="fu">col_factor</span>(),<span class="at">pid =</span> <span class="fu">col_factor</span>())</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="co">#check what we have</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(points)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Rows: 14,956
 Columns: 15
@@ -609,7 +592,7 @@ $ starting.y         &lt;dbl&gt; 684.741, 684.741, 684.741, 684.741, 684.741, 68
 $ normalised.x       &lt;dbl&gt; 0.000, 1.340, 1.340, -8.040, -6.700, -6.700, 0.000,…
 $ normalised.y       &lt;dbl&gt; 0.000, 1.340, 1.340, 8.040, 1.340, -6.700, -18.760,…</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(points)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(points)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 15
   LID   TID   pid   x.position y.position  time track.length euclidean.distance
@@ -662,14 +645,14 @@ Caution
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>points <span class="sc">|&gt;</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>clone,<span class="at">y=</span><span class="fu">log10</span>(velocity)))<span class="sc">+</span></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>()<span class="sc">+</span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_compare_means</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>points <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>clone,<span class="at">y=</span><span class="fu">log10</span>(velocity)))<span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_violin</span>()<span class="sc">+</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_compare_means</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="workshop4_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="workshop4.2026-04-28_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -686,7 +669,7 @@ What does this do?
 <div class="callout-body-container callout-body">
 <p>To find out what any function does, type <code>?function</code> in the RStudio Console. For example to find out what <code>glimpse</code> does:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>?glimpse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>?glimpse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Help on topic 'glimpse' was found in the following packages:
 
@@ -707,38 +690,38 @@ Using the first match ...</code></pre>
 <p>Now, let’s examine the directions the cells move in. A simple way to do this is to plot the <em>x</em> and <em>y</em> coordinates. We will use <code>facet_wrap</code> to plot one box for each lineage ID <code>LID</code>. Remember, a lineage ID contains information for each cell, and all its daughter cells and so on.</p>
 <p>To keep our image simple, we allow clone A and clone B to be on the same panels. But note that <strong>clone A, lineage ID 1</strong> has no relationship to <strong>clone A, lineage ID 2</strong> - they are merely the first lineage ID that Amanda tracked.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>points <span class="sc">|&gt;</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>normalised.x,<span class="at">y=</span>normalised.y,<span class="at">colour=</span>clone))<span class="sc">+</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">1</span>,<span class="at">alpha=</span><span class="fl">0.2</span>)<span class="sc">+</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>LID)<span class="sc">+</span></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>,<span class="at">colour =</span> <span class="st">"grey"</span>,<span class="at">linetype =</span> <span class="st">"dashed"</span>)<span class="sc">+</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>,<span class="at">colour =</span> <span class="st">"grey"</span>,<span class="at">linetype =</span> <span class="st">"dashed"</span>)<span class="sc">+</span></span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic2</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>points <span class="sc">|&gt;</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>normalised.x,<span class="at">y=</span>normalised.y,<span class="at">colour=</span>clone))<span class="sc">+</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">1</span>,<span class="at">alpha=</span><span class="fl">0.2</span>)<span class="sc">+</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>LID)<span class="sc">+</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>,<span class="at">colour =</span> <span class="st">"grey"</span>,<span class="at">linetype =</span> <span class="st">"dashed"</span>)<span class="sc">+</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>,<span class="at">colour =</span> <span class="st">"grey"</span>,<span class="at">linetype =</span> <span class="st">"dashed"</span>)<span class="sc">+</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic2</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="workshop4_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="workshop4.2026-04-28_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">#If we want to show just one clone add this line after 'points |&gt;'</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co">#filter(clone == "A")|&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co">#If we want to show just one clone add this line after 'points |&gt;'</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co">#filter(clone == "A")|&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can see that they wriggle about a lot. They do not move in straight lines. To show one lineage, from one clone and colour by TID (or time), we can do:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the paths taken by the cells in lineage 4 of clone A</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="co">#colouring by tracking ID (TID)</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>points <span class="sc">|&gt;</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(clone <span class="sc">==</span> <span class="st">"A"</span> <span class="sc">&amp;</span> LID<span class="sc">==</span><span class="dv">4</span>) <span class="sc">|&gt;</span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert TID to factor with numeric ordering</span></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">TID =</span> <span class="fu">factor</span>(TID, <span class="at">levels =</span> <span class="fu">sort</span>(<span class="fu">as.numeric</span>(<span class="fu">as.character</span>(<span class="fu">unique</span>(TID)))))) <span class="sc">|&gt;</span></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>normalised.x,<span class="at">y=</span>normalised.y,<span class="at">colour=</span>time))<span class="sc">+</span></span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">1</span>)<span class="sc">+</span></span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>TID)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot the paths taken by the cells in lineage 4 of clone A</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="co">#colouring by tracking ID (TID)</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>points <span class="sc">|&gt;</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(clone <span class="sc">==</span> <span class="st">"A"</span> <span class="sc">&amp;</span> LID<span class="sc">==</span><span class="dv">4</span>) <span class="sc">|&gt;</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Convert TID to factor with numeric ordering</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">TID =</span> <span class="fu">factor</span>(TID, <span class="at">levels =</span> <span class="fu">sort</span>(<span class="fu">as.numeric</span>(<span class="fu">as.character</span>(<span class="fu">unique</span>(TID)))))) <span class="sc">|&gt;</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>normalised.x,<span class="at">y=</span>normalised.y,<span class="at">colour=</span>time))<span class="sc">+</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">1</span>)<span class="sc">+</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>TID)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="workshop4_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="workshop4.2026-04-28_files/figure-html/unnamed-chunk-20-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -754,21 +737,21 @@ Using the first match ...</code></pre>
 <h3 data-number="5.4.1" class="anchored" data-anchor-id="animate-step-1."><span class="header-section-number">5.4.1</span> Animate: step 1.</h3>
 <p>Make a static plot:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make the static plot  </span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>static.plot <span class="ot">&lt;-</span> points <span class="sc">|&gt;</span></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(clone <span class="sc">==</span> <span class="st">"B"</span>, LID <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>normalised.x, <span class="at">y=</span>normalised.y, <span class="at">colour=</span><span class="fu">as.numeric</span>(TID)))<span class="sc">+</span></span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">1</span>, <span class="at">pch=</span><span class="dv">1</span>, <span class="at">lwd=</span><span class="dv">2</span>)<span class="sc">+</span></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">colour =</span> <span class="st">"grey"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>)<span class="sc">+</span></span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">colour =</span> <span class="st">"grey"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>)<span class="sc">+</span></span>
-<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic2</span>()<span class="sc">+</span></span>
-<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">colour =</span> <span class="st">"Tracking ID"</span>)</span>
-<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="co"># view the static plot  </span></span>
-<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>static.plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make the static plot  </span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>static.plot <span class="ot">&lt;-</span> points <span class="sc">|&gt;</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(clone <span class="sc">==</span> <span class="st">"B"</span>, LID <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>normalised.x, <span class="at">y=</span>normalised.y, <span class="at">colour=</span><span class="fu">as.numeric</span>(TID)))<span class="sc">+</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">1</span>, <span class="at">pch=</span><span class="dv">1</span>, <span class="at">lwd=</span><span class="dv">2</span>)<span class="sc">+</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">colour =</span> <span class="st">"grey"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>)<span class="sc">+</span></span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">0</span>, <span class="at">colour =</span> <span class="st">"grey"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>)<span class="sc">+</span></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic2</span>()<span class="sc">+</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">colour =</span> <span class="st">"Tracking ID"</span>)</span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a><span class="co"># view the static plot  </span></span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>static.plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="workshop4_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="workshop4.2026-04-28_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -787,15 +770,15 @@ Using the first match ...</code></pre>
 <h3 data-number="5.4.2" class="anchored" data-anchor-id="animate-step-2"><span class="header-section-number">5.4.2</span> Animate: step 2</h3>
 <p>Animate the plot:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#set up the animation </span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>animated.plot <span class="ot">&lt;-</span> static.plot <span class="sc">+</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transition_time</span>(time) <span class="sc">+</span></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">shadow_mark</span>(<span class="at">past =</span> T, <span class="at">future=</span>F, <span class="at">alpha=</span><span class="fl">0.5</span>)</span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>animated.plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co">#set up the animation </span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>animated.plot <span class="ot">&lt;-</span> static.plot <span class="sc">+</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transition_time</span>(time) <span class="sc">+</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">shadow_mark</span>(<span class="at">past =</span> T, <span class="at">future=</span>F, <span class="at">alpha=</span><span class="fl">0.5</span>)</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>animated.plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="workshop4_files/figure-html/unnamed-chunk-23-1.gif" class="img-fluid figure-img"></p>
+<p><img src="workshop4.2026-04-28_files/figure-html/unnamed-chunk-22-1.gif" class="img-fluid figure-img"></p>
 </figure>
 </div>
 </div>
@@ -805,20 +788,20 @@ Using the first match ...</code></pre>
 <h3 data-number="5.4.3" class="anchored" data-anchor-id="animate-step-3"><span class="header-section-number">5.4.3</span> Animate: step 3</h3>
 <p>We then render the animation</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#render the animation, saving it in an object called 'rendered.animation'</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>rendered.animation <span class="ot">&lt;-</span> <span class="fu">animate</span>(</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  animated.plot,</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">width =</span> <span class="dv">600</span>,</span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">height =</span> <span class="dv">600</span>,</span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">renderer =</span> <span class="fu">gifski_renderer</span>()</span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>rendered.animation</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co">#render the animation, saving it in an object called 'rendered.animation'</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>rendered.animation <span class="ot">&lt;-</span> <span class="fu">animate</span>(</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  animated.plot,</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">width =</span> <span class="dv">600</span>,</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">height =</span> <span class="dv">600</span>,</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">renderer =</span> <span class="fu">gifski_renderer</span>()</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>rendered.animation</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Save the animation as a GIF</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#save the animation as a gif</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="co">#make sure you use a sensible file name</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anim_save</span>(<span class="st">"cloneB.lineage2.gif"</span>, rendered.animation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#save the animation as a gif</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="co">#make sure you use a sensible file name</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anim_save</span>(<span class="st">"cloneB.lineage2.gif"</span>, rendered.animation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><a href="https://gganimate.com/index.html">See this website</a> to learn more about <code>gganimate</code>.</p>
 <p>That is all for this workshop today. If you have time do look at the revision summary below.</p>
@@ -917,7 +900,7 @@ What does this do?
 <div class="callout-body-container callout-body">
 <p>To find out what any function does, type <code>?function</code> in the RStudio Console. For example to find out what <code>glimpse</code> does:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>?glimpse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>?glimpse</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -989,70 +972,58 @@ An example of a multiplicative model
 <p>We’ll assume you have the <code>tidyverse</code> and <code>readxl</code> libraries loaded already. If not, load these now.</p>
 <p>First, we load the data. Your data file might have a different name. This code will work without adjustment if your file has the same rows and columns as <a href="https://djeffares.github.io/BIO66I/example_alkaline_phosphatase_activity_assay-2024-03-21.xlsx">this example file</a>. We’ll also rename a column, so it’s more intuitive.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># first, we load our normalised experimental data again</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a><span class="co"># with our predicted values, normalised for DNA content</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>pnp.experimental.data.normalised <span class="ot">&lt;-</span> <span class="fu">read_tsv</span>(<span class="st">"pnp_experimental_data_normalised.tsv"</span>)</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="co">#rename the 'differentiated' column 'induced', which describes it better</span></span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pnp.experimental.data.normalised)[<span class="dv">3</span>]<span class="ot">&lt;-</span><span class="st">'induced'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#load the data</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>pnp.calibration<span class="ot">&lt;-</span><span class="fu">read_excel</span>(<span class="st">"raw-data/alkaline-phosphatase-activity-assay-real-data.xlsx"</span>,<span class="at">sheet=</span><span class="dv">2</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="co">#rename the 'differentiated' column 'induced', which describes it better</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(pnp.calibration)[<span class="dv">3</span>]<span class="ot">&lt;-</span><span class="st">'induced'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then we need to set some columns to be factors:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">#set day, clone and induced columns to be factors</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>pnp.experimental.data.normalised<span class="sc">$</span>day <span class="ot">&lt;-</span><span class="fu">as.factor</span>(pnp.experimental.data.normalised<span class="sc">$</span>day)</span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>pnp.experimental.data.normalised<span class="sc">$</span>clone <span class="ot">&lt;-</span><span class="fu">as.factor</span>(pnp.experimental.data.normalised<span class="sc">$</span>clone)</span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>pnp.experimental.data.normalised<span class="sc">$</span>induced <span class="ot">&lt;-</span><span class="fu">as.factor</span>(pnp.experimental.data.normalised<span class="sc">$</span>induced)</span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a><span class="co">#this is what we have:</span></span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pnp.experimental.data.normalised)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#set day, clone and induced columns to be factors</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>pnp.calibration<span class="sc">$</span>day <span class="ot">&lt;-</span><span class="fu">as.factor</span>(pnp.calibration<span class="sc">$</span>day)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>pnp.calibration<span class="sc">$</span>clone <span class="ot">&lt;-</span><span class="fu">as.factor</span>(pnp.calibration<span class="sc">$</span>clone)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>pnp.calibration<span class="sc">$</span>induced <span class="ot">&lt;-</span><span class="fu">as.factor</span>(pnp.calibration<span class="sc">$</span>induced)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="co">#this is what we have:</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pnp.calibration)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Now we use <code>pivot_longer</code> to reformat the data, so we can use all the repeats. The <code>cols=!c(day,clone,induced)</code> part indicates that the <code>day</code>, <code>clone</code> and <code>induced</code> columns are not to be lengthened into the <code>absorbance</code> column. So it is <code>absorptionrep1</code>,<code>absorptionrep2</code> and <code>absorptionrep3</code> that are put into the <code>absorbance</code> column.</p>
+<p>Now we use <code>pivot_longer</code> to reformat the data, so we can use all the repeats. The <code>cols=!c(day,clone,differentiated)</code> part indicates that the day,clone,differentiated columns are not to be lengthened into the ‘absorbance’ column. So it is <code>onlyabsorptionrep1</code>,<code>absorptionrep2</code> and <code>absorptionrep3</code> that are put into the ‘absorbance’ column.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pivot the table to a longer format</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a><span class="co"># where everything is a category, except the normalised.pnp.conc</span></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="co"># which we added earlier with: mutate(normalised.pnp.conc = predicted.pnp.conc / DNA_ug_per_ml)</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>pnp.experimental.data.normalised.long <span class="ot">&lt;-</span> pnp.experimental.data.normalised <span class="sc">|&gt;</span> </span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="sc">!</span><span class="fu">c</span>(day,clone,induced), <span class="at">names_to =</span> <span class="st">"replicate"</span>, <span class="at">values_to =</span> <span class="st">"normalised.pnp.conc"</span>)</span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a><span class="co">#this is what we have now</span></span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pnp.experimental.data.normalised.long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>pnp.calibration.pivot<span class="ot">&lt;-</span>pnp.calibration <span class="sc">|&gt;</span> </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols=</span><span class="sc">!</span><span class="fu">c</span>(day,clone,induced), <span class="at">names_to =</span> <span class="st">"rep"</span>, <span class="at">values_to =</span> <span class="st">"absorbance"</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co">#this is what we have now</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(pnp.calibration.pivot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="make-some-plots" class="level2" data-number="8.2">
 <h2 data-number="8.2" class="anchored" data-anchor-id="make-some-plots"><span class="header-section-number">8.2</span> Make some plots</h2>
 <p>If we look at the absorbance by day, we can see that absorbance goes up each day. Here we are ignoring the media (<code>induced</code>).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make a plot of the absorbance for each clone</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="co"># we make geom_boxplot, and then layer a geom_point on top</span></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pnp.experimental.data.normalised.long, <span class="fu">aes</span>(<span class="at">x =</span> clone, <span class="at">y =</span> normalised.pnp.conc, <span class="at">colour =</span> day))<span class="sc">+</span></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">outliers =</span> <span class="cn">FALSE</span>, <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.8</span>))<span class="sc">+</span></span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()<span class="sc">+</span></span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_jitterdodge</span>(<span class="at">jitter.width =</span> <span class="fl">0.2</span>, <span class="at">dodge.width =</span> <span class="fl">0.8</span>), </span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.7</span>, <span class="at">size =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make a plot of the absorbance for each clone</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pnp.calibration.pivot, <span class="fu">aes</span>(<span class="at">x =</span> clone, <span class="at">y =</span> absorbance, <span class="at">colour =</span> day))<span class="sc">+</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Then we can use <code>facet_wrap</code> to examine the data by day <em>and</em> by media. We can see that clone A has much higher values in the differentiation media.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make a plot of the absorbance for each clone</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="co"># using facet_wrap to differentiate the induced from non-induced data</span></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="co"># we make geom_boxplot, and then layer a geom_point on top, as before</span></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pnp.experimental.data.normalised.long, <span class="fu">aes</span>(<span class="at">x =</span> clone, <span class="at">y =</span> normalised.pnp.conc, <span class="at">colour =</span> day))<span class="sc">+</span></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">outliers =</span> <span class="cn">FALSE</span>, <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.8</span>))<span class="sc">+</span></span>
-<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()<span class="sc">+</span></span>
-<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">position =</span> <span class="fu">position_jitterdodge</span>(<span class="at">jitter.width =</span> <span class="fl">0.2</span>, <span class="at">dodge.width =</span> <span class="fl">0.8</span>), </span>
-<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">alpha =</span> <span class="fl">0.7</span>, <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
-<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>induced)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pnp.calibration.pivot, <span class="fu">aes</span>(<span class="at">x =</span> clone, <span class="at">y =</span> absorbance, <span class="at">colour =</span> day))<span class="sc">+</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>()<span class="sc">+</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()<span class="sc">+</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>induced)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="anova-additive-model" class="level2" data-number="8.3">
 <h2 data-number="8.3" class="anchored" data-anchor-id="anova-additive-model"><span class="header-section-number">8.3</span> ANOVA (additive model)</h2>
 <p>To find out if there is evidence that the absorbance value is affected by day, clone or media using an ANOVA, we can use the R function <code>aov()</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co">#we save the result in an object called aov.result.additive</span></span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>aov.result.additive <span class="ot">&lt;-</span> <span class="fu">aov</span>(normalised.pnp.conc <span class="sc">~</span> day <span class="sc">+</span> clone <span class="sc">+</span> induced, <span class="at">data =</span> pnp.experimental.data.normalised.long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">#we save the result in an object called aov.result.additive</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>aov.result.add <span class="ot">&lt;-</span> <span class="fu">aov</span>(absorbance <span class="sc">~</span> day <span class="sc">+</span> clone <span class="sc">+</span> induced, <span class="at">data =</span> pnp.calibration.pivot)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>To view the results, we do:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(aov.result.additive)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(aov.result.add)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1072,11 +1043,11 @@ Interpretation
 <h2 data-number="8.4" class="anchored" data-anchor-id="anova-multiplicative-model"><span class="header-section-number">8.4</span> ANOVA (multiplicative model)</h2>
 <p>Now examine a multiplicative (non additive) model. Here we examine whether interactions between the factors affect the pNP levels. To test this, we simply replace the plus symbol (+) with an asterisk (*) in our code:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co">#run the ANOVA</span></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>aov.result.interaction  <span class="ot">&lt;-</span> <span class="fu">aov</span>(normalised.pnp.conc <span class="sc">~</span> day <span class="sc">*</span> clone <span class="sc">*</span> induced, <span class="at">data =</span> pnp.experimental.data.normalised.long)</span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a><span class="co">#to view the results</span></span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(aov.result.interaction)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co">#run the ANOVA</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>aov.result.mult  <span class="ot">&lt;-</span> <span class="fu">aov</span>(absorbance <span class="sc">~</span> day <span class="sc">*</span> clone <span class="sc">*</span> induced, <span class="at">data =</span> pnp.calibration.pivot)</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a><span class="co">#to view the results</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(aov.result.mult)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Interpretation:</strong> The multiplicative model includes all single factors, all pairwise factors (eg: <code>day:clone</code>) and the interaction of all three factors (<code>day:clone:induced</code>). Where the p-values <code>Pr(&gt;F)</code> are &lt; 0.05, we have a significant effect of this factor (or factors) on the pNP level (and therefore osteogenesis).</p>
 </section>
